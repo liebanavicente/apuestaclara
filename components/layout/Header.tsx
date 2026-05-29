@@ -14,11 +14,11 @@ interface HeaderProps {
 }
 
 const NAV_LINKS = [
+  { href: '/dashboard', label: '⚽ Partidos' },
   { href: '/ranking', label: '🏆 Ranking' },
   { href: '/mis-picks', label: '🎯 Mis picks' },
   { href: '/reglas', label: '📋 Reglas' },
   { href: '/generador', label: '⚡ Generador' },
-  { href: '/buscar-eventos', label: '📅 Eventos' },
   { href: '/simulador', label: '🎲 Simulador' },
 ]
 

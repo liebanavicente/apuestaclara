@@ -1,165 +1,40 @@
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { getUserAccess } from '@/lib/access'
-import { PlanBadge } from '@/components/shared/PlanBadge'
-import { formatDate } from '@/lib/utils'
-import { TrendingUp, Search, Play, Users, Star, BarChart3, Wallet, LogIn } from 'lucide-react'
-import type { Profile, Subscriber } from '@/types/database'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { getMultipleSportsEvents, FEATURED_SPORTS } from '@/lib/services/odds.service'
+import { redirect } from 'next/navigation'
+import { DashboardClient } from './DashboardClient'
+
+export const metadata = { title: 'Dashboard — GañanesBets 🐟' }
+export const revalidate = 300
 
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login?redirect=/dashboard')
 
-  if (!user) {
-    return (
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white mb-1">Dashboard</h1>
-          <p className="text-slate-400 text-sm">Inicia sesión para ver tu actividad y estadísticas personales.</p>
-        </div>
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-12 text-center">
-          <LogIn className="h-12 w-12 text-slate-700 mx-auto mb-4" />
-          <p className="text-slate-300 font-medium mb-2">Acceso completo con cuenta gratuita</p>
-          <p className="text-slate-500 text-sm mb-6">Guarda tus simulaciones, historial y generaciones.</p>
-          <div className="flex gap-3 justify-center">
-            <Link href="/register" className="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
-              Crear cuenta gratis
-            </Link>
-            <Link href="/login" className="border border-slate-700 hover:border-slate-500 text-slate-300 px-5 py-2.5 rounded-xl transition-colors text-sm">
-              Iniciar sesión
-            </Link>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-          {[
-            { href: '/generador', icon: TrendingUp, label: 'Crear combinada' },
-            { href: '/buscar-eventos', icon: Search, label: 'Buscar eventos' },
-            { href: '/simulador', icon: Play, label: 'Simular' },
-            { href: '/comunidad', icon: Users, label: 'Comunidad' },
-          ].map(({ href, icon: Icon, label }) => (
-            <Link key={href} href={href} className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/60 p-4 transition-all group">
-              <Icon className="h-5 w-5 text-teal-400" />
-              <span className="text-xs text-slate-400 text-center">{label}</span>
-            </Link>
-          ))}
-        </div>
-      </div>
-    )
-  }
+  const admin = createAdminClient()
+  const sportKeys = FEATURED_SPORTS.slice(0, 5).map(s => s.key)
 
-  const [profileRes, subscriberRes, walletRes, lastSimRes] = await Promise.all([
-    supabase.from('profiles').select('*').eq('user_id', user.id).single(),
-    supabase.from('subscribers').select('*').eq('user_id', user.id).maybeSingle(),
-    supabase.from('virtual_wallets').select('*').eq('user_id', user.id).maybeSingle(),
-    supabase.from('simulations').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+  const [events, { data: myPicks }] = await Promise.all([
+    getMultipleSportsEvents(sportKeys),
+    admin.from('picks').select('id,description,selection,odds,status,points').eq('user_id', user.id),
   ])
 
-  const profile = profileRes.data as Profile | null
-  const subscriber = subscriberRes.data as Subscriber | null
-  const wallet = walletRes.data as { balance: number; starting_balance: number } | null
-  const lastSim = lastSimRes.data as { status: string; created_at: string } | null
+  // Only show events in the next 7 days
+  const now = Date.now()
+  const week = now + 7 * 24 * 60 * 60 * 1000
+  const upcoming = events.filter(e => {
+    const t = new Date(e.commence_time).getTime()
+    return t >= now - 3600_000 && t <= week
+  })
 
-  if (!profile) {
-    return (
-      <div className="mx-auto max-w-5xl px-4 py-10 text-center">
-        <p className="text-slate-400">Configurando tu perfil... recarga en unos segundos.</p>
-      </div>
-    )
-  }
-
-  const access = getUserAccess(profile, subscriber)
-  const planLabel = access.isAdmin ? 'admin' : access.isPremium ? 'premium' : 'free'
-  const generationsLeft = access.limits.maxDailyGenerations - (profile.daily_generations_used ?? 0)
-
-  const quickLinks = [
-    { href: '/generador', icon: TrendingUp, label: 'Crear combinada' },
-    { href: '/buscar-eventos', icon: Search, label: 'Buscar eventos' },
-    { href: '/simulador', icon: Play, label: 'Simular' },
-    { href: '/comunidad', icon: Users, label: 'Comunidad' },
-    { href: '/premium', icon: Star, label: 'Premium' },
-  ]
+  const totalPoints = (myPicks ?? []).reduce((sum: number, p: any) => sum + (p.points ?? 0), 0)
 
   return (
-    <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-1">
-          <h1 className="text-2xl font-bold text-white">
-            Hola, {profile.username ?? profile.email.split('@')[0]}
-          </h1>
-          <PlanBadge plan={planLabel} />
-        </div>
-        <p className="text-slate-400 text-sm">Aquí tienes un resumen de tu actividad</p>
-      </div>
-
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        {[
-          {
-            label: 'Plan actual',
-            value: planLabel.charAt(0).toUpperCase() + planLabel.slice(1),
-            icon: Star,
-            sub: access.isPremium && profile.premium_until
-              ? `Hasta ${formatDate(profile.premium_until)}`
-              : access.isPremium ? 'Activo' : 'Gratis',
-          },
-          {
-            label: 'Generaciones hoy',
-            value: `${Math.max(0, generationsLeft)} restantes`,
-            icon: TrendingUp,
-            sub: `de ${access.limits.maxDailyGenerations} diarias`,
-          },
-          {
-            label: 'Saldo simulador',
-            value: wallet ? `${wallet.balance.toFixed(0)} 🪙` : '1.000 🪙',
-            icon: Wallet,
-            sub: 'monedas ficticias',
-          },
-          {
-            label: 'Última simulación',
-            value: lastSim ? lastSim.status : 'Ninguna',
-            icon: BarChart3,
-            sub: lastSim ? formatDate(lastSim.created_at) : 'Crea tu primera',
-          },
-        ].map(({ label, value, icon: Icon, sub }) => (
-          <div key={label} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Icon className="h-4 w-4 text-teal-400" />
-              <p className="text-xs text-slate-500">{label}</p>
-            </div>
-            <p className="text-lg font-bold text-white">{value}</p>
-            <p className="text-xs text-slate-500 mt-0.5">{sub}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Accesos rápidos</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          {quickLinks.map(({ href, icon: Icon, label }) => (
-            <Link key={href} href={href} className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/60 hover:border-teal-500/30 p-4 transition-all group">
-              <Icon className="h-6 w-6 text-teal-400 group-hover:scale-110 transition-transform" />
-              <span className="text-xs text-slate-300 text-center">{label}</span>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {!access.isPremium && (
-        <div className="rounded-xl border border-teal-500/30 bg-teal-950/30 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="flex-1">
-            <p className="text-teal-300 font-semibold mb-1">Pasa a Premium — 4,99 €/mes</p>
-            <p className="text-slate-400 text-sm">20 generaciones diarias, hasta 6 picks, análisis avanzado y más. Sin permanencia.</p>
-            <p className="text-xs text-orange-400/80 mt-1">Premium no garantiza beneficios ni aumenta tus probabilidades reales.</p>
-          </div>
-          <div className="flex gap-2 shrink-0">
-            <Link href="/redeem" className="text-sm text-teal-400 hover:text-teal-300 border border-teal-500/30 px-3 py-1.5 rounded-lg transition-colors">
-              Código promo
-            </Link>
-            <Link href="/premium" className="text-sm bg-teal-600 hover:bg-teal-500 text-white px-4 py-1.5 rounded-lg transition-colors">
-              Ver Premium
-            </Link>
-          </div>
-        </div>
-      )}
-    </div>
+    <DashboardClient
+      events={upcoming}
+      totalPoints={totalPoints}
+      myPicks={myPicks ?? []}
+    />
   )
 }

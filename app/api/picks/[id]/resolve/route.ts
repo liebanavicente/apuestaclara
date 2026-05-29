@@ -25,19 +25,20 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   if (!pick) return NextResponse.json({ error: 'Pick no encontrado' }, { status: 404 })
 
-  const profit = result === 'won'
-    ? pick.stake * (pick.odds - 1)
-    : -pick.stake
+  // Points = odds if won, 0 if lost
+  const points = result === 'won' ? Math.round(pick.odds * 100) / 100 : 0
+  const profit = result === 'won' ? pick.stake * (pick.odds - 1) : -pick.stake
 
   const { error } = await admin
     .from('picks')
     .update({
       status: result,
+      points,
       profit: Math.round(profit * 100) / 100,
       resolved_at: new Date().toISOString(),
     })
     .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ ok: true, profit })
+  return NextResponse.json({ ok: true, points })
 }
