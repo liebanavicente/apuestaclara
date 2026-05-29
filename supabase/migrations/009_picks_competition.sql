@@ -25,7 +25,7 @@ create index if not exists picks_created_at_idx on public.picks(created_at desc)
 -- View: bankroll por usuario (base 1000 + suma de profits)
 create or replace view public.bankrolls as
 select
-  p.user_id,
+  pr.user_id,
   pr.username,
   pr.avatar_url,
   1000 + coalesce(sum(pk.profit) filter (where pk.status in ('won','lost')), 0) as bankroll,
