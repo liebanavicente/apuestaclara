@@ -1,39 +1,16 @@
 'use client'
-import { useState, Suspense } from 'react'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { TrendingUp, Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
+import { loginAction } from './actions'
 
 function LoginInner() {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') ?? '/dashboard'
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const errorParam = searchParams.get('error')
   const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  async function handleEmailLogin(e: React.FormEvent) {
-    e.preventDefault()
-    if (!email || !password) return setError('Completa todos los campos')
-    setLoading(true)
-    setError(null)
-
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    })
-
-    if (res.ok) {
-      window.location.href = redirect
-    } else {
-      const data = await res.json()
-      setError(data.error ?? 'Error al iniciar sesión')
-      setLoading(false)
-    }
-  }
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-12">
@@ -48,19 +25,20 @@ function LoginInner() {
         </div>
 
         <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-          {error && (
+          {errorParam === 'credenciales' && (
             <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-              {error}
+              Email o contraseña incorrectos
             </div>
           )}
 
-          <form onSubmit={handleEmailLogin} className="space-y-4">
+          <form action={loginAction} className="space-y-4">
+            <input type="hidden" name="redirect" value={redirect} />
+
             <div>
               <label className="block text-sm text-slate-300 mb-1.5">Email</label>
               <input
                 type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                name="email"
                 placeholder="tu@email.com"
                 className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
                 required
@@ -71,8 +49,7 @@ function LoginInner() {
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
+                  name="password"
                   placeholder="••••••••"
                   className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500/50 pr-10"
                   required
@@ -93,10 +70,9 @@ function LoginInner() {
             </div>
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-teal-600 hover:bg-teal-500 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg transition-colors"
+              className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-lg transition-colors"
             >
-              {loading ? 'Entrando...' : 'Entrar'}
+              Entrar
             </button>
           </form>
         </div>
