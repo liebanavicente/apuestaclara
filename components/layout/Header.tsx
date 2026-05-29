@@ -15,11 +15,11 @@ interface HeaderProps {
 }
 
 const NAV_LINKS = [
+  { href: '/ranking', label: '🏆 Ranking' },
+  { href: '/mis-picks', label: 'Mis picks' },
   { href: '/generador', label: 'Generador' },
   { href: '/buscar-eventos', label: 'Eventos' },
   { href: '/simulador', label: 'Simulador' },
-  { href: '/comunidad', label: 'Comunidad' },
-  { href: '/premium', label: 'Premium' },
   { href: '/responsable', label: 'Juego responsable' },
 ]
 
