@@ -105,10 +105,10 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link href="/login" className="text-sm text-slate-400 hover:text-white transition-colors px-3 py-1.5">
+                <Link href="/login?redirect=/dashboard" className="text-sm text-slate-400 hover:text-white transition-colors px-3 py-1.5">
                   Entrar
                 </Link>
-                <Link href="/register" className="text-sm bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-3 py-1.5 rounded-md transition-colors">
+                <Link href="/register?redirect=/dashboard" className="text-sm bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-3 py-1.5 rounded-md transition-colors">
                   Únete 🐟
                 </Link>
               </div>
