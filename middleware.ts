@@ -1,8 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-// Solo requieren login las rutas de datos personales
-// Generador, buscador y simulador son libres para el MVP
 const PROTECTED_ROUTES = ['/account']
 const ADMIN_ROUTES = ['/admin']
 
@@ -21,17 +19,17 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({ request })
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, { ...options, sameSite: 'lax', secure: true })
           )
         },
       },
     }
   )
 
+  // IMPORTANT: always call getUser() to refresh session cookies
   const { data: { user } } = await supabase.auth.getUser()
   const pathname = request.nextUrl.pathname
 
-  // Protect routes
   const isProtected = PROTECTED_ROUTES.some(r => pathname.startsWith(r))
   const isAdmin = ADMIN_ROUTES.some(r => pathname.startsWith(r))
 
@@ -42,19 +40,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  if (isAdmin && !user) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
   if (isAdmin && user) {
-    // Verify admin role via profile
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('user_id', user.id)
       .single()
-
     if (profile?.role !== 'admin') {
       return NextResponse.redirect(new URL('/', request.url))
     }
-  } else if (isAdmin && !user) {
-    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   return supabaseResponse

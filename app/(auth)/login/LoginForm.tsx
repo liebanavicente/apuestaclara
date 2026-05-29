@@ -27,8 +27,7 @@ export function LoginForm() {
     if (error) {
       setError('Email o contraseña incorrectos')
     } else {
-      router.push(redirect)
-      router.refresh()
+      window.location.href = redirect
     }
     setLoading(false)
   }
