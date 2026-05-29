@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   const admin = createAdminClient()
   const [{ data: profile }, { data: subscriber }] = await Promise.all([
-    admin.from('profiles').select('*').eq('id', user.id).single(),
+    admin.from('profiles').select('*').eq('user_id', user.id).single(),
     admin.from('subscribers').select('*').eq('user_id', user.id).maybeSingle(),
   ])
 

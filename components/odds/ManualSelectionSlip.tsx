@@ -66,13 +66,13 @@ export function ManualSelectionSlip({ picks, onRemove, onClear, isLoggedIn }: Ma
         <p className="text-xs text-orange-400/70 mb-3">Las predicciones son orientativas y pueden fallar.</p>
         <div className="grid grid-cols-2 gap-2">
           <Link
-            href={isLoggedIn ? `/simulador/nueva?${params}` : '/login?redirect=/simulador/nueva'}
+            href={`/simulador?${params}`}
             className="flex items-center justify-center gap-1 bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium py-2 rounded-lg transition-colors"
           >
             <Play className="h-3.5 w-3.5" /> Simular
           </Link>
           <Link
-            href={isLoggedIn ? `/generador?${params}` : '/login?redirect=/generador'}
+            href={`/generador?${params}`}
             className="flex items-center justify-center gap-1 bg-teal-600 hover:bg-teal-500 text-white text-xs font-medium py-2 rounded-lg transition-colors"
           >
             <TrendingUp className="h-3.5 w-3.5" /> Analizar IA
