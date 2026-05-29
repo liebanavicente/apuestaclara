@@ -9,7 +9,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-3">
               <TrendingUp className="h-5 w-5 text-teal-400" />
-              <span className="font-bold text-white">Apuesta Clara</span>
+              <span className="font-bold text-white">GañanesBets</span>
             </Link>
             <p className="text-slate-500 text-sm leading-relaxed">
               Herramienta de análisis orientativo de combinadas deportivas. No garantizamos beneficios ni aciertos.
@@ -41,7 +41,7 @@ export function Footer() {
 
         <div className="mt-10 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-slate-600 text-xs">
-            © {new Date().getFullYear()} Apuesta Clara · Herramienta de análisis orientativo
+            © {new Date().getFullYear()} GañanesBets · Herramienta de análisis orientativo
           </p>
           <p className="text-slate-600 text-xs">
             Las predicciones son orientativas y pueden fallar

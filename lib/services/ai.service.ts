@@ -27,7 +27,7 @@ function getClient() {
 
 const MODEL = process.env.GROQ_API_KEY ? 'llama-3.3-70b-versatile' : 'gpt-4o-mini'
 
-const SYSTEM_PROMPT = `Eres un analista deportivo objetivo para la plataforma "Apuesta Clara".
+const SYSTEM_PROMPT = `Eres un analista deportivo objetivo para la plataforma "GañanesBets".
 Tu función es analizar combinadas deportivas de forma RESPONSABLE.
 
 REGLAS ESTRICTAS:

@@ -1,6 +1,6 @@
 import { AnalizarClient } from './AnalizarClient'
 
-export const metadata = { title: 'Análisis IA — Apuesta Clara' }
+export const metadata = { title: 'Análisis IA — GañanesBets' }
 
 export default function AnalizarPage() {
   return (

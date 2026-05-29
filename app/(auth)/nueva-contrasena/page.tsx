@@ -36,7 +36,7 @@ function NuevaContrasenaForm() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-4">
             <TrendingUp className="h-6 w-6 text-teal-400" />
-            <span className="font-bold text-white text-xl">Apuesta Clara</span>
+            <span className="font-bold text-white text-xl">GañanesBets</span>
           </Link>
           <h1 className="text-2xl font-bold text-white mb-1">Nueva contraseña</h1>
           <p className="text-slate-400 text-sm">Elige una contraseña segura para tu cuenta.</p>

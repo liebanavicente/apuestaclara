@@ -1,4 +1,4 @@
-export const metadata = { title: 'Política de privacidad — Apuesta Clara' }
+export const metadata = { title: 'Política de privacidad — GañanesBets' }
 
 export default function PrivacidadPage() {
   return (
@@ -9,7 +9,7 @@ export default function PrivacidadPage() {
       <div className="space-y-6 text-slate-300 text-sm leading-relaxed">
         <section>
           <h2 className="text-white font-semibold text-base mb-2">1. Responsable del tratamiento</h2>
-          <p>Apuesta Clara es responsable del tratamiento de los datos personales recogidos a través de esta plataforma.</p>
+          <p>GañanesBets es responsable del tratamiento de los datos personales recogidos a través de esta plataforma.</p>
         </section>
 
         <section>
@@ -42,7 +42,7 @@ export default function PrivacidadPage() {
 
         <section>
           <h2 className="text-white font-semibold text-base mb-2">6. Tus derechos</h2>
-          <p>Puedes ejercer tus derechos de acceso, rectificación, supresión y portabilidad contactando en <span className="text-teal-400">hola@apuestaclara.com</span>.</p>
+          <p>Puedes ejercer tus derechos de acceso, rectificación, supresión y portabilidad contactando en <span className="text-teal-400">hola@gananesbets.com</span>.</p>
         </section>
 
         <section>

@@ -1,4 +1,4 @@
-export const metadata = { title: 'Términos de uso — Apuesta Clara' }
+export const metadata = { title: 'Términos de uso — GañanesBets' }
 
 export default function TerminosPage() {
   return (
@@ -9,7 +9,7 @@ export default function TerminosPage() {
       <div className="prose prose-invert prose-slate max-w-none space-y-6 text-slate-300 text-sm leading-relaxed">
         <section>
           <h2 className="text-white font-semibold text-base mb-2">1. Descripción del servicio</h2>
-          <p>Apuesta Clara es una plataforma de análisis deportivo orientativo. La información proporcionada tiene carácter exclusivamente informativo y no constituye consejo de inversión, asesoramiento financiero ni recomendación de apuesta.</p>
+          <p>GañanesBets es una plataforma de análisis deportivo orientativo. La información proporcionada tiene carácter exclusivamente informativo y no constituye consejo de inversión, asesoramiento financiero ni recomendación de apuesta.</p>
         </section>
 
         <section>
@@ -19,12 +19,12 @@ export default function TerminosPage() {
 
         <section>
           <h2 className="text-white font-semibold text-base mb-2">3. Juego responsable</h2>
-          <p>Apuesta Clara promueve activamente el juego responsable. Las predicciones y análisis son orientativos y pueden fallar. Apostar implica riesgo real de pérdida económica. Si crees que puedes tener un problema con el juego, contacta con <a href="https://www.jugarbien.es" className="text-teal-400 hover:text-teal-300" target="_blank" rel="noopener">JugarBien.es</a> o llama al <strong className="text-white">900 200 225</strong>.</p>
+          <p>GañanesBets promueve activamente el juego responsable. Las predicciones y análisis son orientativos y pueden fallar. Apostar implica riesgo real de pérdida económica. Si crees que puedes tener un problema con el juego, contacta con <a href="https://www.jugarbien.es" className="text-teal-400 hover:text-teal-300" target="_blank" rel="noopener">JugarBien.es</a> o llama al <strong className="text-white">900 200 225</strong>.</p>
         </section>
 
         <section>
           <h2 className="text-white font-semibold text-base mb-2">4. Limitación de responsabilidad</h2>
-          <p>Apuesta Clara no se hace responsable de las decisiones de apuesta tomadas por los usuarios basándose en el contenido de la plataforma. Los análisis de IA son generados automáticamente y pueden contener inexactitudes.</p>
+          <p>GañanesBets no se hace responsable de las decisiones de apuesta tomadas por los usuarios basándose en el contenido de la plataforma. Los análisis de IA son generados automáticamente y pueden contener inexactitudes.</p>
         </section>
 
         <section>
@@ -39,7 +39,7 @@ export default function TerminosPage() {
 
         <section>
           <h2 className="text-white font-semibold text-base mb-2">7. Contacto</h2>
-          <p>Para cualquier consulta sobre estos términos, contáctanos en <span className="text-teal-400">hola@apuestaclara.com</span>.</p>
+          <p>Para cualquier consulta sobre estos términos, contáctanos en <span className="text-teal-400">hola@gananesbets.com</span>.</p>
         </section>
       </div>
     </main>

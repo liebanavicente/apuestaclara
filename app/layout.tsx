@@ -6,7 +6,7 @@ import { ErrorBoundary } from '@/components/shared/ErrorBoundary'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'Apuesta Clara — Analiza. Compara. Decide mejor.',
+  title: 'GañanesBets — Analiza. Compara. Decide mejor.',
   description:
     'Herramienta de análisis orientativo de combinadas deportivas. Simula apuestas sin dinero real, consulta cuotas y gestiona el riesgo de forma responsable.',
   keywords: ['apuestas deportivas', 'análisis combinadas', 'simulador apuestas', 'cuotas deportivas'],

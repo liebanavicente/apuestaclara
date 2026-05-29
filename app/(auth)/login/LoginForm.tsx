@@ -39,7 +39,7 @@ function LoginInner() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 text-teal-400 mb-4">
             <TrendingUp className="h-6 w-6" />
-            <span className="font-bold text-white text-xl">Apuesta Clara</span>
+            <span className="font-bold text-white text-xl">GañanesBets</span>
           </Link>
           <h1 className="text-2xl font-bold text-white mb-1">Bienvenido de vuelta</h1>
           <p className="text-slate-400 text-sm">Accede a tu cuenta para continuar</p>

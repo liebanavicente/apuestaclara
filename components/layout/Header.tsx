@@ -37,7 +37,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <TrendingUp className="h-6 w-6 text-teal-400" />
-            <span className="font-bold text-white text-lg tracking-tight">Apuesta Clara</span>
+            <span className="font-bold text-white text-lg tracking-tight">GañanesBets</span>
           </Link>
 
           {/* Desktop nav */}

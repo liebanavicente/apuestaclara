@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { SimuladorClient } from './SimuladorClient'
 
-export const metadata = { title: 'Simulador — Apuesta Clara' }
+export const metadata = { title: 'Simulador — GañanesBets' }
 
 export default async function SimuladorPage() {
   const supabase = await createClient()

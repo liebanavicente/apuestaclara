@@ -304,7 +304,7 @@ export default function HomePage() {
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">Tu bienestar, primero</h2>
           <p className="text-slate-400 leading-relaxed mb-8">
-            Apuesta Clara es una herramienta de análisis y simulación. Nunca apostamos por ti ni te decimos qué hacer.
+            GañanesBets es una herramienta de análisis y simulación. Nunca apostamos por ti ni te decimos qué hacer.
             Si el juego deja de ser entretenimiento, busca ayuda.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 text-left">

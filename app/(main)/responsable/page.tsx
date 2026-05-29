@@ -10,7 +10,7 @@ export default function ResponsablePage() {
       </div>
 
       <div className="rounded-xl border border-orange-500/30 bg-orange-500/10 p-6 mb-8">
-        <p className="text-orange-300 font-semibold text-lg mb-2">Apuesta Clara no es un operador de apuestas</p>
+        <p className="text-orange-300 font-semibold text-lg mb-2">GañanesBets no es un operador de apuestas</p>
         <p className="text-orange-200/80 leading-relaxed">
           Somos una herramienta de análisis, simulación y gestión del riesgo. No aceptamos dinero real,
           no operamos apuestas y no somos responsables de decisiones tomadas a partir de nuestros análisis.
@@ -47,7 +47,7 @@ export default function ResponsablePage() {
           {
             icon: '🔞',
             title: 'Solo mayores de 18 años',
-            body: 'Las apuestas deportivas están prohibidas para menores de 18 años en España. Apuesta Clara requiere ser mayor de edad para registrarse.',
+            body: 'Las apuestas deportivas están prohibidas para menores de 18 años en España. GañanesBets requiere ser mayor de edad para registrarse.',
           },
         ].map(({ icon, title, body }) => (
           <div key={title} className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
