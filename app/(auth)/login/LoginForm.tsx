@@ -1,25 +1,37 @@
 'use client'
-import { Suspense, useEffect, useActionState } from 'react'
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { TrendingUp, Eye, EyeOff } from 'lucide-react'
-import { useState } from 'react'
-import { loginAction } from './actions'
+import { createClient } from '@/lib/supabase/client'
 
 function LoginInner() {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') ?? '/dashboard'
-  const errorParam = searchParams.get('error')
   const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  const [state, formAction, isPending] = useActionState(loginAction, null)
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
-  useEffect(() => {
-    if (state?.redirect) {
-      router.push(state.redirect)
+    const supabase = createClient()
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+
+    if (authError) {
+      setError('Email o contraseña incorrectos')
+      setLoading(false)
+      return
     }
-  }, [state, router])
+
+    // Full reload so the server reads fresh cookies
+    window.location.href = redirect
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-12">
@@ -34,20 +46,19 @@ function LoginInner() {
         </div>
 
         <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-          {(errorParam === 'credenciales' || state?.error === 'credenciales') && (
+          {error && (
             <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-              Email o contraseña incorrectos
+              {error}
             </div>
           )}
 
-          <form action={formAction} className="space-y-4">
-            <input type="hidden" name="redirect" value={redirect} />
-
+          <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm text-slate-300 mb-1.5">Email</label>
               <input
                 type="email"
-                name="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 placeholder="tu@email.com"
                 className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
                 required
@@ -58,7 +69,8 @@ function LoginInner() {
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  name="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500/50 pr-10"
                   required
@@ -79,10 +91,10 @@ function LoginInner() {
             </div>
             <button
               type="submit"
-              disabled={isPending}
+              disabled={loading}
               className="w-full bg-teal-600 hover:bg-teal-500 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg transition-colors"
             >
-              {isPending ? 'Entrando...' : 'Entrar'}
+              {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
         </div>
