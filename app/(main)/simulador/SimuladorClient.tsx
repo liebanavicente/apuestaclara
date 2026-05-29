@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
-import { Plus, BarChart3, TrendingUp, TrendingDown, Target, Percent } from 'lucide-react'
+import { Plus, BarChart3, TrendingUp, TrendingDown, Target, Percent, LogIn } from 'lucide-react'
+import Link from 'next/link'
 import { WalletCard } from '@/components/simulator/WalletCard'
 import { SimulationCard } from '@/components/simulator/SimulationCard'
 import { NewSimulationModal } from '@/components/simulator/NewSimulationModal'
@@ -25,7 +26,7 @@ interface Simulation {
   simulation_picks: any[]
 }
 
-export function SimuladorClient() {
+export function SimuladorClient({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
   const [wallet, setWallet] = useState<Wallet | null>(null)
   const [simulations, setSimulations] = useState<Simulation[]>([])
   const [total, setTotal] = useState(0)
@@ -35,6 +36,7 @@ export function SimuladorClient() {
   const [activeTab, setActiveTab] = useState<'pending' | 'resolved' | 'stats'>('pending')
 
   const load = useCallback(async () => {
+    if (!isLoggedIn) { setLoading(false); return }
     setLoading(true)
     try {
       const [walletRes, simsRes] = await Promise.all([
@@ -50,7 +52,7 @@ export function SimuladorClient() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [isLoggedIn])
 
   useEffect(() => { load() }, [load])
 
@@ -118,14 +120,24 @@ export function SimuladorClient() {
           )}
         </div>
 
-        <button
-          onClick={() => setShowModal(true)}
-          disabled={!wallet}
-          className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
-        >
-          <Plus className="h-4 w-4" />
-          Nueva simulación
-        </button>
+        {isLoggedIn ? (
+          <button
+            onClick={() => setShowModal(true)}
+            disabled={!wallet}
+            className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            Nueva simulación
+          </button>
+        ) : (
+          <Link
+            href="/register"
+            className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          >
+            <LogIn className="h-4 w-4" />
+            Crear cuenta para simular
+          </Link>
+        )}
 
         <p className="text-xs text-slate-600 text-center">
           Dinero ficticio. Simular no garantiza resultados reales.

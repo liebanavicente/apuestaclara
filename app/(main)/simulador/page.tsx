@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { SimuladorClient } from './SimuladorClient'
 
@@ -7,7 +6,6 @@ export const metadata = { title: 'Simulador — Apuesta Clara' }
 export default async function SimuladorPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login?redirect=/simulador')
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
@@ -15,7 +13,7 @@ export default async function SimuladorPage() {
         <h1 className="text-2xl font-bold text-white mb-1">Simulador sin dinero</h1>
         <p className="text-slate-400 text-sm">Practica con dinero ficticio. Sin riesgo real, sin dinero real.</p>
       </div>
-      <SimuladorClient />
+      <SimuladorClient isLoggedIn={!!user} />
     </main>
   )
 }

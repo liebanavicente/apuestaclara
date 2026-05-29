@@ -1,17 +1,51 @@
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { getUserAccess } from '@/lib/access'
 import { PlanBadge } from '@/components/shared/PlanBadge'
 import { formatDate } from '@/lib/utils'
-import { TrendingUp, Search, Play, Users, Star, BarChart3, Wallet } from 'lucide-react'
+import { TrendingUp, Search, Play, Users, Star, BarChart3, Wallet, LogIn } from 'lucide-react'
 import type { Profile, Subscriber } from '@/types/database'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) redirect('/login')
+  if (!user) {
+    return (
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-white mb-1">Dashboard</h1>
+          <p className="text-slate-400 text-sm">Inicia sesión para ver tu actividad y estadísticas personales.</p>
+        </div>
+        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-12 text-center">
+          <LogIn className="h-12 w-12 text-slate-700 mx-auto mb-4" />
+          <p className="text-slate-300 font-medium mb-2">Acceso completo con cuenta gratuita</p>
+          <p className="text-slate-500 text-sm mb-6">Guarda tus simulaciones, historial y generaciones.</p>
+          <div className="flex gap-3 justify-center">
+            <Link href="/register" className="bg-teal-600 hover:bg-teal-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm">
+              Crear cuenta gratis
+            </Link>
+            <Link href="/login" className="border border-slate-700 hover:border-slate-500 text-slate-300 px-5 py-2.5 rounded-xl transition-colors text-sm">
+              Iniciar sesión
+            </Link>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+          {[
+            { href: '/generador', icon: TrendingUp, label: 'Crear combinada' },
+            { href: '/buscar-eventos', icon: Search, label: 'Buscar eventos' },
+            { href: '/simulador', icon: Play, label: 'Simular' },
+            { href: '/comunidad', icon: Users, label: 'Comunidad' },
+          ].map(({ href, icon: Icon, label }) => (
+            <Link key={href} href={href} className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/60 p-4 transition-all group">
+              <Icon className="h-5 w-5 text-teal-400" />
+              <span className="text-xs text-slate-400 text-center">{label}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   const [profileRes, subscriberRes, walletRes, lastSimRes] = await Promise.all([
     supabase.from('profiles').select('*').eq('user_id', user.id).single(),
@@ -25,19 +59,24 @@ export default async function DashboardPage() {
   const wallet = walletRes.data as { balance: number; starting_balance: number } | null
   const lastSim = lastSimRes.data as { status: string; created_at: string } | null
 
-  if (!profile) redirect('/login')
+  if (!profile) {
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-10 text-center">
+        <p className="text-slate-400">Configurando tu perfil... recarga en unos segundos.</p>
+      </div>
+    )
+  }
 
   const access = getUserAccess(profile, subscriber)
   const planLabel = access.isAdmin ? 'admin' : access.isPremium ? 'premium' : 'free'
-
   const generationsLeft = access.limits.maxDailyGenerations - (profile.daily_generations_used ?? 0)
 
   const quickLinks = [
-    { href: '/generador', icon: TrendingUp, label: 'Crear combinada', color: 'teal' },
-    { href: '/buscar-eventos', icon: Search, label: 'Buscar eventos', color: 'blue' },
-    { href: '/simulador/nueva', icon: Play, label: 'Simular', color: 'green' },
-    { href: '/comunidad', icon: Users, label: 'Comunidad', color: 'purple' },
-    { href: '/premium', icon: Star, label: 'Premium', color: 'yellow' },
+    { href: '/generador', icon: TrendingUp, label: 'Crear combinada' },
+    { href: '/buscar-eventos', icon: Search, label: 'Buscar eventos' },
+    { href: '/simulador', icon: Play, label: 'Simular' },
+    { href: '/comunidad', icon: Users, label: 'Comunidad' },
+    { href: '/premium', icon: Star, label: 'Premium' },
   ]
 
   return (
@@ -52,7 +91,6 @@ export default async function DashboardPage() {
         <p className="text-slate-400 text-sm">Aquí tienes un resumen de tu actividad</p>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {[
           {
@@ -93,16 +131,11 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      {/* Quick links */}
       <div className="mb-8">
         <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Accesos rápidos</h2>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {quickLinks.map(({ href, icon: Icon, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/60 hover:border-teal-500/30 p-4 transition-all group"
-            >
+            <Link key={href} href={href} className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800/60 hover:border-teal-500/30 p-4 transition-all group">
               <Icon className="h-6 w-6 text-teal-400 group-hover:scale-110 transition-transform" />
               <span className="text-xs text-slate-300 text-center">{label}</span>
             </Link>
@@ -110,7 +143,6 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Premium upsell */}
       {!access.isPremium && (
         <div className="rounded-xl border border-teal-500/30 bg-teal-950/30 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex-1">
