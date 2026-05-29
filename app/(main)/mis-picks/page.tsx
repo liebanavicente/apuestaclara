@@ -12,16 +12,18 @@ export default async function MisPicksPage({
 }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
   if (!user) redirect('/login?redirect=/mis-picks')
 
   const admin = createAdminClient()
   const { import: importParam } = await searchParams
 
-  const [{ data: picks }, { data: bankrollRow }] = await Promise.all([
-    admin.from('picks').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
-    admin.from('bankrolls').select('*').eq('user_id', user.id).single(),
-  ])
+  const { data: picks } = await admin
+    .from('picks')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+
+  const totalPoints = (picks ?? []).reduce((sum: number, p: any) => sum + (p.points ?? 0), 0)
 
   let importedLegs: { description: string; selection: string; odds: number }[] | null = null
   if (importParam) {
@@ -40,7 +42,7 @@ export default async function MisPicksPage({
   return (
     <MisPicksClient
       picks={picks ?? []}
-      bankroll={bankrollRow?.bankroll ?? 1000}
+      totalPoints={totalPoints}
       userId={user.id}
       importedLegs={importedLegs}
     />
