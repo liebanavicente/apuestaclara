@@ -4,7 +4,7 @@ import { getMultipleSportsEvents, FEATURED_SPORTS } from '@/lib/services/odds.se
 import { redirect } from 'next/navigation'
 import { DashboardClient } from './DashboardClient'
 
-export const metadata = { title: 'Dashboard — GañanesBets 🐟' }
+export const metadata = { title: 'GañanesBets 🐟' }
 export const revalidate = 300
 
 export default async function DashboardPage() {
@@ -13,19 +13,19 @@ export default async function DashboardPage() {
   if (!user) redirect('/login?redirect=/dashboard')
 
   const admin = createAdminClient()
-  const sportKeys = FEATURED_SPORTS.slice(0, 5).map(s => s.key)
+  // Fetch all featured sports
+  const sportKeys = FEATURED_SPORTS.map(s => s.key)
 
   const [events, { data: myPicks }] = await Promise.all([
     getMultipleSportsEvents(sportKeys),
     admin.from('picks').select('id,description,selection,odds,status,points').eq('user_id', user.id),
   ])
 
-  // Only show events in the next 7 days
+  // Next 14 days
   const now = Date.now()
-  const week = now + 7 * 24 * 60 * 60 * 1000
   const upcoming = events.filter(e => {
     const t = new Date(e.commence_time).getTime()
-    return t >= now - 3600_000 && t <= week
+    return t >= now - 3600_000 && t <= now + 14 * 24 * 60 * 60 * 1000
   })
 
   const totalPoints = (myPicks ?? []).reduce((sum: number, p: any) => sum + (p.points ?? 0), 0)
@@ -33,6 +33,7 @@ export default async function DashboardPage() {
   return (
     <DashboardClient
       events={upcoming}
+      sports={FEATURED_SPORTS}
       totalPoints={totalPoints}
       myPicks={myPicks ?? []}
     />
