@@ -1,5 +1,5 @@
 'use client'
-import { X, TrendingUp, Play, Users, BookmarkPlus, Trash2 } from 'lucide-react'
+import { X, TrendingUp, Play, Users, Target, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import type { PickSelection } from '@/types/odds'
 import { formatOdds, totalOdds, impliedProbability } from '@/lib/utils'
@@ -78,19 +78,13 @@ export function ManualSelectionSlip({ picks, onRemove, onClear, isLoggedIn }: Ma
             <TrendingUp className="h-3.5 w-3.5" /> Analizar IA
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-2 mt-2">
+        <div className="mt-2">
           <Link
-            href={isLoggedIn ? `/comunidad/nuevo-pick?${params}` : '/login'}
-            className="flex items-center justify-center gap-1 border border-slate-700 hover:border-slate-500 text-slate-400 hover:text-white text-xs font-medium py-2 rounded-lg transition-colors"
+            href={isLoggedIn ? `/mis-picks?import=${encodeURIComponent(JSON.stringify(picks))}` : '/login?redirect=/mis-picks'}
+            className="flex items-center justify-center gap-1.5 w-full bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs py-2 rounded-lg transition-colors"
           >
-            <Users className="h-3.5 w-3.5" /> Publicar
+            <Target className="h-3.5 w-3.5" /> Apostar combinada 🎯
           </Link>
-          <button
-            className="flex items-center justify-center gap-1 border border-slate-700 hover:border-slate-500 text-slate-400 hover:text-white text-xs font-medium py-2 rounded-lg transition-colors"
-            onClick={() => alert('Guardado en historial (disponible con cuenta)')}
-          >
-            <BookmarkPlus className="h-3.5 w-3.5" /> Guardar
-          </button>
         </div>
       </div>
     </div>

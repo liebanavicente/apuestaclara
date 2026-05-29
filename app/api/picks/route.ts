@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const { description, competition, selection, odds, stake, note, match_date } = body
+  const { description, competition, selection, odds, stake, note, match_date, legs } = body
 
   if (!description || !selection || !odds || !stake) {
     return NextResponse.json({ error: 'Faltan campos' }, { status: 400 })
@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
     stake,
     note: note || null,
     match_date: match_date || null,
+    legs: legs || null,
   }).select().single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
