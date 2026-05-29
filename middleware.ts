@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 // Solo requieren login las rutas de datos personales
 // Generador, buscador y simulador son libres para el MVP
-const PROTECTED_ROUTES = ['/dashboard', '/account', '/mis-picks', '/comunidad/nuevo-pick']
+const PROTECTED_ROUTES = ['/dashboard', '/account', '/mis-picks', '/comunidad/nuevo-pick', '/simulador']
 const ADMIN_ROUTES = ['/admin']
 
 export async function middleware(request: NextRequest) {
