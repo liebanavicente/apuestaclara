@@ -3,16 +3,9 @@ import type { Sport, OddsEvent, NormalizedEvent } from '@/types/odds'
 const BASE_URL = 'https://api.the-odds-api.com/v4'
 const API_KEY = process.env.THE_ODDS_API_KEY
 
-// Sports to show by default (most popular in Spain/Europe)
 export const FEATURED_SPORTS: { key: string; label: string; emoji: string; featured?: boolean }[] = [
   { key: 'soccer_fifa_world_cup', label: 'Mundial 2026', emoji: '🌍', featured: true },
   { key: 'soccer_uefa_champs_league', label: 'Champions League', emoji: '⭐', featured: true },
-  { key: 'soccer_spain_la_liga', label: 'LaLiga', emoji: '🇪🇸' },
-  { key: 'soccer_epl', label: 'Premier League', emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
-  { key: 'soccer_germany_bundesliga', label: 'Bundesliga', emoji: '🇩🇪' },
-  { key: 'soccer_italy_serie_a', label: 'Serie A', emoji: '🇮🇹' },
-  { key: 'soccer_france_ligue_one', label: 'Ligue 1', emoji: '🇫🇷' },
-  { key: 'basketball_nba', label: 'NBA', emoji: '🏀' },
 ]
 
 export async function getSports(): Promise<Sport[]> {
