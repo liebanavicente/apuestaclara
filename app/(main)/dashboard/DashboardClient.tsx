@@ -40,6 +40,11 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
 
   const myPickMap = new Map(myPicks.map(p => [p.description, p]))
 
+  async function deletePick(id: string) {
+    await fetch(`/api/picks/${id}`, { method: 'DELETE' })
+    router.refresh()
+  }
+
   // Build league tabs from available events
   const leaguesInEvents = Array.from(new Set(events.map(e => e.league)))
   const tabs = [
@@ -134,6 +139,11 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
                     <p className="text-white font-semibold text-sm leading-tight">{ev.event_name}</p>
                     <p className="text-slate-500 text-xs mt-0.5">{ev.league} · {fmtDate(ev.commence_time)}</p>
                   </div>
+                  {myPick && myPick.status === 'pending' && (
+                    <button onClick={() => deletePick(myPick.id)} className="text-slate-600 hover:text-red-400 transition-colors shrink-0 p-1" title="Eliminar pick">
+                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  )}
                   {myPick && (
                     <span className={`text-xs px-2 py-1 rounded-full font-medium shrink-0 ${
                       myPick.status === 'won' ? 'bg-green-500/20 text-green-400' :

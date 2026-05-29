@@ -172,6 +172,11 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
     router.refresh()
   }
 
+  async function deletePick(id: string) {
+    await fetch(`/api/picks/${id}`, { method: 'DELETE' })
+    router.refresh()
+  }
+
   const filteredEvents = events.filter(ev =>
     !eventSearch ||
     ev.event_name.toLowerCase().includes(eventSearch.toLowerCase()) ||
@@ -375,7 +380,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
             <Clock className="h-3.5 w-3.5" /> Pendientes ({pending.length})
           </h2>
           <div className="space-y-2.5">
-            {pending.map(p => <PickCard key={p.id} pick={p} onResolve={resolve} />)}
+            {pending.map(p => <PickCard key={p.id} pick={p} onResolve={resolve} onDelete={deletePick} />)}
           </div>
         </section>
       )}
@@ -469,7 +474,7 @@ function MarketSelector({ event, market, selection, onMarketChange, onSelectOutc
   )
 }
 
-function PickCard({ pick, onResolve }: { pick: Pick; onResolve?: (id: string, r: 'won' | 'lost') => void }) {
+function PickCard({ pick, onResolve, onDelete }: { pick: Pick; onResolve?: (id: string, r: 'won' | 'lost') => void; onDelete?: (id: string) => void }) {
   const [expanded, setExpanded] = useState(false)
   const isPending = pick.status === 'pending'
   const isCombinada = pick.legs && pick.legs.length > 0
@@ -520,14 +525,21 @@ function PickCard({ pick, onResolve }: { pick: Pick; onResolve?: (id: string, r:
             ? <span className="text-green-400 font-semibold">+{fmtPts(pick.points)} pts ✓</span>
             : <span className="text-slate-500">0 pts ✗</span>}
         </div>
-        {isPending && onResolve && (
+        {isPending && (
           <div className="flex gap-2">
-            <button onClick={() => onResolve(pick.id, 'won')} className="flex items-center gap-1 text-xs bg-green-500/20 hover:bg-green-500/30 text-green-400 px-3 py-1.5 rounded-lg font-medium">
-              <Check className="h-3 w-3" /> Acerté
-            </button>
-            <button onClick={() => onResolve(pick.id, 'lost')} className="flex items-center gap-1 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-1.5 rounded-lg font-medium">
-              <X className="h-3 w-3" /> Fallé
-            </button>
+            {onResolve && <>
+              <button onClick={() => onResolve(pick.id, 'won')} className="flex items-center gap-1 text-xs bg-green-500/20 hover:bg-green-500/30 text-green-400 px-3 py-1.5 rounded-lg font-medium">
+                <Check className="h-3 w-3" /> Acerté
+              </button>
+              <button onClick={() => onResolve(pick.id, 'lost')} className="flex items-center gap-1 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-1.5 rounded-lg font-medium">
+                <X className="h-3 w-3" /> Fallé
+              </button>
+            </>}
+            {onDelete && (
+              <button onClick={() => onDelete(pick.id)} className="flex items-center gap-1 text-xs text-slate-600 hover:text-red-400 px-2 py-1.5 rounded-lg transition-colors ml-auto">
+                <Trash2 className="h-3 w-3" />
+              </button>
+            )}
           </div>
         )}
       </div>
