@@ -24,11 +24,11 @@ const NAV_LINKS = [
 ]
 
 const TAGLINES = [
-  'donde los listos también pierden',
-  'apuestas ficticias, vergüenza real',
-  'porque alguien tiene que acertar',
-  '¡tú siempre con el Almería!',
-  'el único que acierta es el portero',
+  'quien pierda paga unas birras',
+  'apuestas ficticias, birras reales',
+  'aquí se viene a perder con estilo',
+  'el último paga la ronda',
+  'birras o gloria, no hay más opciones',
 ]
 
 export function Header({ profile, access, onSignOut }: HeaderProps) {
