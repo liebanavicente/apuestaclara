@@ -9,8 +9,9 @@ export default async function GeneradorPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  let maxPicks = 2
-  let isPremium = false
+  // MVP: premium gratis para todos
+  let maxPicks = 6
+  let isPremium = true
 
   if (user) {
     const [profileRes, subscriberRes] = await Promise.all([
