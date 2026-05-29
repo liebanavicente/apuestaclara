@@ -11,25 +11,24 @@ export default function HomePage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-4 py-1.5 text-sm text-teal-300 mb-6">
-            <Zap className="h-3.5 w-3.5" />
-            Análisis responsable de combinadas deportivas
+          <div className="inline-flex items-center gap-2 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-1.5 text-sm text-yellow-300 mb-6">
+            <span>🐟</span>
+            Competición ficticia entre amigos
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold text-white leading-tight mb-6">
-            Analiza.{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-400">
-              Compara.
-            </span>{' '}
-            Decide mejor.
+            Quien pierda{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
+              paga unas birras.
+            </span>
           </h1>
 
           <p className="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto mb-4 leading-relaxed">
-            Cuotas reales, análisis con IA y simulador sin dinero. Todo lo que necesitas para entender el riesgo antes de apostar.
+            Picks con cuotas reales, análisis IA y €1.000 ficticios para ver quién sabe más de fútbol entre vosotros.
           </p>
 
-          <p className="text-orange-400/80 text-sm mb-10">
-            Las predicciones son orientativas y pueden fallar. Apostar implica riesgo.
+          <p className="text-slate-600 text-sm mb-10">
+            Todo ficticio. Nadie pierde dinero real. Solo el orgullo.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
