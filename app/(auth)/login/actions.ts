@@ -1,9 +1,11 @@
 'use server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 
-export async function loginAction(formData: FormData) {
+export async function loginAction(
+  _prev: { error?: string } | null,
+  formData: FormData
+): Promise<{ error?: string; redirect?: string }> {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const redirectTo = (formData.get('redirect') as string) || '/dashboard'
@@ -30,8 +32,8 @@ export async function loginAction(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) {
-    redirect(`/login?error=credenciales`)
+    return { error: 'credenciales' }
   }
 
-  redirect(redirectTo)
+  return { redirect: redirectTo }
 }

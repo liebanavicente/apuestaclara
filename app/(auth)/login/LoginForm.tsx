@@ -1,7 +1,7 @@
 'use client'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useActionState } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { TrendingUp, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { loginAction } from './actions'
@@ -11,6 +11,15 @@ function LoginInner() {
   const redirect = searchParams.get('redirect') ?? '/dashboard'
   const errorParam = searchParams.get('error')
   const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter()
+
+  const [state, formAction, isPending] = useActionState(loginAction, null)
+
+  useEffect(() => {
+    if (state?.redirect) {
+      router.push(state.redirect)
+    }
+  }, [state, router])
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-12">
@@ -25,13 +34,13 @@ function LoginInner() {
         </div>
 
         <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-          {errorParam === 'credenciales' && (
+          {(errorParam === 'credenciales' || state?.error === 'credenciales') && (
             <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
               Email o contraseña incorrectos
             </div>
           )}
 
-          <form action={loginAction} className="space-y-4">
+          <form action={formAction} className="space-y-4">
             <input type="hidden" name="redirect" value={redirect} />
 
             <div>
@@ -70,9 +79,10 @@ function LoginInner() {
             </div>
             <button
               type="submit"
-              className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-lg transition-colors"
+              disabled={isPending}
+              className="w-full bg-teal-600 hover:bg-teal-500 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg transition-colors"
             >
-              Entrar
+              {isPending ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
         </div>
