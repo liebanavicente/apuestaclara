@@ -84,6 +84,11 @@ export function LoginForm() {
                 </button>
               </div>
             </div>
+            <div className="flex justify-end">
+              <Link href="/reset-password" className="text-xs text-slate-500 hover:text-teal-400 transition-colors">
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
             <button
               type="submit"
               disabled={loading}
