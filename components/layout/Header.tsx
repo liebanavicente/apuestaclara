@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { PlanBadge } from '@/components/shared/PlanBadge'
 import type { Profile } from '@/types/database'
 import type { UserAccess } from '@/lib/access'
 
@@ -36,8 +35,6 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
   const tagline = TAGLINES[Math.floor(Math.abs(Math.sin(Date.now() / 86400000) * TAGLINES.length))]
-
-  const planLabel = access?.isAdmin ? 'admin' : access?.isPremium ? 'premium' : 'free'
 
   return (
     <header className="sticky top-0 z-50 border-b border-yellow-500/20 bg-slate-950/95 backdrop-blur-sm">
@@ -87,7 +84,6 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                     </div>
                   )}
                   <span className="hidden sm:block font-medium">{profile.username ?? profile.email.split('@')[0]}</span>
-                  <PlanBadge plan={planLabel} />
                   <ChevronDown className="h-3 w-3 hidden sm:block" />
                 </button>
 
