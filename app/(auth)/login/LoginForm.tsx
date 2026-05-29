@@ -1,12 +1,10 @@
 'use client'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { TrendingUp, Eye, EyeOff } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 
-export function LoginForm() {
-  const router = useRouter()
+function LoginInner() {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') ?? '/dashboard'
 
@@ -22,14 +20,20 @@ export function LoginForm() {
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      setError('Email o contraseña incorrectos')
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, redirect }),
+      redirect: 'follow',
+    })
+
+    if (res.ok || res.redirected) {
+      window.location.href = res.url || redirect
     } else {
-      window.location.href = redirect
+      const data = await res.json()
+      setError(data.error ?? 'Error al iniciar sesión')
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (
@@ -96,7 +100,6 @@ export function LoginForm() {
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
-
         </div>
 
         <p className="text-center text-slate-500 text-sm mt-5">
@@ -108,4 +111,8 @@ export function LoginForm() {
       </div>
     </div>
   )
+}
+
+export function LoginForm() {
+  return <Suspense><LoginInner /></Suspense>
 }
