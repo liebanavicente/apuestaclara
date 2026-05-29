@@ -72,7 +72,7 @@ export function ManualSelectionSlip({ picks, onRemove, onClear, isLoggedIn }: Ma
             <Play className="h-3.5 w-3.5" /> Simular
           </Link>
           <Link
-            href={`/generador?${params}`}
+            href={`/analizar?${params}`}
             className="flex items-center justify-center gap-1 bg-teal-600 hover:bg-teal-500 text-white text-xs font-medium py-2 rounded-lg transition-colors"
           >
             <TrendingUp className="h-3.5 w-3.5" /> Analizar IA
