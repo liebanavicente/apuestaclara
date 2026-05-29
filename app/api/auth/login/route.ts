@@ -3,14 +3,10 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 export async function POST(req: NextRequest) {
-  const { email, password, redirect } = await req.json()
+  const { email, password } = await req.json()
   const cookieStore = await cookies()
-  const redirectTo = redirect ?? '/dashboard'
 
-  const response = NextResponse.redirect(
-    new URL(redirectTo, req.url),
-    { status: 302 }
-  )
+  const response = NextResponse.json({ ok: true })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -27,6 +23,7 @@ export async function POST(req: NextRequest) {
               sameSite: 'lax',
               secure: true,
               httpOnly: true,
+              path: '/',
             })
           })
         },

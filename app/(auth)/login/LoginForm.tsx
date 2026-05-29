@@ -23,12 +23,11 @@ function LoginInner() {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, redirect }),
-      redirect: 'follow',
+      body: JSON.stringify({ email, password }),
     })
 
-    if (res.ok || res.redirected) {
-      window.location.href = res.url || redirect
+    if (res.ok) {
+      window.location.href = redirect
     } else {
       const data = await res.json()
       setError(data.error ?? 'Error al iniciar sesión')
