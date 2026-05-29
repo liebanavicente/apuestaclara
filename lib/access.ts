@@ -53,7 +53,8 @@ export function getUserAccess(
     return premiumAccess(reason)
   }
 
-  return freeAccess()
+  // MVP: todo el mundo tiene premium temporalmente
+  return premiumAccess('promo')
 }
 
 function adminAccess(): UserAccess {
