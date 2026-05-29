@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Apuesta Clara
 
-## Getting Started
+Plataforma SaaS de análisis responsable de combinadas deportivas.
 
-First, run the development server:
+**Analiza. Compara. Decide mejor.**
+
+## Stack
+
+- Next.js 15 (App Router) + TypeScript
+- Tailwind CSS
+- Supabase (auth + DB + RLS)
+- Stripe (suscripción Premium)
+- The Odds API (cuotas deportivas reales)
+- OpenAI (análisis IA)
+- Vercel (deploy)
+
+## Instalación
 
 ```bash
+npm install
+cp .env.local.example .env.local
+# Rellenar variables en .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Migraciones Supabase
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Ejecutar en orden en SQL Editor de Supabase:
+1. `supabase/migrations/001_profiles.sql`
+2. `supabase/migrations/002_subscribers.sql`
+3. `supabase/migrations/003_promos.sql`
+4. `supabase/migrations/004_referrals.sql`
+5. `supabase/migrations/005_simulator.sql`
+6. `supabase/migrations/006_community.sql`
+7. `supabase/migrations/007_rls.sql`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Variables de entorno
 
-## Learn More
+| Variable | Descripción |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL de tu proyecto Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Clave anon pública |
+| `SUPABASE_SERVICE_ROLE_KEY` | Clave service_role (solo servidor) |
+| `THE_ODDS_API_KEY` | API key de The Odds API |
+| `OPENAI_API_KEY` | API key de OpenAI |
+| `STRIPE_SECRET_KEY` | Clave secreta Stripe |
+| `STRIPE_WEBHOOK_SECRET` | Secret webhooks Stripe |
+| `STRIPE_PREMIUM_PRICE_ID` | Price ID del plan 4,99 €/mes |
+| `NEXT_PUBLIC_SITE_URL` | URL pública (ej: https://apuestaclara.com) |
 
-To learn more about Next.js, take a look at the following resources:
+## Configuración Supabase
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Crear proyecto en supabase.com
+2. Ejecutar migraciones SQL en orden
+3. Authentication → Providers → Google → activar
+4. Authentication → URL Configuration:
+   - Site URL: tu dominio
+   - Redirect URL: `https://tu-dominio.com/api/auth/callback`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Configuración Stripe
 
-## Deploy on Vercel
+1. Crear producto "Apuesta Clara Premium" — 4,99 €/mes
+2. Copiar Price ID a `STRIPE_PREMIUM_PRICE_ID`
+3. Webhook → `https://tu-dominio.com/api/stripe/webhooks`
+4. Eventos: `checkout.session.completed`, `customer.subscription.*`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Cuenta admin
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El email `mlieban3@gmail.com` recibe automáticamente role admin + premium_forever.  
+Si falla: ir a `/admin/debug-auth` → "Reparar mi perfil".
+
+## Fases
+
+- **Fase 1** ✅ Estructura, auth, perfiles, admin, landing, navegación
+- **Fase 2** The Odds API, buscador de eventos, generador básico
+- **Fase 3** IA de análisis y combinadas mixtas
+- **Fase 4** Simulador sin dinero
+- **Fase 5** Comunidad de picks
+- **Fase 6** Stripe Premium completo
+- **Fase 7** Promos, referidos y pulido final
+
+## Aviso legal
+
+Solo mayores de 18 años. Las predicciones son orientativas. Apostar implica riesgo.
