@@ -25,7 +25,8 @@ export function getUserAccess(
   subscriber: Subscriber | null
 ): UserAccess {
   if (!profile) {
-    return freeAccess()
+    // MVP: premium gratis para todos, incluso sin login
+    return premiumAccess('promo')
   }
 
   // 1. Admin premium forever
