@@ -18,6 +18,7 @@ const NAV_LINKS = [
   { href: '/mundial', label: '🌍 Mundial' },
   { href: '/ranking', label: '🏆 Ranking' },
   { href: '/reglas', label: '📋 Reglas' },
+  { href: '/herramientas', label: '🔧 Herramientas' },
 ]
 
 const TAGLINES = [
