@@ -178,7 +178,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
                     <p className="text-slate-500 text-xs mt-0.5">{ev.league} · {fmtDate(ev.commence_time)}</p>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
-                    {myPick?.status === 'pending' && (
+                    {myPick?.status === 'pending' && !matchStarted && (
                       <button onClick={() => deletePick(myPick.id)} className="text-slate-600 hover:text-red-400 transition-colors p-1" title="Eliminar pick">
                         <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                       </button>
@@ -229,19 +229,9 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
                   })}
                 </div>
 
-                {/* Resolve bar — shown after match starts */}
+                {/* Waiting for auto-resolve */}
                 {myPick?.status === 'pending' && matchStarted && (
-                  <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800">
-                    <span className="text-xs text-slate-400 flex-1">¿Acertaste <strong className="text-yellow-400">{myPick.selection === 'Empate' ? 'el Empate' : teamShort(myPick.selection.replace(' gana', ''))}</strong>?</span>
-                    <button onClick={() => resolvePick(myPick.id, 'won')}
-                      className="text-xs bg-green-500/20 hover:bg-green-500/30 text-green-400 font-bold px-3 py-1.5 rounded-lg transition-colors">
-                      ✓ Sí
-                    </button>
-                    <button onClick={() => resolvePick(myPick.id, 'lost')}
-                      className="text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 font-bold px-3 py-1.5 rounded-lg transition-colors">
-                      ✗ No
-                    </button>
-                  </div>
+                  <p className="text-xs text-slate-600 mt-2">⏳ Pendiente de resultado oficial</p>
                 )}
 
                 {/* Confirm bar — shown before confirming a new pick */}

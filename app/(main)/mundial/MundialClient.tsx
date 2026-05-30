@@ -274,11 +274,7 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
       </div>
 
       {myPick?.status === 'pending' && matchStarted && (
-        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800">
-          <span className="text-xs text-slate-400 flex-1">¿Acertaste <strong className="text-yellow-400">{teamShort(myPick.selection.replace(' gana', ''))}</strong>?</span>
-          <button onClick={() => onResolve(myPick.id, 'won')} className="text-xs bg-green-500/20 hover:bg-green-500/30 text-green-400 font-bold px-3 py-1.5 rounded-lg">✓ Sí</button>
-          <button onClick={() => onResolve(myPick.id, 'lost')} className="text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 font-bold px-3 py-1.5 rounded-lg">✗ No</button>
-        </div>
+        <p className="text-xs text-slate-600 mt-2">⏳ Pendiente de resultado oficial</p>
       )}
 
       {isStagingThis && !myPick && (
