@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { DashboardClient } from './DashboardClient'
 
 export const metadata = { title: 'GañanesBets 🐟' }
-export const revalidate = 300
+export const revalidate = 0
 
 export default async function DashboardPage() {
   const supabase = await createClient()
