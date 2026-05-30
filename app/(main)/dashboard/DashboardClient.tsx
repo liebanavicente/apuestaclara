@@ -13,11 +13,7 @@ interface MyPick {
   points: number
 }
 
-interface Sport {
-  key: string
-  label: string
-  emoji: string
-}
+interface Sport { key: string; label: string; emoji: string }
 
 interface Props {
   events: NormalizedEvent[]
@@ -26,7 +22,6 @@ interface Props {
   myPicks: MyPick[]
 }
 
-// Staged pick: selected but not yet confirmed
 interface StagedPick {
   eventId: string
   selection: string
@@ -40,6 +35,16 @@ function fmtDate(iso: string) {
   })
 }
 
+function OddsDiff({ pickOdds, currentOdds }: { pickOdds: number; currentOdds: number }) {
+  const diff = currentOdds - pickOdds
+  if (Math.abs(diff) < 0.01) return <span className="text-slate-500 text-xs">{currentOdds.toFixed(2)}</span>
+  return (
+    <span className={`text-xs font-medium ${diff > 0 ? 'text-green-400' : 'text-red-400'}`}>
+      {currentOdds.toFixed(2)} ({diff > 0 ? '+' : ''}{diff.toFixed(2)})
+    </span>
+  )
+}
+
 export function DashboardClient({ events, sports, totalPoints, myPicks }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
@@ -50,20 +55,14 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
 
   const leaguesInEvents = Array.from(new Set(events.map(e => e.league)))
   const tabs = [
-    { key: 'all', label: 'Todos', emoji: '⚽' },
-    ...sports
-      .filter(s => leaguesInEvents.includes(s.label))
-      .map(s => ({ key: s.label, label: s.label, emoji: s.emoji })),
+    { key: 'all', label: 'Todos', emoji: '🌍' },
+    ...sports.filter(s => leaguesInEvents.includes(s.label)).map(s => ({ key: s.label, label: s.label, emoji: s.emoji })),
   ]
 
   const filtered = activeLeague === 'all' ? events : events.filter(e => e.league === activeLeague)
 
   function stagePick(event: NormalizedEvent, selection: string, odds: number) {
-    // If clicking same selection → unstage
-    if (staged?.eventId === event.id && staged.selection === selection) {
-      setStaged(null)
-      return
-    }
+    if (staged?.eventId === event.id && staged.selection === selection) { setStaged(null); return }
     setStaged({ eventId: event.id, selection, odds })
   }
 
@@ -102,9 +101,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
             <span className="text-2xl font-black text-yellow-400">{totalPoints.toFixed(2)}</span>
             <span className="text-xs text-slate-500 ml-1">pts</span>
           </div>
-          <Link href="/ranking" className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition-colors">
-            🏆 Ranking
-          </Link>
+          <Link href="/ranking" className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition-colors">🏆 Ranking</Link>
         </div>
       </div>
 
@@ -113,21 +110,17 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
         <div className="flex gap-1.5 overflow-x-auto pb-2 mb-5 scrollbar-none">
           {tabs.map(tab => (
             <button key={tab.key} onClick={() => setActiveLeague(tab.key)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors shrink-0 ${
-                activeLeague === tab.key ? 'bg-yellow-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400 hover:text-white'
-              }`}>
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors shrink-0 ${activeLeague === tab.key ? 'bg-yellow-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
               <span>{tab.emoji}</span><span>{tab.label}</span>
             </button>
           ))}
         </div>
       )}
 
-      {/* Match list */}
       {filtered.length === 0 ? (
         <div className="text-center py-16 text-slate-500">
           <p className="text-4xl mb-3">😴</p>
           <p className="text-white font-medium">Sin partidos disponibles</p>
-          <p className="text-sm mt-1">Prueba con otra liga o vuelve más tarde</p>
         </div>
       ) : (
         <div className="space-y-2.5">
@@ -135,13 +128,15 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
             const myPick = myPickMap.get(ev.event_name)
             const { home, draw, away } = ev.best_odds
             const isStagingThis = staged?.eventId === ev.id
-            const isConfirming = loading === ev.id
 
             const outcomes = [
               { short: ev.home_team.split(' ').pop()!, full: `${ev.home_team} gana`, odds: home },
               { short: 'X', full: 'Empate', odds: draw },
               { short: ev.away_team.split(' ').pop()!, full: `${ev.away_team} gana`, odds: away },
             ]
+
+            // Current odds for the user's pick selection
+            const myCurrentOdds = myPick ? outcomes.find(o => o.full === myPick.selection)?.odds ?? null : null
 
             return (
               <div key={ev.id} className={`rounded-xl border p-3.5 transition-colors ${
@@ -168,23 +163,30 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
                         'bg-yellow-500/20 text-yellow-400'
                       }`}>
                         {myPick.status === 'won' ? `+${myPick.points.toFixed(2)} pts ✓` :
-                         myPick.status === 'lost' ? 'Fallado ✗' :
-                         `✓ ${myPick.selection.split(' ').pop()}`}
+                         myPick.status === 'lost' ? '0 pts ✗' :
+                         `✓ ${myPick.selection.split(' ').pop()} @ ${myPick.odds.toFixed(2)}`}
                       </span>
                     )}
                   </div>
                 </div>
 
-                {/* 1X2 buttons */}
+                {/* Current odds vs pick odds */}
+                {myPick?.status === 'pending' && myCurrentOdds !== null && (
+                  <div className="text-xs text-slate-500 mb-2">
+                    Cuota actual: <OddsDiff pickOdds={myPick.odds} currentOdds={myCurrentOdds} />
+                    {myCurrentOdds > myPick.odds && <span className="text-slate-600 ml-1">— apostaste antes y mejor 🎉</span>}
+                    {myCurrentOdds < myPick.odds && <span className="text-slate-600 ml-1">— la cuota ha bajado</span>}
+                  </div>
+                )}
+
+                {/* 1X2 */}
                 <div className="grid grid-cols-3 gap-2">
                   {outcomes.map(({ short, full, odds }) => {
                     if (!odds) return null
                     const isMyPick = myPick?.selection === full
                     const isStaged = isStagingThis && staged?.selection === full
-
                     return (
-                      <button
-                        key={full}
+                      <button key={full}
                         onClick={() => !myPick && stagePick(ev, full, odds)}
                         disabled={!!myPick}
                         className={`rounded-lg border px-2 py-2.5 text-center transition-all ${
@@ -192,8 +194,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
                           isStaged ? 'border-yellow-400 bg-yellow-400/20 ring-1 ring-yellow-400/40' :
                           myPick ? 'border-slate-800 bg-slate-900 opacity-30 cursor-default' :
                           'border-slate-700 bg-slate-800 hover:border-yellow-500/50 hover:bg-yellow-500/10 cursor-pointer'
-                        }`}
-                      >
+                        }`}>
                         <div className={`text-xs font-medium truncate ${isMyPick || isStaged ? 'text-yellow-300' : 'text-slate-400'}`}>{short}</div>
                         <div className={`font-black text-sm mt-0.5 ${isMyPick || isStaged ? 'text-yellow-400' : 'text-slate-300'}`}>{odds.toFixed(2)}</div>
                       </button>
@@ -209,18 +210,10 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
                       {' '}@ <span className="text-yellow-400 font-black">{staged.odds.toFixed(2)}</span>
                       <span className="text-slate-600 ml-1">→ +{staged.odds.toFixed(2)} pts si aciertas</span>
                     </div>
-                    <button
-                      onClick={() => setStaged(null)}
-                      className="text-xs text-slate-500 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition-colors"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      onClick={() => confirmPick(ev)}
-                      disabled={isConfirming}
-                      className="text-xs bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-slate-950 font-black px-4 py-1.5 rounded-lg transition-colors"
-                    >
-                      {isConfirming ? '…' : 'Confirmar ✓'}
+                    <button onClick={() => setStaged(null)} className="text-xs text-slate-500 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition-colors">Cancelar</button>
+                    <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
+                      className="text-xs bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-slate-950 font-black px-4 py-1.5 rounded-lg transition-colors">
+                      {loading === ev.id ? '…' : 'Confirmar ✓'}
                     </button>
                   </div>
                 )}

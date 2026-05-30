@@ -13,7 +13,6 @@ export default async function DashboardPage() {
   if (!user) redirect('/login?redirect=/dashboard')
 
   const admin = createAdminClient()
-  // Fetch all featured sports
   const sportKeys = FEATURED_SPORTS.map(s => s.key)
 
   const [events, { data: myPicks }] = await Promise.all([
@@ -21,12 +20,11 @@ export default async function DashboardPage() {
     admin.from('picks').select('id,description,selection,odds,status,points').eq('user_id', user.id),
   ])
 
-  // Next 14 days
+  // Show all future matches (no date cap — allow anticipating World Cup picks)
   const now = Date.now()
-  const upcoming = events.filter(e => {
-    const t = new Date(e.commence_time).getTime()
-    return t >= now - 3600_000 && t <= now + 14 * 24 * 60 * 60 * 1000
-  })
+  const upcoming = events
+    .filter(e => new Date(e.commence_time).getTime() >= now - 3600_000)
+    .sort((a, b) => new Date(a.commence_time).getTime() - new Date(b.commence_time).getTime())
 
   const totalPoints = (myPicks ?? []).reduce((sum: number, p: any) => sum + (p.points ?? 0), 0)
 
