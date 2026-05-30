@@ -140,7 +140,7 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
                 </div>
                 <div>
                   <h2 className="text-white font-bold text-sm">Grupo {group.id}</h2>
-                  <p className="text-slate-500 text-xs">{group.teams.join(' · ')}</p>
+                  <p className="text-slate-500 text-xs">{group.teams.map(t => t.name).join(' · ')}</p>
                 </div>
                 <span className="ml-auto text-xs text-slate-600">{matches.length} partido{matches.length !== 1 ? 's' : ''}</span>
               </div>
