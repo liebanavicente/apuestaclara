@@ -39,7 +39,7 @@ async function runAutoResolve(req: NextRequest) {
       const eventName = `${match.home_team} vs ${match.away_team}`
       const { data: pendingPicks } = await admin
         .from('picks')
-        .select('id, selection, odds, user_id')
+        .select('id, selection, odds, stake, is_sim, user_id')
         .eq('description', eventName)
         .eq('status', 'pending')
 
@@ -56,8 +56,10 @@ async function runAutoResolve(req: NextRequest) {
         if (result === 'draw' && sel === 'empate') won = true
 
         const status = won ? 'won' : 'lost'
-        const points = won ? Math.round(pick.odds * 100) / 100 : 0
-        const profit = won ? pick.odds - 1 : -1
+        const points = (!pick.is_sim && won) ? Math.round(pick.odds * 100) / 100 : 0
+        const profit = pick.is_sim
+          ? (won ? Math.round(pick.stake * (pick.odds - 1) * 100) / 100 : -pick.stake)
+          : (won ? pick.odds - 1 : -1)
 
         const { error } = await admin.from('picks').update({
           status,
