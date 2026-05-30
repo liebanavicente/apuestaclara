@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import type { NormalizedEvent } from '@/types/odds'
 import type { Group } from './groups'
 import { teamShort } from './groups'
+import { PickConfirmedToast, shouldShowPickWarning } from '@/components/picks/PickConfirmedToast'
 
 interface MyPick {
   id: string
@@ -38,15 +39,20 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
   const [activeGroup, setActiveGroup] = useState<string>('all')
   const [staged, setStaged] = useState<StagedPick | null>(null)
   const [loading, setLoading] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ odds: number } | null>(null)
 
   const myPickMap = new Map(myPicks.map(p => [p.description, p]))
   const totalPoints = myPicks.reduce((s, p) => s + (p.points ?? 0), 0)
 
-  // Groups that actually have matches
   const activeGroups = groups.filter(g => (matchesByGroup[g.id] ?? []).length > 0)
-
   const visibleGroups = activeGroup === 'all' ? activeGroups : activeGroups.filter(g => g.id === activeGroup)
   const showUnassigned = (activeGroup === 'all' || activeGroup === '?') && unassigned.length > 0
+
+  const groupOptions = [
+    { key: 'all', label: 'Todos los grupos' },
+    ...activeGroups.map(g => ({ key: g.id, label: `Grupo ${g.id} — ${g.teams.map(t => t.name).join(', ')}` })),
+    ...(unassigned.length > 0 ? [{ key: '?', label: 'Otros partidos' }] : []),
+  ]
 
   function stagePick(ev: NormalizedEvent, selection: string, odds: number) {
     if (staged?.eventId === ev.id && staged.selection === selection) { setStaged(null); return }
@@ -56,6 +62,7 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
   async function confirmPick(ev: NormalizedEvent, competition: string) {
     if (!staged || staged.eventId !== ev.id) return
     setLoading(ev.id)
+    const confirmedOdds = staged.odds
     await fetch('/api/picks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -63,14 +70,15 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
         description: ev.event_name,
         competition,
         selection: staged.selection,
-        odds: staged.odds,
+        odds: confirmedOdds,
         stake: 1,
         match_date: ev.commence_time,
       }),
     })
     setStaged(null)
     setLoading(null)
-    router.refresh()
+    if (shouldShowPickWarning()) setToast({ odds: confirmedOdds })
+    else router.refresh()
   }
 
   async function resolvePick(id: string, result: 'won' | 'lost') {
@@ -89,6 +97,10 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-6">
+      {toast && (
+        <PickConfirmedToast odds={toast.odds} onClose={() => { setToast(null); router.refresh() }} />
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
@@ -101,24 +113,38 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
         </div>
       </div>
 
-      {/* Group tabs */}
-      <div className="flex gap-1.5 overflow-x-auto pb-2 mb-6 scrollbar-none">
-        <button onClick={() => setActiveGroup('all')}
-          className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === 'all' ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
-          Todos
-        </button>
-        {activeGroups.map(g => (
-          <button key={g.id} onClick={() => setActiveGroup(g.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === g.id ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
-            Grupo {g.id}
+      {/* Group selector — dropdown on mobile, tabs on desktop */}
+      <div className="mb-6">
+        {/* Mobile: dropdown */}
+        <select
+          value={activeGroup}
+          onChange={e => setActiveGroup(e.target.value)}
+          className="sm:hidden w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white text-sm focus:border-yellow-500 focus:outline-none"
+        >
+          {groupOptions.map(o => (
+            <option key={o.key} value={o.key}>{o.label}</option>
+          ))}
+        </select>
+
+        {/* Desktop: scrollable tabs */}
+        <div className="hidden sm:flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+          <button onClick={() => setActiveGroup('all')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === 'all' ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
+            Todos
           </button>
-        ))}
-        {unassigned.length > 0 && (
-          <button onClick={() => setActiveGroup('?')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === '?' ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
-            Otros
-          </button>
-        )}
+          {activeGroups.map(g => (
+            <button key={g.id} onClick={() => setActiveGroup(g.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === g.id ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
+              Grp {g.id}
+            </button>
+          ))}
+          {unassigned.length > 0 && (
+            <button onClick={() => setActiveGroup('?')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === '?' ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
+              Otros
+            </button>
+          )}
+        </div>
       </div>
 
       {activeGroups.length === 0 && unassigned.length === 0 && (
@@ -134,7 +160,6 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
           const matches = matchesByGroup[group.id] ?? []
           return (
             <section key={group.id}>
-              {/* Group header */}
               <div className="flex items-center gap-3 mb-3">
                 <div className="bg-yellow-500 text-slate-950 font-black text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
                   {group.id}
@@ -145,30 +170,31 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
                 </div>
                 <span className="ml-auto text-xs text-slate-600">{matches.length} partido{matches.length !== 1 ? 's' : ''}</span>
               </div>
-
               <div className="space-y-2">
-                {matches.map(ev => <MatchCard key={ev.id} ev={ev} competition={`Grupo ${group.id} · Mundial 2026`}
-                  myPick={myPickMap.get(ev.event_name) ?? null}
-                  staged={staged} onStage={stagePick} onConfirm={confirmPick}
-                  onResolve={resolvePick} onDelete={deletePick} loading={loading} />)}
+                {matches.map(ev => (
+                  <MatchCard key={ev.id} ev={ev} competition={`Grupo ${group.id} · Mundial 2026`}
+                    myPick={myPickMap.get(ev.event_name) ?? null}
+                    staged={staged} onStage={stagePick} onConfirm={confirmPick}
+                    onResolve={resolvePick} onDelete={deletePick} loading={loading} />
+                ))}
               </div>
             </section>
           )
         })}
 
-        {/* Unassigned matches (knockouts, etc.) */}
         {showUnassigned && (
           <section>
             <div className="flex items-center gap-3 mb-3">
               <div className="bg-slate-700 text-slate-300 font-black text-xs w-8 h-8 rounded-lg flex items-center justify-center shrink-0">?</div>
               <h2 className="text-white font-bold text-sm">Sin grupo asignado</h2>
-              <span className="ml-auto text-xs text-slate-600">{unassigned.length} partidos</span>
             </div>
             <div className="space-y-2">
-              {unassigned.map(ev => <MatchCard key={ev.id} ev={ev} competition="Mundial 2026"
-                myPick={myPickMap.get(ev.event_name) ?? null}
-                staged={staged} onStage={stagePick} onConfirm={confirmPick}
-                onResolve={resolvePick} onDelete={deletePick} loading={loading} />)}
+              {unassigned.map(ev => (
+                <MatchCard key={ev.id} ev={ev} competition="Mundial 2026"
+                  myPick={myPickMap.get(ev.event_name) ?? null}
+                  staged={staged} onStage={stagePick} onConfirm={confirmPick}
+                  onResolve={resolvePick} onDelete={deletePick} loading={loading} />
+              ))}
             </div>
           </section>
         )}
@@ -178,9 +204,7 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
 }
 
 function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onResolve, onDelete, loading }: {
-  ev: NormalizedEvent
-  competition: string
-  myPick: MyPick | null
+  ev: NormalizedEvent; competition: string; myPick: MyPick | null
   staged: StagedPick | null
   onStage: (ev: NormalizedEvent, sel: string, odds: number) => void
   onConfirm: (ev: NormalizedEvent, comp: string) => void
@@ -210,7 +234,7 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
           <p className="text-slate-500 text-xs mt-0.5">{fmtDate(ev.commence_time)}</p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          {myPick?.status === 'pending' && (
+          {myPick?.status === 'pending' && !matchStarted && (
             <button onClick={() => onDelete(myPick.id)} className="text-slate-600 hover:text-red-400 p-1">
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
@@ -223,7 +247,7 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
             }`}>
               {myPick.status === 'won' ? `+${myPick.points.toFixed(2)} pts ✓` :
                myPick.status === 'lost' ? '0 pts ✗' :
-               `✓ ${myPick.selection.split(' ').pop()} @ ${myPick.odds.toFixed(2)}`}
+               `✓ ${teamShort(myPick.selection.replace(' gana', ''))} @ ${myPick.odds.toFixed(2)}`}
             </span>
           )}
         </div>
@@ -242,29 +266,27 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
                 myPick ? 'border-slate-800 bg-slate-900 opacity-30 cursor-default' :
                 'border-slate-700 bg-slate-800 hover:border-yellow-500/50 hover:bg-yellow-500/10 cursor-pointer'
               }`}>
-              <div className={`text-xs font-medium truncate ${isMyPick || isStaged ? 'text-yellow-300' : 'text-slate-400'}`}>{short}</div>
+              <div className={`text-xs font-bold ${isMyPick || isStaged ? 'text-yellow-300' : 'text-slate-400'}`}>{short}</div>
               <div className={`font-black text-sm mt-0.5 ${isMyPick || isStaged ? 'text-yellow-400' : 'text-slate-300'}`}>{odds.toFixed(2)}</div>
             </button>
           )
         })}
       </div>
 
-      {/* Resolve after match */}
       {myPick?.status === 'pending' && matchStarted && (
         <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800">
-          <span className="text-xs text-slate-400 flex-1">¿Acertaste <strong className="text-yellow-400">{myPick.selection.split(' ').pop()}</strong>?</span>
+          <span className="text-xs text-slate-400 flex-1">¿Acertaste <strong className="text-yellow-400">{teamShort(myPick.selection.replace(' gana', ''))}</strong>?</span>
           <button onClick={() => onResolve(myPick.id, 'won')} className="text-xs bg-green-500/20 hover:bg-green-500/30 text-green-400 font-bold px-3 py-1.5 rounded-lg">✓ Sí</button>
           <button onClick={() => onResolve(myPick.id, 'lost')} className="text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 font-bold px-3 py-1.5 rounded-lg">✗ No</button>
         </div>
       )}
 
-      {/* Confirm new pick */}
       {isStagingThis && !myPick && (
         <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800">
           <div className="flex-1 text-xs text-slate-400">
-            <span className="text-white font-medium">{staged!.selection.split(' ').pop()}</span>
+            <span className="text-white font-medium">{staged!.selection.replace(' gana', '')}</span>
             {' '}@ <span className="text-yellow-400 font-black">{staged!.odds.toFixed(2)}</span>
-            <span className="text-slate-600 ml-1">→ +{staged!.odds.toFixed(2)} pts si aciertas</span>
+            <span className="text-slate-600 ml-1">→ +{staged!.odds.toFixed(2)} pts</span>
           </div>
           <button onClick={() => onStage(ev, staged!.selection, staged!.odds)} className="text-xs text-slate-500 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700">Cancelar</button>
           <button onClick={() => onConfirm(ev, competition)} disabled={loading === ev.id}

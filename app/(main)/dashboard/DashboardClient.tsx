@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import type { NormalizedEvent } from '@/types/odds'
 import Link from 'next/link'
 import { teamShort } from '@/lib/teamShort'
+import { PickConfirmedToast, shouldShowPickWarning } from '@/components/picks/PickConfirmedToast'
 
 interface MyPick {
   id: string
@@ -51,6 +52,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
   const [loading, setLoading] = useState<string | null>(null)
   const [activeLeague, setActiveLeague] = useState<string>('all')
   const [staged, setStaged] = useState<StagedPick | null>(null)
+  const [toast, setToast] = useState<{ odds: number } | null>(null)
 
   const myPickMap = new Map(myPicks.map(p => [p.description, p]))
 
@@ -77,6 +79,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
   async function confirmPick(event: NormalizedEvent) {
     if (!staged || staged.eventId !== event.id) return
     setLoading(event.id)
+    const confirmedOdds = staged.odds
     await fetch('/api/picks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -91,7 +94,8 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
     })
     setStaged(null)
     setLoading(null)
-    router.refresh()
+    if (shouldShowPickWarning()) setToast({ odds: confirmedOdds })
+    else router.refresh()
   }
 
   async function deletePick(id: string) {
@@ -110,6 +114,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-6">
+      {toast && <PickConfirmedToast odds={toast.odds} onClose={() => { setToast(null); router.refresh() }} />}
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <h1 className="text-xl font-black text-white">⚽ Partidos</h1>
