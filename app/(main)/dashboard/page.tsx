@@ -28,12 +28,19 @@ export default async function DashboardPage() {
 
   const totalPoints = (myPicks ?? []).reduce((sum: number, p: any) => sum + (p.points ?? 0), 0)
 
+  // Picks pendientes cuyo partido ya no está en la API (en juego o recién acabado)
+  const eventNames = new Set(upcoming.map(e => e.event_name))
+  const inProgressPicks = (myPicks ?? []).filter((p: any) =>
+    p.status === 'pending' && !eventNames.has(p.description)
+  )
+
   return (
     <DashboardClient
       events={upcoming}
       sports={FEATURED_SPORTS}
       totalPoints={totalPoints}
       myPicks={myPicks ?? []}
+      inProgressPicks={inProgressPicks}
     />
   )
 }

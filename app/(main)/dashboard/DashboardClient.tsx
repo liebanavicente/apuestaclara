@@ -22,6 +22,7 @@ interface Props {
   sports: Sport[]
   totalPoints: number
   myPicks: MyPick[]
+  inProgressPicks: MyPick[]
 }
 
 interface StagedPick {
@@ -47,7 +48,7 @@ function OddsDiff({ pickOdds, currentOdds }: { pickOdds: number; currentOdds: nu
   )
 }
 
-export function DashboardClient({ events, sports, totalPoints, myPicks }: Props) {
+export function DashboardClient({ events, sports, totalPoints, myPicks, inProgressPicks }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
   const [activeLeague, setActiveLeague] = useState<string>('all')
@@ -135,6 +136,30 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors shrink-0 ${activeLeague === tab.key ? 'bg-yellow-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
               <span>{tab.emoji}</span><span>{tab.label}</span>
             </button>
+          ))}
+        </div>
+      )}
+
+      {/* In-progress picks — partido ya no está en la API */}
+      {inProgressPicks.length > 0 && (
+        <div className="mb-6 space-y-2">
+          <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            En juego — resultado pendiente
+          </h2>
+          {inProgressPicks.map(p => (
+            <div key={p.id} className="rounded-xl border border-green-500/20 bg-green-500/5 px-4 py-3 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-white font-medium text-sm truncate">{p.description}</p>
+                <p className="text-yellow-400 text-xs mt-0.5">
+                  → {p.selection === 'Empate' ? 'Empate' : teamShort(p.selection.replace(' gana', ''))} @ {p.odds.toFixed(2)}
+                </p>
+              </div>
+              <span className="text-xs text-green-400 font-medium shrink-0 flex items-center gap-1">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                En juego
+              </span>
+            </div>
           ))}
         </div>
       )}
