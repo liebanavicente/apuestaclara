@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { getMultipleSportsEvents, FEATURED_SPORTS } from '@/lib/services/odds.service'
+import { getMultipleSportsEvents, SIM_SPORTS } from '@/lib/services/odds.service'
 import { redirect } from 'next/navigation'
 import { SimClient } from './SimClient'
 
@@ -13,7 +13,7 @@ export default async function SimPage() {
   if (!user) redirect('/login?redirect=/sim')
 
   const admin = createAdminClient()
-  const sportKeys = FEATURED_SPORTS.map(s => s.key)
+  const sportKeys = SIM_SPORTS.map(s => s.key)
 
   const [events, { data: myPicks }, { data: leaderboard }] = await Promise.all([
     getMultipleSportsEvents(sportKeys),
@@ -27,14 +27,13 @@ export default async function SimPage() {
     .sort((a, b) => new Date(a.commence_time).getTime() - new Date(b.commence_time).getTime())
 
   const myNetProfit = (myPicks ?? []).reduce((s: number, p: any) => s + (p.profit ?? 0), 0)
-
   const eventNames = new Set(upcoming.map(e => e.event_name))
   const inProgressPicks = (myPicks ?? []).filter((p: any) => p.status === 'pending' && !eventNames.has(p.description))
 
   return (
     <SimClient
       events={upcoming}
-      sports={FEATURED_SPORTS}
+      sports={SIM_SPORTS}
       myPicks={myPicks ?? []}
       inProgressPicks={inProgressPicks}
       leaderboard={leaderboard ?? []}

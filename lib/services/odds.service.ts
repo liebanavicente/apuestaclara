@@ -8,6 +8,20 @@ export const FEATURED_SPORTS: { key: string; label: string; emoji: string; featu
   { key: 'soccer_uefa_champs_league', label: 'Champions League', emoji: '⭐', featured: true },
 ]
 
+// Extra sports for the simulator
+export const SIM_SPORTS: { key: string; label: string; emoji: string }[] = [
+  { key: 'soccer_fifa_world_cup', label: 'Mundial 2026', emoji: '🌍' },
+  { key: 'soccer_uefa_champs_league', label: 'Champions League', emoji: '⭐' },
+  { key: 'basketball_nba', label: 'NBA', emoji: '🏀' },
+  { key: 'tennis_atp_french_open', label: 'Roland Garros ATP', emoji: '🎾' },
+  { key: 'tennis_wta_french_open', label: 'Roland Garros WTA', emoji: '🎾' },
+  { key: 'icehockey_nhl', label: 'NHL', emoji: '🏒' },
+  { key: 'baseball_mlb', label: 'MLB', emoji: '⚾' },
+  { key: 'soccer_conmebol_copa_libertadores', label: 'Copa Libertadores', emoji: '🌎' },
+  { key: 'mma_mixed_martial_arts', label: 'MMA', emoji: '🥊' },
+  { key: 'boxing_boxing', label: 'Boxeo', emoji: '🥊' },
+]
+
 export interface CompletedMatch {
   id: string
   sport_key: string
