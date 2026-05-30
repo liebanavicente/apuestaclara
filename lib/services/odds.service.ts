@@ -8,6 +8,39 @@ export const FEATURED_SPORTS: { key: string; label: string; emoji: string; featu
   { key: 'soccer_uefa_champs_league', label: 'Champions League', emoji: '⭐', featured: true },
 ]
 
+export interface CompletedMatch {
+  id: string
+  sport_key: string
+  home_team: string
+  away_team: string
+  completed: boolean
+  scores: { name: string; score: string }[] | null
+}
+
+export type MatchResult = 'home' | 'away' | 'draw'
+
+export function getMatchResult(match: CompletedMatch): MatchResult | null {
+  if (!match.completed || !match.scores || match.scores.length < 2) return null
+  const homeScore = match.scores.find(s => s.name === match.home_team)
+  const awayScore = match.scores.find(s => s.name === match.away_team)
+  if (!homeScore || !awayScore) return null
+  const h = parseInt(homeScore.score)
+  const a = parseInt(awayScore.score)
+  if (isNaN(h) || isNaN(a)) return null
+  if (h > a) return 'home'
+  if (a > h) return 'away'
+  return 'draw'
+}
+
+export async function getCompletedMatches(sportKey: string, daysFrom = 3): Promise<CompletedMatch[]> {
+  if (!API_KEY) return []
+  const params = new URLSearchParams({ apiKey: API_KEY, daysFrom: String(daysFrom), dateFormat: 'iso' })
+  const res = await fetch(`${BASE_URL}/sports/${sportKey}/scores?${params}`, { cache: 'no-store' })
+  if (!res.ok) return []
+  const data: CompletedMatch[] = await res.json()
+  return data.filter(m => m.completed)
+}
+
 export async function getSports(): Promise<Sport[]> {
   if (!API_KEY) return []
   const res = await fetch(`${BASE_URL}/sports/?apiKey=${API_KEY}`, {

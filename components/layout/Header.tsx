@@ -92,9 +92,10 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                     <Link href="/mis-picks" className="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800" onClick={() => setAccountOpen(false)}>🎯 Mis picks</Link>
                     <Link href="/ranking" className="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800" onClick={() => setAccountOpen(false)}>🏆 Ranking</Link>
                     <Link href="/account" className="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800" onClick={() => setAccountOpen(false)}>Mi cuenta</Link>
-                    {access?.isAdmin && (
+                    {access?.isAdmin && (<>
+                      <Link href="/admin/resolver" className="block px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-slate-800" onClick={() => setAccountOpen(false)}>⚙️ Auto-resolver</Link>
                       <Link href="/admin/debug" className="block px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-slate-800" onClick={() => setAccountOpen(false)}>Admin debug</Link>
-                    )}
+                    </>)}
                     <hr className="border-slate-700 my-1" />
                     <button onClick={onSignOut} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-slate-800">
                       Salir 👋
