@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { NormalizedEvent } from '@/types/odds'
 import { teamShort } from '@/lib/teamShort'
+import { QuickAI } from '@/components/picks/QuickAI'
 
 interface MyPick { id: string; description: string; selection: string; odds: number; status: string; profit: number; stake: number }
 interface LeaderboardRow { user_id: string; username: string; net_profit: number; total_resolved: number; total_won: number; win_rate: number }
@@ -210,6 +211,12 @@ export function SimClient({ events, sports, myPicks, inProgressPicks, leaderboar
                               Si aciertas: <span className="text-green-400 font-medium">+{((parseFloat(stake)||0) * (staged!.odds - 1)).toFixed(0)}€</span>
                               {' '}· Si fallas: <span className="text-red-400 font-medium">-{(parseFloat(stake)||0).toFixed(0)}€</span>
                             </div>
+                            <QuickAI
+                              event={ev.event_name}
+                              league={ev.league}
+                              selection={staged!.selection}
+                              odds={staged!.odds}
+                            />
                             <div className="flex gap-2">
                               <button onClick={() => setStaged(null)} className="text-xs text-slate-500 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700">Cancelar</button>
                               <button onClick={() => confirmPick(ev)} disabled={loading === ev.id || !stake || parseFloat(stake) <= 0}
