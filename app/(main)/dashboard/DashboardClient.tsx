@@ -201,8 +201,8 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
                 {myPick?.status === 'pending' && myCurrentOdds !== null && (
                   <div className="text-xs text-slate-500 mb-2">
                     Cuota actual: <OddsDiff pickOdds={myPick.odds} currentOdds={myCurrentOdds} />
-                    {myCurrentOdds > myPick.odds && <span className="text-slate-600 ml-1">— apostaste antes y mejor 🎉</span>}
-                    {myCurrentOdds < myPick.odds && <span className="text-slate-600 ml-1">— la cuota ha bajado</span>}
+                    {myCurrentOdds > myPick.odds && <span className="text-slate-600 ml-1">— cuota subió, menos probable ahora 📉</span>}
+                    {myCurrentOdds < myPick.odds && <span className="text-slate-600 ml-1">— cuota bajó, más probable ahora 📈</span>}
                   </div>
                 )}
 
