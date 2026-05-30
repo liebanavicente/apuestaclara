@@ -72,7 +72,7 @@ export default function AdminResolverPage() {
             <div className="flex-1 min-w-0">
               <p className="text-white text-sm font-medium truncate">{p.description}</p>
               <p className="text-yellow-400 text-xs">→ {p.selection} @ {p.odds.toFixed(2)}</p>
-              <p className="text-slate-600 text-xs">{p.profiles?.username ?? p.user_id.slice(0, 8)}</p>
+              <p className="text-slate-600 text-xs">{(p as any).username}</p>
             </div>
             <div className="flex gap-2 shrink-0">
               <button onClick={() => manualResolve(p.id, 'won')} disabled={resolving === p.id}
