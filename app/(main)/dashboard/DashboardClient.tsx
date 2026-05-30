@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { NormalizedEvent } from '@/types/odds'
 import Link from 'next/link'
+import { teamShort } from '@/lib/teamShort'
 
 interface MyPick {
   id: string
@@ -150,9 +151,9 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
             const isStagingThis = staged?.eventId === ev.id
 
             const outcomes = [
-              { short: ev.home_team.split(' ').pop()!, full: `${ev.home_team} gana`, odds: home },
+              { short: teamShort(ev.home_team), full: `${ev.home_team} gana`, odds: home },
               { short: 'X', full: 'Empate', odds: draw },
-              { short: ev.away_team.split(' ').pop()!, full: `${ev.away_team} gana`, odds: away },
+              { short: teamShort(ev.away_team), full: `${ev.away_team} gana`, odds: away },
             ]
 
             // Current odds for the user's pick selection

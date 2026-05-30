@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { NormalizedEvent } from '@/types/odds'
 import type { Group } from './groups'
+import { teamShort } from './groups'
 
 interface MyPick {
   id: string
@@ -192,9 +193,9 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
   const matchStarted = new Date(ev.commence_time).getTime() < Date.now()
 
   const outcomes = [
-    { short: ev.home_team.split(' ').pop()!, full: `${ev.home_team} gana`, odds: home },
+    { short: teamShort(ev.home_team), full: `${ev.home_team} gana`, odds: home },
     { short: 'X', full: 'Empate', odds: draw },
-    { short: ev.away_team.split(' ').pop()!, full: `${ev.away_team} gana`, odds: away },
+    { short: teamShort(ev.away_team), full: `${ev.away_team} gana`, odds: away },
   ]
 
   return (

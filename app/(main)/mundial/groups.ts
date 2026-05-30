@@ -44,9 +44,15 @@ export const WC_GROUPS: Group[] = [
 ]
 
 export const TEAM_TO_GROUP = new Map<string, string>()
+export const TEAM_TO_CODE = new Map<string, string>()  // api name (lower) → FIFA code
+
 for (const group of WC_GROUPS) {
-  for (const name of group.apiNames) {
-    TEAM_TO_GROUP.set(name.toLowerCase(), group.id)
+  for (let i = 0; i < group.apiNames.length; i++) {
+    const lower = group.apiNames[i].toLowerCase()
+    TEAM_TO_GROUP.set(lower, group.id)
+    // First apiName per team maps to its code (same order as teams array)
+    const teamIdx = Math.min(i, group.teams.length - 1)
+    TEAM_TO_CODE.set(lower, group.teams[teamIdx].code)
   }
 }
 
@@ -54,4 +60,14 @@ export function getGroupForMatch(homeTeam: string, awayTeam: string): string | n
   return TEAM_TO_GROUP.get(homeTeam.toLowerCase())
     ?? TEAM_TO_GROUP.get(awayTeam.toLowerCase())
     ?? null
+}
+
+/** Short label for a button — FIFA code if known, else smart abbreviation */
+export function teamShort(apiName: string): string {
+  const code = TEAM_TO_CODE.get(apiName.toLowerCase())
+  if (code) return code
+  const words = apiName.trim().split(' ')
+  if (words.length === 1) return words[0]
+  if (words.length === 2) return `${words[0][0]}. ${words[1]}`
+  return words.map(w => w[0]).join('').toUpperCase()
 }
