@@ -14,20 +14,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Faltan campos' }, { status: 400 })
   }
   if (odds <= 1) return NextResponse.json({ error: 'Cuota debe ser mayor de 1' }, { status: 400 })
-  if (stake <= 0) return NextResponse.json({ error: 'Apuesta debe ser positiva' }, { status: 400 })
 
   const admin = createAdminClient()
 
-  // Check bankroll
-  const { data: bankrollRow } = await admin
-    .from('bankrolls')
-    .select('bankroll')
+  // Check: only one pick per user per match
+  const { data: existing } = await admin
+    .from('picks')
+    .select('id')
     .eq('user_id', user.id)
-    .single()
+    .eq('description', description)
+    .neq('status', 'void')
+    .maybeSingle()
 
-  const currentBankroll = bankrollRow?.bankroll ?? 1000
-  if (stake > currentBankroll) {
-    return NextResponse.json({ error: 'No tienes suficiente bankroll' }, { status: 400 })
+  if (existing) {
+    return NextResponse.json({ error: 'Ya tienes un pick para este partido' }, { status: 400 })
   }
 
   const { data, error } = await admin.from('picks').insert({
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     competition: competition || null,
     selection,
     odds,
-    stake,
+    stake: stake || 1,
     note: note || null,
     match_date: match_date || null,
     legs: legs || null,
