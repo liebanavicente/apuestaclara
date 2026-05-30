@@ -61,6 +61,13 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
 
   const filtered = activeLeague === 'all' ? events : events.filter(e => e.league === activeLeague)
 
+  // Group by day
+  const byDay = filtered.reduce<Record<string, NormalizedEvent[]>>((acc, ev) => {
+    const day = new Date(ev.commence_time).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })
+    ;(acc[day] ??= []).push(ev)
+    return acc
+  }, {})
+
   function stagePick(event: NormalizedEvent, selection: string, odds: number) {
     if (staged?.eventId === event.id && staged.selection === selection) { setStaged(null); return }
     setStaged({ eventId: event.id, selection, odds })
@@ -123,8 +130,12 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
           <p className="text-white font-medium">Sin partidos disponibles</p>
         </div>
       ) : (
-        <div className="space-y-2.5">
-          {filtered.map(ev => {
+        <div className="space-y-8">
+          {Object.entries(byDay).map(([day, dayEvents]) => (
+            <section key={day}>
+              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 capitalize">{day}</h2>
+              <div className="space-y-2.5">
+          {dayEvents.map(ev => {
             const myPick = myPickMap.get(ev.event_name)
             const { home, draw, away } = ev.best_odds
             const isStagingThis = staged?.eventId === ev.id
@@ -220,6 +231,9 @@ export function DashboardClient({ events, sports, totalPoints, myPicks }: Props)
               </div>
             )
           })}
+              </div>
+            </section>
+          ))}
         </div>
       )}
     </main>
