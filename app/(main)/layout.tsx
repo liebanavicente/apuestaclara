@@ -8,16 +8,18 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   const { data: { user } } = await supabase.auth.getUser()
 
   let profile = null
+  let isAdmin = false
 
   if (user) {
     const admin = createAdminClient()
     const { data } = await admin.from('profiles').select('*').eq('user_id', user.id).single()
     profile = data
+    isAdmin = data?.role === 'admin'
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-white">
-      <HeaderWrapper profile={profile} access={null} />
+      <HeaderWrapper profile={profile} access={isAdmin ? { isAdmin: true, isPremium: true } as any : null} />
       <main className="flex-1">
         {children}
       </main>
