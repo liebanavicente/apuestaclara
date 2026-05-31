@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getMultipleSportsEvents, FEATURED_SPORTS } from '@/lib/services/odds.service'
+// FEATURED_SPORTS used for sport keys only
 import { redirect } from 'next/navigation'
 import { DashboardClient } from './DashboardClient'
 
@@ -37,7 +38,6 @@ export default async function DashboardPage() {
   return (
     <DashboardClient
       events={upcoming}
-      sports={FEATURED_SPORTS}
       totalPoints={totalPoints}
       myPicks={myPicks ?? []}
       inProgressPicks={inProgressPicks}
