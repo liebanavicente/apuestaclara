@@ -5,6 +5,7 @@ import type { NormalizedEvent } from '@/types/odds'
 import Link from 'next/link'
 import { teamShort } from '@/lib/teamShort'
 import { PickConfirmedToast, shouldShowPickWarning } from '@/components/picks/PickConfirmedToast'
+import { QuickAI } from '@/components/picks/QuickAI'
 
 interface MyPick {
   id: string
@@ -164,12 +165,15 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks 
                     ) : null)}
                   </div>
                   {isStagingThis && (
-                    <div className="mt-2 flex gap-1.5">
-                      <button onClick={() => setStaged(null)} className="text-xs text-slate-500 px-2 py-1 rounded border border-slate-700">✕</button>
-                      <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
-                        className="flex-1 text-xs bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-slate-950 font-black py-1 rounded transition-colors">
-                        {loading === ev.id ? '…' : 'Confirmar ✓'}
-                      </button>
+                    <div className="mt-2 space-y-1.5">
+                      <QuickAI event={ev.event_name} league={ev.league} selection={staged!.selection} odds={staged!.odds} />
+                      <div className="flex gap-1.5">
+                        <button onClick={() => setStaged(null)} className="text-xs text-slate-500 px-2 py-1 rounded border border-slate-700">✕</button>
+                        <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
+                          className="flex-1 text-xs bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-slate-950 font-black py-1 rounded transition-colors">
+                          {loading === ev.id ? '…' : 'Confirmar ✓'}
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -269,17 +273,25 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks 
                       )}
 
                       {isStagingThis && !myPick && (
-                        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800">
-                          <div className="flex-1 text-xs text-slate-400">
-                            <span className="text-white font-medium">{staged!.selection === 'Empate' ? 'Empate' : staged!.selection.replace(' gana', '')}</span>
-                            {' '}@ <span className="text-yellow-400 font-black">{staged!.odds.toFixed(2)}</span>
-                            <span className="text-slate-600 ml-1">→ +{staged!.odds.toFixed(2)} pts</span>
+                        <div className="mt-3 pt-3 border-t border-slate-800 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 text-xs text-slate-400">
+                              <span className="text-white font-medium">{staged!.selection === 'Empate' ? 'Empate' : staged!.selection.replace(' gana', '')}</span>
+                              {' '}@ <span className="text-yellow-400 font-black">{staged!.odds.toFixed(2)}</span>
+                              <span className="text-slate-600 ml-1">→ +{staged!.odds.toFixed(2)} pts</span>
+                            </div>
+                            <button onClick={() => setStaged(null)} className="text-xs text-slate-500 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700">Cancelar</button>
+                            <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
+                              className="text-xs bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-slate-950 font-black px-4 py-1.5 rounded-lg">
+                              {loading === ev.id ? '…' : 'Confirmar ✓'}
+                            </button>
                           </div>
-                          <button onClick={() => setStaged(null)} className="text-xs text-slate-500 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700">Cancelar</button>
-                          <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
-                            className="text-xs bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-slate-950 font-black px-4 py-1.5 rounded-lg">
-                            {loading === ev.id ? '…' : 'Confirmar ✓'}
-                          </button>
+                          <QuickAI
+                            event={ev.event_name}
+                            league={ev.league}
+                            selection={staged!.selection}
+                            odds={staged!.odds}
+                          />
                         </div>
                       )}
                     </div>
