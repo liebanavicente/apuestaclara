@@ -4,9 +4,23 @@ import { cookies } from 'next/headers'
 export async function createClient() {
   const cookieStore = await cookies()
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  // When Supabase isn't configured, return a minimal stub so pages can render.
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return {
+      auth: {
+        async getUser() {
+          return { data: { user: null }, error: null }
+        },
+      },
+    } as unknown as ReturnType<typeof createServerClient>
+  }
+
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
