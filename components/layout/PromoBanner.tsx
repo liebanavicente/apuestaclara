@@ -13,20 +13,20 @@ export function PromoBanner({ isPremium }: PromoBannerProps) {
   if (isPremium || dismissed) return null
 
   return (
-    <div className="bg-gradient-to-r from-teal-900/80 to-teal-800/60 border-b border-teal-700/50">
+    <div className="border-b border-primary/20 bg-primary/10">
       <div className="mx-auto max-w-7xl px-4 py-2.5 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-sm text-teal-100">
-          <Sparkles className="h-4 w-4 text-teal-400 shrink-0" />
+        <div className="flex items-center gap-2 text-sm text-foreground/90">
+          <Sparkles className="h-4 w-4 text-primary shrink-0" />
           <span>
-            <strong>Lanzamiento:</strong> prueba Premium gratis durante 1 mes con el código{' '}
-            <code className="bg-teal-800/60 px-1.5 py-0.5 rounded text-teal-300 font-mono text-xs">PRUEBA1MES</code>
+            <strong className="font-semibold">Lanzamiento:</strong> prueba Premium gratis durante 1 mes con el código{' '}
+            <code className="bg-primary/20 px-1.5 py-0.5 rounded text-primary font-mono text-xs">PRUEBA1MES</code>
           </span>
         </div>
         <div className="flex items-center gap-3 shrink-0">
-          <Link href="/redeem" className="text-xs text-teal-300 hover:text-white underline-offset-2 hover:underline transition-colors">
+          <Link href="/redeem" className="text-xs text-primary hover:text-foreground underline-offset-2 hover:underline transition-colors">
             Canjear
           </Link>
-          <button onClick={() => setDismissed(true)} className="text-teal-400 hover:text-white transition-colors">
+          <button onClick={() => setDismissed(true)} className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Cerrar">
             <X className="h-4 w-4" />
           </button>
         </div>
