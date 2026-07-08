@@ -105,11 +105,11 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
       <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-xl font-black text-white">🌍 Mundial 2026</h1>
-          <p className="text-slate-500 text-xs mt-0.5">11 jun – 19 jul · USA, Canada, Mexico</p>
+          <p className="text-texto-secundario text-xs mt-0.5">11 jun – 19 jul · USA, Canada, Mexico</p>
         </div>
         <div className="text-right">
-          <span className="text-2xl font-black text-yellow-400">{totalPoints.toFixed(2)}</span>
-          <span className="text-xs text-slate-500 ml-1">pts</span>
+          <span className="text-2xl font-black text-neon">{totalPoints.toFixed(2)}</span>
+          <span className="text-xs text-texto-secundario ml-1">pts</span>
         </div>
       </div>
 
@@ -119,7 +119,7 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
         <select
           value={activeGroup}
           onChange={e => setActiveGroup(e.target.value)}
-          className="sm:hidden w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white text-sm focus:border-yellow-500 focus:outline-none"
+          className="sm:hidden w-full rounded-lg border border-superficie-hover bg-superficie-hover px-3 py-2 text-white text-sm focus:border-neon focus:outline-none"
         >
           {groupOptions.map(o => (
             <option key={o.key} value={o.key}>{o.label}</option>
@@ -129,18 +129,18 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
         {/* Desktop: scrollable tabs */}
         <div className="hidden sm:flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           <button onClick={() => setActiveGroup('all')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === 'all' ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === 'all' ? 'bg-neon text-[#0B3D2E]' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
             Todos
           </button>
           {activeGroups.map(g => (
             <button key={g.id} onClick={() => setActiveGroup(g.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === g.id ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === g.id ? 'bg-neon text-[#0B3D2E]' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
               Grp {g.id}
             </button>
           ))}
           {unassigned.length > 0 && (
             <button onClick={() => setActiveGroup('?')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === '?' ? 'bg-yellow-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === '?' ? 'bg-neon text-[#0B3D2E]' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
               Otros
             </button>
           )}
@@ -148,7 +148,7 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
       </div>
 
       {activeGroups.length === 0 && unassigned.length === 0 && (
-        <div className="text-center py-16 text-slate-500">
+        <div className="text-center py-16 text-texto-secundario">
           <p className="text-4xl mb-3">🌍</p>
           <p className="text-white font-medium">Sin partidos disponibles todavía</p>
           <p className="text-sm mt-1">Las cuotas del Mundial aparecerán cuando se acerquen los partidos</p>
@@ -161,14 +161,14 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
           return (
             <section key={group.id}>
               <div className="flex items-center gap-3 mb-3">
-                <div className="bg-yellow-500 text-slate-950 font-black text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
+                <div className="bg-neon text-[#0B3D2E] font-black text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
                   {group.id}
                 </div>
                 <div>
                   <h2 className="text-white font-bold text-sm">Grupo {group.id}</h2>
-                  <p className="text-slate-500 text-xs">{group.teams.map(t => t.name).join(' · ')}</p>
+                  <p className="text-texto-secundario text-xs">{group.teams.map(t => t.name).join(' · ')}</p>
                 </div>
-                <span className="ml-auto text-xs text-slate-600">{matches.length} partido{matches.length !== 1 ? 's' : ''}</span>
+                <span className="ml-auto text-xs text-texto-terciario">{matches.length} partido{matches.length !== 1 ? 's' : ''}</span>
               </div>
               <div className="space-y-2">
                 {matches.map(ev => (
@@ -185,7 +185,7 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
         {showUnassigned && (
           <section>
             <div className="flex items-center gap-3 mb-3">
-              <div className="bg-slate-700 text-slate-300 font-black text-xs w-8 h-8 rounded-lg flex items-center justify-center shrink-0">?</div>
+              <div className="bg-superficie-hover text-texto-secundario font-black text-xs w-8 h-8 rounded-lg flex items-center justify-center shrink-0">?</div>
               <h2 className="text-white font-bold text-sm">Sin grupo asignado</h2>
             </div>
             <div className="space-y-2">
@@ -224,18 +224,18 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
 
   return (
     <div className={`rounded-xl border p-3.5 transition-colors ${
-      myPick ? 'border-yellow-500/30 bg-yellow-500/5' :
-      isStagingThis ? 'border-yellow-500/20 bg-slate-900' :
-      'border-slate-800 bg-slate-900/60'
+      myPick ? 'border-neon/30 bg-neon/5' :
+      isStagingThis ? 'border-neon/20 bg-superficie' :
+      'border-superficie-hover bg-superficie/60'
     }`}>
       <div className="flex items-start justify-between gap-2 mb-2.5">
         <div className="min-w-0">
           <p className="text-white font-semibold text-sm">{ev.event_name}</p>
-          <p className="text-slate-500 text-xs mt-0.5">{fmtDate(ev.commence_time)}</p>
+          <p className="text-texto-secundario text-xs mt-0.5">{fmtDate(ev.commence_time)}</p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           {myPick?.status === 'pending' && !matchStarted && (
-            <button onClick={() => onDelete(myPick.id)} className="text-slate-600 hover:text-red-400 p-1">
+            <button onClick={() => onDelete(myPick.id)} className="text-texto-terciario hover:text-red-400 p-1">
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           )}
@@ -243,7 +243,7 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
             <span className={`text-xs px-2 py-1 rounded-full font-medium ${
               myPick.status === 'won' ? 'bg-green-500/20 text-green-400' :
               myPick.status === 'lost' ? 'bg-red-500/20 text-red-400' :
-              'bg-yellow-500/20 text-yellow-400'
+              'bg-neon/20 text-neon'
             }`}>
               {myPick.status === 'won' ? `+${myPick.points.toFixed(2)} pts ✓` :
                myPick.status === 'lost' ? '0 pts ✗' :
@@ -261,32 +261,32 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
           return (
             <button key={full} onClick={() => !myPick && onStage(ev, full, odds)} disabled={!!myPick}
               className={`rounded-lg border px-2 py-2.5 text-center transition-all ${
-                isMyPick ? 'border-yellow-500/60 bg-yellow-500/15 cursor-default' :
-                isStaged ? 'border-yellow-400 bg-yellow-400/20 ring-1 ring-yellow-400/40' :
-                myPick ? 'border-slate-800 bg-slate-900 opacity-30 cursor-default' :
-                'border-slate-700 bg-slate-800 hover:border-yellow-500/50 hover:bg-yellow-500/10 cursor-pointer'
+                isMyPick ? 'border-neon/60 bg-neon/15 cursor-default' :
+                isStaged ? 'border-neon bg-neon/20 ring-1 ring-neon/40' :
+                myPick ? 'border-superficie-hover bg-superficie opacity-30 cursor-default' :
+                'border-superficie-hover bg-superficie-hover hover:border-neon/50 hover:bg-neon/10 cursor-pointer'
               }`}>
-              <div className={`text-xs font-bold ${isMyPick || isStaged ? 'text-yellow-300' : 'text-slate-400'}`}>{short}</div>
-              <div className={`font-black text-sm mt-0.5 ${isMyPick || isStaged ? 'text-yellow-400' : 'text-slate-300'}`}>{odds.toFixed(2)}</div>
+              <div className={`text-xs font-bold ${isMyPick || isStaged ? 'text-neon' : 'text-texto-secundario'}`}>{short}</div>
+              <div className={`font-black text-sm mt-0.5 ${isMyPick || isStaged ? 'text-neon' : 'text-texto-secundario'}`}>{odds.toFixed(2)}</div>
             </button>
           )
         })}
       </div>
 
       {myPick?.status === 'pending' && matchStarted && (
-        <p className="text-xs text-slate-600 mt-2">⏳ Pendiente de resultado oficial</p>
+        <p className="text-xs text-texto-terciario mt-2">⏳ Pendiente de resultado oficial</p>
       )}
 
       {isStagingThis && !myPick && (
-        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800">
-          <div className="flex-1 text-xs text-slate-400">
+        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-superficie-hover">
+          <div className="flex-1 text-xs text-texto-secundario">
             <span className="text-white font-medium">{staged!.selection.replace(' gana', '')}</span>
-            {' '}@ <span className="text-yellow-400 font-black">{staged!.odds.toFixed(2)}</span>
-            <span className="text-slate-600 ml-1">→ +{staged!.odds.toFixed(2)} pts</span>
+            {' '}@ <span className="text-neon font-black">{staged!.odds.toFixed(2)}</span>
+            <span className="text-texto-terciario ml-1">→ +{staged!.odds.toFixed(2)} pts</span>
           </div>
-          <button onClick={() => onStage(ev, staged!.selection, staged!.odds)} className="text-xs text-slate-500 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700">Cancelar</button>
+          <button onClick={() => onStage(ev, staged!.selection, staged!.odds)} className="text-xs text-texto-secundario hover:text-white px-3 py-1.5 rounded-lg border border-superficie-hover">Cancelar</button>
           <button onClick={() => onConfirm(ev, competition)} disabled={loading === ev.id}
-            className="text-xs bg-yellow-500 hover:bg-yellow-400 disabled:opacity-60 text-slate-950 font-black px-4 py-1.5 rounded-lg">
+            className="text-xs bg-neon hover:brightness-110 disabled:opacity-60 text-[#0B3D2E] font-black px-4 py-1.5 rounded-lg">
             {loading === ev.id ? '…' : 'Confirmar ✓'}
           </button>
         </div>

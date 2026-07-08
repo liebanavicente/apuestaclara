@@ -11,39 +11,39 @@ export function Footer() {
               <TrendingUp className="h-5 w-5 text-neon" />
               <span className="font-bold text-white">GañanesBets</span>
             </Link>
-            <p className="text-slate-500 text-sm leading-relaxed">
+            <p className="text-texto-secundario text-sm leading-relaxed">
               Herramienta de análisis orientativo de combinadas deportivas. No garantizamos beneficios ni aciertos.
               Apostar implica riesgo de pérdida económica.
             </p>
-            <p className="text-slate-600 text-xs mt-3 font-medium">+18 · Solo mayores de edad · Juega con responsabilidad</p>
+            <p className="text-texto-terciario text-xs mt-3 font-medium">+18 · Solo mayores de edad · Juega con responsabilidad</p>
           </div>
 
           <div>
-            <p className="text-slate-300 font-semibold text-sm mb-3">Plataforma</p>
+            <p className="text-texto-secundario font-semibold text-sm mb-3">Plataforma</p>
             <ul className="space-y-2">
-              <li><Link href="/generador" className="text-slate-500 hover:text-neon text-sm transition-colors">Generador</Link></li>
-              <li><Link href="/buscar-eventos" className="text-slate-500 hover:text-neon text-sm transition-colors">Buscar eventos</Link></li>
-              <li><Link href="/simulador" className="text-slate-500 hover:text-neon text-sm transition-colors">Simulador</Link></li>
-              <li><Link href="/comunidad" className="text-slate-500 hover:text-neon text-sm transition-colors">Comunidad</Link></li>
-              <li><Link href="/premium" className="text-slate-500 hover:text-neon text-sm transition-colors">Premium</Link></li>
+              <li><Link href="/generador" className="text-texto-secundario hover:text-neon text-sm transition-colors">Generador</Link></li>
+              <li><Link href="/buscar-eventos" className="text-texto-secundario hover:text-neon text-sm transition-colors">Buscar eventos</Link></li>
+              <li><Link href="/simulador" className="text-texto-secundario hover:text-neon text-sm transition-colors">Simulador</Link></li>
+              <li><Link href="/comunidad" className="text-texto-secundario hover:text-neon text-sm transition-colors">Comunidad</Link></li>
+              <li><Link href="/premium" className="text-texto-secundario hover:text-neon text-sm transition-colors">Premium</Link></li>
             </ul>
           </div>
 
           <div>
-            <p className="text-slate-300 font-semibold text-sm mb-3">Legal</p>
+            <p className="text-texto-secundario font-semibold text-sm mb-3">Legal</p>
             <ul className="space-y-2">
-              <li><Link href="/responsable" className="text-slate-500 hover:text-neon text-sm transition-colors">Juego responsable</Link></li>
-              <li><Link href="/privacidad" className="text-slate-500 hover:text-neon text-sm transition-colors">Privacidad</Link></li>
-              <li><Link href="/terminos" className="text-slate-500 hover:text-neon text-sm transition-colors">Términos</Link></li>
+              <li><Link href="/responsable" className="text-texto-secundario hover:text-neon text-sm transition-colors">Juego responsable</Link></li>
+              <li><Link href="/privacidad" className="text-texto-secundario hover:text-neon text-sm transition-colors">Privacidad</Link></li>
+              <li><Link href="/terminos" className="text-texto-secundario hover:text-neon text-sm transition-colors">Términos</Link></li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-slate-600 text-xs">
+        <div className="mt-10 pt-6 border-t border-superficie-hover flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-texto-terciario text-xs">
             © {new Date().getFullYear()} GañanesBets · Herramienta de análisis orientativo
           </p>
-          <p className="text-slate-600 text-xs">
+          <p className="text-texto-terciario text-xs">
             Las predicciones son orientativas y pueden fallar
           </p>
         </div>

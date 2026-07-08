@@ -4,9 +4,9 @@ export default function TerminosPage() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="text-2xl font-bold text-white mb-2">Términos de uso</h1>
-      <p className="text-slate-500 text-sm mb-8">Última actualización: mayo 2026</p>
+      <p className="text-texto-secundario text-sm mb-8">Última actualización: mayo 2026</p>
 
-      <div className="prose prose-invert prose-slate max-w-none space-y-6 text-slate-300 text-sm leading-relaxed">
+      <div className="prose prose-invert prose-slate max-w-none space-y-6 text-texto-secundario text-sm leading-relaxed">
         <section>
           <h2 className="text-white font-semibold text-base mb-2">1. Descripción del servicio</h2>
           <p>GañanesBets es una plataforma de análisis deportivo orientativo. La información proporcionada tiene carácter exclusivamente informativo y no constituye consejo de inversión, asesoramiento financiero ni recomendación de apuesta.</p>

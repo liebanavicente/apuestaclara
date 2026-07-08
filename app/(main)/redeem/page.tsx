@@ -40,17 +40,17 @@ export default function RedeemPage() {
             <Gift className="h-7 w-7 text-teal-400" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-1">Canjear código</h1>
-          <p className="text-slate-400 text-sm">Activa Premium gratis con un código promocional</p>
+          <p className="text-texto-secundario text-sm">Activa Premium gratis con un código promocional</p>
         </div>
 
         {success ? (
           <div className="rounded-xl border border-teal-500/40 bg-teal-950/30 p-6 text-center">
             <Check className="h-8 w-8 text-teal-400 mx-auto mb-2" />
             <p className="text-white font-semibold">¡Código canjeado!</p>
-            <p className="text-slate-400 text-sm mt-1">Redirigiendo a tu dashboard...</p>
+            <p className="text-texto-secundario text-sm mt-1">Redirigiendo a tu dashboard...</p>
           </div>
         ) : (
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+          <div className="rounded-xl border border-superficie-hover bg-superficie/50 p-6">
             {error && (
               <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
                 {error}
@@ -58,13 +58,13 @@ export default function RedeemPage() {
             )}
             <form onSubmit={handleRedeem} className="space-y-4">
               <div>
-                <label className="block text-sm text-slate-300 mb-1.5">Código promocional</label>
+                <label className="block text-sm text-texto-secundario mb-1.5">Código promocional</label>
                 <input
                   type="text"
                   value={code}
                   onChange={e => setCode(e.target.value.toUpperCase())}
                   placeholder="PRUEBA1MES"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:border-teal-500 focus:outline-none font-mono tracking-widest uppercase"
+                  className="w-full rounded-lg border border-superficie-hover bg-superficie-hover px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:border-teal-500 focus:outline-none font-mono tracking-widest uppercase"
                 />
               </div>
               <button
@@ -75,7 +75,7 @@ export default function RedeemPage() {
                 {loading ? 'Canjeando...' : 'Canjear código'}
               </button>
             </form>
-            <p className="text-xs text-slate-500 text-center mt-4">
+            <p className="text-xs text-texto-secundario text-center mt-4">
               No requiere tarjeta de crédito. Los códigos tienen validez limitada.
             </p>
           </div>

@@ -5,7 +5,7 @@ import type { PickAnalysis } from '@/types/ai'
 
 const CONFIDENCE_STYLE = {
   alta: 'bg-green-500/10 text-green-400 border-green-500/30',
-  media: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30',
+  media: 'bg-ambar/10 text-ambar border-ambar/30',
   baja: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
 }
 
@@ -18,29 +18,29 @@ export function PickAnalysisCard({ pick, index }: Props) {
   const [open, setOpen] = useState(index === 0)
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/40 overflow-hidden">
+    <div className="rounded-xl border border-superficie-hover bg-superficie/40 overflow-hidden">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-800/30 transition-colors"
+        className="w-full flex items-center justify-between p-4 text-left hover:bg-superficie-hover/30 transition-colors"
       >
         <div className="flex items-center gap-3 min-w-0">
-          <span className="text-xs font-bold text-slate-500 shrink-0">#{index + 1}</span>
+          <span className="text-xs font-bold text-texto-secundario shrink-0">#{index + 1}</span>
           <div className="min-w-0">
             <p className="text-sm font-medium text-white truncate">{pick.event_name}</p>
-            <p className="text-xs text-slate-400 truncate">{pick.selection} · @{pick.odds.toFixed(2)}</p>
+            <p className="text-xs text-texto-secundario truncate">{pick.selection} · @{pick.odds.toFixed(2)}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0 ml-3">
           <span className={`text-xs px-2 py-0.5 rounded-full border ${CONFIDENCE_STYLE[pick.confidence]}`}>
             {pick.confidence}
           </span>
-          {open ? <ChevronUp className="h-4 w-4 text-slate-500" /> : <ChevronDown className="h-4 w-4 text-slate-500" />}
+          {open ? <ChevronUp className="h-4 w-4 text-texto-secundario" /> : <ChevronDown className="h-4 w-4 text-texto-secundario" />}
         </div>
       </button>
 
       {open && (
-        <div className="px-4 pb-4 space-y-3 border-t border-slate-800 pt-3">
-          <p className="text-sm text-slate-300 leading-relaxed">{pick.reasoning}</p>
+        <div className="px-4 pb-4 space-y-3 border-t border-superficie-hover pt-3">
+          <p className="text-sm text-texto-secundario leading-relaxed">{pick.reasoning}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {pick.factors_for.length > 0 && (
@@ -51,7 +51,7 @@ export function PickAnalysisCard({ pick, index }: Props) {
                 </div>
                 <ul className="space-y-1">
                   {pick.factors_for.map((f, i) => (
-                    <li key={i} className="text-xs text-slate-400 flex items-start gap-1.5">
+                    <li key={i} className="text-xs text-texto-secundario flex items-start gap-1.5">
                       <span className="text-green-500 mt-0.5">+</span>{f}
                     </li>
                   ))}
@@ -66,7 +66,7 @@ export function PickAnalysisCard({ pick, index }: Props) {
                 </div>
                 <ul className="space-y-1">
                   {pick.factors_against.map((f, i) => (
-                    <li key={i} className="text-xs text-slate-400 flex items-start gap-1.5">
+                    <li key={i} className="text-xs text-texto-secundario flex items-start gap-1.5">
                       <span className="text-red-500 mt-0.5">−</span>{f}
                     </li>
                   ))}

@@ -83,11 +83,11 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-2xl flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-2xl bg-superficie border border-superficie-hover rounded-2xl flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-800 shrink-0">
+        <div className="flex items-center justify-between p-4 border-b border-superficie-hover shrink-0">
           <h2 className="font-semibold text-white">Nueva simulación</h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-texto-secundario hover:text-white transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -95,7 +95,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
         <div className="overflow-y-auto flex-1 p-4 space-y-4">
           {/* Sport selector */}
           <div>
-            <p className="text-xs text-slate-500 mb-2 uppercase tracking-wider">Competición</p>
+            <p className="text-xs text-texto-secundario mb-2 uppercase tracking-wider">Competición</p>
             <div className="flex flex-wrap gap-1.5">
               {FEATURED_SPORTS.map(s => (
                 <button
@@ -104,7 +104,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
                   className={`text-xs px-2.5 py-1 rounded-full transition-colors ${
                     selectedSport === s.key
                       ? 'bg-teal-600 text-white'
-                      : 'bg-slate-800 text-slate-400 hover:text-white'
+                      : 'bg-superficie-hover text-texto-secundario hover:text-white'
                   }`}
                 >
                   {s.emoji} {s.label}
@@ -115,20 +115,20 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
 
           {/* Events */}
           <div>
-            <p className="text-xs text-slate-500 mb-2 uppercase tracking-wider">Selecciona eventos</p>
+            <p className="text-xs text-texto-secundario mb-2 uppercase tracking-wider">Selecciona eventos</p>
             {loadingEvents ? (
-              <div className="flex items-center gap-2 text-slate-500 text-sm py-4">
+              <div className="flex items-center gap-2 text-texto-secundario text-sm py-4">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Cargando eventos...
               </div>
             ) : events.length === 0 ? (
-              <p className="text-sm text-slate-600 py-4">No hay eventos disponibles para esta competición.</p>
+              <p className="text-sm text-texto-terciario py-4">No hay eventos disponibles para esta competición.</p>
             ) : (
               <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                 {events.map(event => {
                   const selected = picks.find(p => p.event_id === event.id)
                   return (
-                    <div key={event.id} className={`rounded-lg border p-3 transition-colors ${selected ? 'border-teal-500/40 bg-teal-950/20' : 'border-slate-800 bg-slate-800/30'}`}>
+                    <div key={event.id} className={`rounded-lg border p-3 transition-colors ${selected ? 'border-teal-500/40 bg-teal-950/20' : 'border-superficie-hover bg-superficie-hover/30'}`}>
                       <p className="text-xs font-medium text-white mb-2">{event.event_name}</p>
                       <div className="grid grid-cols-3 gap-1.5">
                         {(['home', 'draw', 'away'] as const).map(outcome => {
@@ -143,7 +143,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
                               className={`text-xs py-1.5 rounded transition-colors ${
                                 isSelected
                                   ? 'bg-teal-600 text-white font-bold'
-                                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                                  : 'bg-superficie-hover text-texto-secundario hover:bg-superficie-hover'
                               }`}
                             >
                               {label} · {odds.toFixed(2)}
@@ -161,15 +161,15 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
           {/* Selected picks summary */}
           {picks.length > 0 && (
             <div>
-              <p className="text-xs text-slate-500 mb-2 uppercase tracking-wider">Selecciones ({picks.length})</p>
+              <p className="text-xs text-texto-secundario mb-2 uppercase tracking-wider">Selecciones ({picks.length})</p>
               <div className="space-y-1.5">
                 {picks.map(pick => (
-                  <div key={pick.event_id} className="flex items-center justify-between bg-slate-800/50 rounded-lg px-3 py-2">
+                  <div key={pick.event_id} className="flex items-center justify-between bg-superficie-hover/50 rounded-lg px-3 py-2">
                     <div className="min-w-0">
                       <p className="text-xs text-white truncate">{pick.event_name}</p>
-                      <p className="text-xs text-slate-400">{pick.selection} · @{pick.odds.toFixed(2)}</p>
+                      <p className="text-xs text-texto-secundario">{pick.selection} · @{pick.odds.toFixed(2)}</p>
                     </div>
-                    <button onClick={() => setPicks(prev => prev.filter(p => p.event_id !== pick.event_id))} className="text-slate-600 hover:text-red-400 ml-2 shrink-0">
+                    <button onClick={() => setPicks(prev => prev.filter(p => p.event_id !== pick.event_id))} className="text-texto-terciario hover:text-red-400 ml-2 shrink-0">
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   </div>
@@ -180,7 +180,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-800 shrink-0 space-y-3">
+        <div className="p-4 border-t border-superficie-hover shrink-0 space-y-3">
           {error && (
             <div className="flex items-center gap-2 rounded-lg bg-orange-500/10 border border-orange-500/20 px-3 py-2">
               <AlertCircle className="h-4 w-4 text-orange-400 shrink-0" />
@@ -190,18 +190,18 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
 
           <div className="flex items-center gap-3">
             <div className="flex-1">
-              <p className="text-xs text-slate-500 mb-1">Apuesta virtual (max {balance.toFixed(0)}€)</p>
+              <p className="text-xs text-texto-secundario mb-1">Apuesta virtual (max {balance.toFixed(0)}€)</p>
               <input
                 type="number"
                 value={stake}
                 onChange={e => setStake(e.target.value)}
                 min="1" max={balance} step="1"
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white text-sm focus:outline-none focus:border-teal-500"
+                className="w-full rounded-lg border border-superficie-hover bg-superficie-hover px-3 py-2 text-white text-sm focus:outline-none focus:border-teal-500"
               />
             </div>
             {picks.length > 0 && (
               <div className="text-right shrink-0">
-                <p className="text-xs text-slate-500">Cuota total</p>
+                <p className="text-xs text-texto-secundario">Cuota total</p>
                 <p className="text-lg font-black text-white">{totalOdds.toFixed(2)}</p>
                 <p className="text-xs text-teal-400">Retorno: {potentialReturn.toFixed(2)}€</p>
               </div>
@@ -216,7 +216,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
             {submitting ? 'Creando...' : `Simular ${picks.length > 1 ? 'combinada' : 'simple'}`}
           </button>
-          <p className="text-xs text-slate-600 text-center">Dinero ficticio. Sin riesgo real.</p>
+          <p className="text-xs text-texto-terciario text-center">Dinero ficticio. Sin riesgo real.</p>
         </div>
       </div>
     </div>

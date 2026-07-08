@@ -50,12 +50,12 @@ export default function ResponsablePage() {
             body: 'Las apuestas deportivas están prohibidas para menores de 18 años en España. GañanesBets requiere ser mayor de edad para registrarse.',
           },
         ].map(({ icon, title, body }) => (
-          <div key={title} className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
+          <div key={title} className="rounded-xl border border-superficie-hover bg-superficie/50 p-5">
             <div className="flex items-start gap-4">
               <span className="text-2xl shrink-0">{icon}</span>
               <div>
                 <h3 className="text-white font-semibold mb-1.5">{title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{body}</p>
+                <p className="text-texto-secundario text-sm leading-relaxed">{body}</p>
               </div>
             </div>
           </div>
@@ -65,8 +65,8 @@ export default function ResponsablePage() {
       {/* Autoexclusión RGIAJ */}
       <div className="mt-10 rounded-xl border border-orange-500/30 bg-orange-950/30 p-6">
         <h2 className="text-orange-300 font-bold text-lg mb-3">Autoexclusión en España — RGIAJ</h2>
-        <p className="text-slate-400 text-sm leading-relaxed mb-4">
-          El <strong className="text-slate-300">Registro General de Interdicciones de Acceso al Juego (RGIAJ)</strong> es
+        <p className="text-texto-secundario text-sm leading-relaxed mb-4">
+          El <strong className="text-texto-secundario">Registro General de Interdicciones de Acceso al Juego (RGIAJ)</strong> es
           el sistema oficial del Gobierno de España que permite autoexcluirse de todos los operadores de juego online
           regulados en España simultáneamente. Una vez inscrito, ningún operador puede aceptar apuestas tuyas durante
           el período elegido.
@@ -84,7 +84,7 @@ export default function ResponsablePage() {
       {/* Ayuda */}
       <div id="necesito-parar" className="mt-6 rounded-xl border border-red-500/40 bg-red-950/30 p-6 text-center">
         <h2 className="text-red-300 font-bold text-xl mb-3">¿Necesitas parar?</h2>
-        <p className="text-slate-400 text-sm mb-6 max-w-md mx-auto">
+        <p className="text-texto-secundario text-sm mb-6 max-w-md mx-auto">
           Si sientes que el juego está afectando tu vida o la de tu familia, busca ayuda profesional. No estás solo.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto">

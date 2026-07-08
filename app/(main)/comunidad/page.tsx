@@ -18,13 +18,13 @@ export default function ComunidadPage() {
         Los picks son opiniones personales, no recomendaciones de inversión. Apostar implica riesgo.
       </p>
       <div className="flex gap-4 mb-6">
-        <Link href="/comunidad/ranking" className="flex items-center gap-2 text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 px-3 py-1.5 rounded-lg text-sm transition-colors">
+        <Link href="/comunidad/ranking" className="flex items-center gap-2 text-texto-secundario hover:text-white border border-superficie-hover hover:border-neon px-3 py-1.5 rounded-lg text-sm transition-colors">
           <Trophy className="h-4 w-4" />
           Ranking
         </Link>
       </div>
-      <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-10 text-center">
-        <p className="text-slate-400">La comunidad completa está disponible en la Fase 5.</p>
+      <div className="rounded-xl border border-superficie-hover bg-superficie/50 p-10 text-center">
+        <p className="text-texto-secundario">La comunidad completa está disponible en la Fase 5.</p>
       </div>
     </div>
   )

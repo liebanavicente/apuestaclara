@@ -30,7 +30,7 @@ export default async function GeneradorPage() {
           <TrendingUp className="h-6 w-6 text-teal-400" />
           <h1 className="text-2xl font-bold text-white">Generador de Combinadas</h1>
         </div>
-        <p className="text-slate-400 text-sm">Construye combinadas con cuotas reales. El análisis IA llega en la próxima fase.</p>
+        <p className="text-texto-secundario text-sm">Construye combinadas con cuotas reales. El análisis IA llega en la próxima fase.</p>
       </div>
 
       <ResponsibleNotice variant="compact" className="mb-6" />

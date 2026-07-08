@@ -87,35 +87,35 @@ export function SimuladorClient({ isLoggedIn = false }: { isLoggedIn?: boolean }
         {wallet ? (
           <WalletCard wallet={wallet} onReset={handleReset} resetting={resetting} />
         ) : (
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 animate-pulse h-40" />
+          <div className="rounded-xl border border-superficie-hover bg-superficie/50 p-5 animate-pulse h-40" />
         )}
 
         {/* Quick stats */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+        <div className="rounded-xl border border-superficie-hover bg-superficie/50 p-4">
           <div className="flex items-center gap-2 mb-3">
             <BarChart3 className="h-4 w-4 text-teal-400" />
             <span className="text-sm font-semibold text-white">Estadísticas</span>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Total sims.', value: total.toString(), icon: Target, color: 'text-slate-300' },
+              { label: 'Total sims.', value: total.toString(), icon: Target, color: 'text-texto-secundario' },
               { label: '% acierto', value: `${winRate}%`, icon: Percent, color: won > lost ? 'text-green-400' : 'text-red-400' },
               { label: 'Ganadas', value: won.toString(), icon: TrendingUp, color: 'text-green-400' },
               { label: 'Perdidas', value: lost.toString(), icon: TrendingDown, color: 'text-red-400' },
             ].map(({ label, value, icon: Icon, color }) => (
-              <div key={label} className="bg-slate-800/40 rounded-lg p-2.5">
+              <div key={label} className="bg-superficie-hover/40 rounded-lg p-2.5">
                 <div className="flex items-center gap-1 mb-1">
                   <Icon className={`h-3 w-3 ${color}`} />
-                  <span className="text-xs text-slate-500">{label}</span>
+                  <span className="text-xs text-texto-secundario">{label}</span>
                 </div>
                 <p className={`text-lg font-bold ${color}`}>{value}</p>
               </div>
             ))}
           </div>
           {simulations.length > 0 && (
-            <div className="mt-3 pt-3 border-t border-slate-800">
-              <p className="text-xs text-slate-500">Cuota media</p>
-              <p className="text-sm font-semibold text-slate-300">{avgOdds}</p>
+            <div className="mt-3 pt-3 border-t border-superficie-hover">
+              <p className="text-xs text-texto-secundario">Cuota media</p>
+              <p className="text-sm font-semibold text-texto-secundario">{avgOdds}</p>
             </div>
           )}
         </div>
@@ -139,7 +139,7 @@ export function SimuladorClient({ isLoggedIn = false }: { isLoggedIn?: boolean }
           </Link>
         )}
 
-        <p className="text-xs text-slate-600 text-center">
+        <p className="text-xs text-texto-terciario text-center">
           Dinero ficticio. Simular no garantiza resultados reales.
         </p>
       </div>
@@ -147,7 +147,7 @@ export function SimuladorClient({ isLoggedIn = false }: { isLoggedIn?: boolean }
       {/* Right: simulations list */}
       <div className="lg:col-span-2">
         {/* Tabs */}
-        <div className="flex gap-1 mb-4 bg-slate-900/50 rounded-xl p-1 border border-slate-800">
+        <div className="flex gap-1 mb-4 bg-superficie/50 rounded-xl p-1 border border-superficie-hover">
           {([
             { id: 'pending', label: `Pendientes (${pending.length})` },
             { id: 'resolved', label: `Resueltas (${resolvedList.length})` },
@@ -156,7 +156,7 @@ export function SimuladorClient({ isLoggedIn = false }: { isLoggedIn?: boolean }
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 text-sm py-2 rounded-lg transition-colors ${
-                activeTab === tab.id ? 'bg-teal-600 text-white' : 'text-slate-400 hover:text-white'
+                activeTab === tab.id ? 'bg-teal-600 text-white' : 'text-texto-secundario hover:text-white'
               }`}
             >
               {tab.label}
@@ -167,17 +167,17 @@ export function SimuladorClient({ isLoggedIn = false }: { isLoggedIn?: boolean }
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="rounded-xl border border-slate-800 h-16 animate-pulse bg-slate-900/40" />
+              <div key={i} className="rounded-xl border border-superficie-hover h-16 animate-pulse bg-superficie/40" />
             ))}
           </div>
         ) : (
           <div className="space-y-2">
             {activeTab === 'pending' && (
               pending.length === 0 ? (
-                <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-12 text-center">
-                  <Target className="h-10 w-10 text-slate-700 mx-auto mb-3" />
-                  <p className="text-slate-400 font-medium">Sin simulaciones pendientes</p>
-                  <p className="text-slate-600 text-sm mt-1">Pulsa "Nueva simulación" para empezar.</p>
+                <div className="rounded-xl border border-superficie-hover bg-superficie/30 p-12 text-center">
+                  <Target className="h-10 w-10 text-texto-terciario mx-auto mb-3" />
+                  <p className="text-texto-secundario font-medium">Sin simulaciones pendientes</p>
+                  <p className="text-texto-terciario text-sm mt-1">Pulsa "Nueva simulación" para empezar.</p>
                 </div>
               ) : (
                 pending.map(sim => (
@@ -187,8 +187,8 @@ export function SimuladorClient({ isLoggedIn = false }: { isLoggedIn?: boolean }
             )}
             {activeTab === 'resolved' && (
               resolvedList.length === 0 ? (
-                <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-12 text-center">
-                  <p className="text-slate-500">Aún no has resuelto ninguna simulación.</p>
+                <div className="rounded-xl border border-superficie-hover bg-superficie/30 p-12 text-center">
+                  <p className="text-texto-secundario">Aún no has resuelto ninguna simulación.</p>
                 </div>
               ) : (
                 resolvedList.map(sim => (

@@ -14,7 +14,7 @@ export default async function BuscarEventosPage() {
           <Search className="h-6 w-6 text-teal-400" />
           <h1 className="text-2xl font-bold text-white">Buscar Eventos</h1>
         </div>
-        <p className="text-slate-400 text-sm">Cuotas reales de múltiples casas de apuestas. Añade picks a tu selección.</p>
+        <p className="text-texto-secundario text-sm">Cuotas reales de múltiples casas de apuestas. Añade picks a tu selección.</p>
       </div>
 
       <ResponsibleNotice variant="compact" className="mb-6" />

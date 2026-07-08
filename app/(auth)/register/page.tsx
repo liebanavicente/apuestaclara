@@ -3,7 +3,7 @@ import { RegisterForm } from './RegisterForm'
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+    <Suspense fallback={<div className="min-h-screen bg-carbon" />}>
       <RegisterForm />
     </Suspense>
   )

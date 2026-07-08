@@ -34,7 +34,7 @@ export default async function AccountPage() {
       </div>
 
       {/* Profile */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 mb-4">
+      <div className="rounded-xl border border-superficie-hover bg-superficie/50 p-6 mb-4">
         <div className="flex items-center gap-4 mb-4">
           {profile.avatar_url ? (
             <img src={profile.avatar_url} alt="" className="w-14 h-14 rounded-full" />
@@ -45,46 +45,46 @@ export default async function AccountPage() {
           )}
           <div>
             <p className="text-white font-semibold text-lg">@{profile.username ?? 'usuario'}</p>
-            <p className="text-slate-400 text-sm">{profile.email}</p>
+            <p className="text-texto-secundario text-sm">{profile.email}</p>
           </div>
           <PlanBadge plan={planLabel} className="ml-auto" />
         </div>
       </div>
 
       {/* Subscription */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 mb-4">
+      <div className="rounded-xl border border-superficie-hover bg-superficie/50 p-6 mb-4">
         <div className="flex items-center gap-2 mb-4">
           <CreditCard className="h-4 w-4 text-teal-400" />
           <h2 className="text-white font-semibold">Suscripción</h2>
         </div>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-slate-400">Plan</span>
+            <span className="text-texto-secundario">Plan</span>
             <PlanBadge plan={planLabel} />
           </div>
           {subscriber?.subscribed && (
             <>
               <div className="flex justify-between">
-                <span className="text-slate-400">Estado</span>
+                <span className="text-texto-secundario">Estado</span>
                 <span className="text-green-400">{subscriber.subscription_status}</span>
               </div>
               {subscriber.current_period_end && (
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Próximo cargo</span>
-                  <span className="text-slate-300">{formatDate(subscriber.current_period_end)}</span>
+                  <span className="text-texto-secundario">Próximo cargo</span>
+                  <span className="text-texto-secundario">{formatDate(subscriber.current_period_end)}</span>
                 </div>
               )}
             </>
           )}
           {profile.premium_until && !subscriber?.subscribed && (
             <div className="flex justify-between">
-              <span className="text-slate-400">Premium hasta</span>
+              <span className="text-texto-secundario">Premium hasta</span>
               <span className="text-teal-300">{formatDate(profile.premium_until)}</span>
             </div>
           )}
           {profile.premium_forever && (
             <div className="flex justify-between">
-              <span className="text-slate-400">Premium forever</span>
+              <span className="text-texto-secundario">Premium forever</span>
               <span className="text-purple-300">Sí</span>
             </div>
           )}
@@ -97,7 +97,7 @@ export default async function AccountPage() {
           )}
           {subscriber?.subscribed && subscriber.stripe_customer_id && (
             <form action="/api/stripe/portal" method="POST">
-              <button className="text-sm border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white px-4 py-2 rounded-lg transition-colors">
+              <button className="text-sm border border-superficie-hover hover:border-neon text-texto-secundario hover:text-white px-4 py-2 rounded-lg transition-colors">
                 Gestionar suscripción
               </button>
             </form>
@@ -107,18 +107,18 @@ export default async function AccountPage() {
 
       {/* Promo & referral */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <Link href="/redeem" className="rounded-xl border border-slate-800 bg-slate-900/50 hover:border-teal-500/30 p-5 transition-colors flex items-center gap-3">
+        <Link href="/redeem" className="rounded-xl border border-superficie-hover bg-superficie/50 hover:border-teal-500/30 p-5 transition-colors flex items-center gap-3">
           <Gift className="h-5 w-5 text-teal-400 shrink-0" />
           <div>
             <p className="text-white font-medium text-sm">Canjear código</p>
-            <p className="text-slate-500 text-xs">Activa Premium con un código promo</p>
+            <p className="text-texto-secundario text-xs">Activa Premium con un código promo</p>
           </div>
         </Link>
-        <Link href="/invita" className="rounded-xl border border-slate-800 bg-slate-900/50 hover:border-teal-500/30 p-5 transition-colors flex items-center gap-3">
+        <Link href="/invita" className="rounded-xl border border-superficie-hover bg-superficie/50 hover:border-teal-500/30 p-5 transition-colors flex items-center gap-3">
           <Share2 className="h-5 w-5 text-teal-400 shrink-0" />
           <div>
             <p className="text-white font-medium text-sm">Invita y gana</p>
-            <p className="text-slate-500 text-xs">30 días Premium por cada referido</p>
+            <p className="text-texto-secundario text-xs">30 días Premium por cada referido</p>
           </div>
         </Link>
       </div>

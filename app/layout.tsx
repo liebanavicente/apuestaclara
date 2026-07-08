@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${inter.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} h-full antialiased`}>
-      <body className="min-h-full bg-slate-950 text-white">
+      <body className="min-h-full bg-carbon text-white">
         <ErrorBoundary>{children}</ErrorBoundary>
       </body>
     </html>
