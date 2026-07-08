@@ -77,7 +77,7 @@ export function ScoringRanking() {
     <section className="px-4 py-20">
       <div className="mx-auto max-w-5xl">
         <div className="mb-10 flex items-center justify-between">
-          <h2 className="font-display text-3xl tracking-wide text-[#F5F5F5] sm:text-4xl">
+          <h2 className="font-display text-4xl tracking-wide text-[#F5F5F5] sm:text-6xl">
             📊 La puntuación es simple
           </h2>
           <Link href="/reglas" className="text-sm text-texto-secundario transition-colors hover:text-neon">
@@ -94,7 +94,7 @@ export function ScoringRanking() {
               >
                 <div className="mb-2 text-3xl">{c.emoji}</div>
                 <p className="text-[14px] uppercase tracking-[2px] text-texto-secundario">{c.label}</p>
-                <p className="mt-2 font-display text-4xl tracking-wide text-[#F5F5F5]">{c.value}</p>
+                <p className="mt-2 font-display text-6xl tracking-wide text-[#F5F5F5]">{c.value}</p>
                 <p className="mt-3 text-sm text-texto-secundario">{c.desc}</p>
               </div>
             </Reveal>
@@ -102,7 +102,7 @@ export function ScoringRanking() {
         </div>
 
         <Reveal delay={300} className="mt-14">
-          <h3 className="mb-5 font-display text-2xl tracking-wide text-[#F5F5F5]">
+          <h3 className="mb-5 font-display text-3xl tracking-wide text-[#F5F5F5]">
             🏆 Ranking en tiempo real
           </h3>
 
@@ -164,7 +164,7 @@ export function ScoringRanking() {
             Faltan{' '}
             <span
               className={cn(
-                'font-mono text-2xl font-bold text-ambar sm:text-3xl',
+                'font-mono text-3xl font-bold text-ambar sm:text-4xl',
                 seconds % 2 === 0 ? 'opacity-100' : 'opacity-80'
               )}
             >

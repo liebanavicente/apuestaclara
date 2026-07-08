@@ -100,10 +100,30 @@ body {
   animation: ripple 0.4s ease-out;
 }
 
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(var(--dx, 20px), -36px, 0) rotate(8deg); }
+}
+.particle {
+  animation: drift var(--dur, 12s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform;
+}
+
+@keyframes glow-drift {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.12); }
+}
+.glow-orb {
+  animation: glow-drift 6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
   .animate-glow-pulse,
   .animate-ripple,
+  .particle,
+  .glow-orb,
   .reveal {
     animation: none !important;
     transition: none !important;

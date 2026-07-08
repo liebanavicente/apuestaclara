@@ -22,7 +22,7 @@ export function HowItWorks() {
   return (
     <section className="px-4 py-20">
       <div className="mx-auto max-w-4xl">
-        <h2 className="mb-14 text-center font-display text-3xl tracking-wide text-[#F5F5F5] sm:text-4xl">
+        <h2 className="mb-14 text-center font-display text-4xl tracking-wide text-[#F5F5F5] sm:text-6xl">
           ¿Cómo funciona? Es más fácil que un penalti...
         </h2>
 
@@ -43,8 +43,8 @@ export function HowItWorks() {
                     <span className="pointer-events-none absolute right-4 top-2 font-display text-5xl text-neon opacity-30">
                       {i + 1}
                     </span>
-                    <h3 className="relative text-xl font-bold text-[#F5F5F5]">{step.title}</h3>
-                    <p className="relative mt-2 text-sm leading-relaxed text-texto-secundario">
+                    <h3 className="relative text-2xl font-bold text-[#F5F5F5]">{step.title}</h3>
+                    <p className="relative mt-2 text-base leading-relaxed text-texto-secundario">
                       {step.desc}
                     </p>
                   </div>

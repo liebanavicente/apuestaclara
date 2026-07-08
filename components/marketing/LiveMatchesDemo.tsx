@@ -138,7 +138,7 @@ export function LiveMatchesDemo() {
     <section id="partidos" className="px-4 py-20">
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 flex items-center justify-between">
-          <h2 className="font-display text-3xl tracking-wide text-[#F5F5F5] sm:text-4xl">
+          <h2 className="font-display text-4xl tracking-wide text-[#F5F5F5] sm:text-6xl">
             🔥 Próximos Partidos
           </h2>
           <Link href="/dashboard" className="text-sm text-texto-secundario transition-colors hover:text-neon">
