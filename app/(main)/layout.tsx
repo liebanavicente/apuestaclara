@@ -16,7 +16,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-carbon text-white">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-white">
       <HeaderWrapper profile={profile} access={null} />
       <main className="flex-1">
         {children}
