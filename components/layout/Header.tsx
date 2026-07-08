@@ -58,7 +58,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 className={cn(
                   'px-3 py-1.5 rounded-md text-sm transition-colors',
                   pathname.startsWith(href)
-                    ? 'text-yellow-400 bg-yellow-400/10 font-medium'
+                    ? 'text-neon bg-neon/10 font-medium'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 )}
               >
@@ -108,7 +108,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 <Link href="/login?redirect=/dashboard" className="text-sm text-slate-400 hover:text-white transition-colors px-3 py-1.5">
                   Entrar
                 </Link>
-                <Link href="/register?redirect=/dashboard" className="text-sm bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-3 py-1.5 rounded-md transition-colors">
+                <Link href="/register?redirect=/dashboard" className="text-sm bg-neon hover:brightness-110 text-[#0B3D2E] font-black px-3 py-1.5 rounded-md transition-all">
                   Únete 🐟
                 </Link>
               </div>
@@ -136,7 +136,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 className={cn(
                   'block px-3 py-2 rounded-md text-sm transition-colors',
                   pathname.startsWith(href)
-                    ? 'text-yellow-400 bg-yellow-400/10 font-medium'
+                    ? 'text-neon bg-neon/10 font-medium'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 )}
                 onClick={() => setMobileOpen(false)}

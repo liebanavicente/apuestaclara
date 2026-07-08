@@ -1,0 +1,179 @@
+'use client'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { Reveal } from './Reveal'
+
+const WORLD_CUP_FINAL = new Date('2026-07-19T20:00:00Z').getTime()
+
+const SCORE_CARDS = [
+  {
+    emoji: '✅',
+    label: 'Aciertas',
+    value: '+3.50 pts',
+    desc: 'Cuota 3.50 = +3.50 pts',
+    border: '#00E676',
+  },
+  {
+    emoji: '❌',
+    label: 'Fallas',
+    value: '0 pts',
+    desc: 'No pierdes nada. Solo te quedas sin puntos',
+    border: '#FF5252',
+  },
+  {
+    emoji: '🍺',
+    label: 'El último paga',
+    value: '19 jul 2026',
+    desc: 'El ranking decide quién paga las birras',
+    border: '#FFB300',
+  },
+]
+
+const RANKING = [
+  { rank: 1, medal: '🥇', avatar: '😎', name: 'ElBicho', points: 45.2, picks: ['✅', '✅', '✅', '❌', '✅'] },
+  { rank: 2, medal: '🥈', avatar: '🤠', name: 'DonCagao', points: 38.75, picks: ['✅', '❌', '✅', '✅', '✅'] },
+  { rank: 3, medal: '🥉', avatar: '🦁', name: 'LaFiera', points: 32.1, picks: ['✅', '✅', '❌', '✅', '❌'] },
+  { rank: 4, medal: null, avatar: '🦊', name: 'Zorro', points: 28.5, picks: ['❌', '✅', '✅', '❌', '✅'] },
+  { rank: 5, medal: null, avatar: '🐸', name: 'ElRana', points: 22.3, picks: ['❌', '❌', '✅', '✅', '❌'] },
+]
+
+const YOU = { rank: 12, avatar: '😰', name: 'TÚ (si te registras)', points: 5.2, picks: ['❌', '❌', '❌', '❌', '❌'] }
+const LAST = { rank: 15, avatar: '🍺', name: 'ElÚltimo', points: 0, picks: ['❌', '❌', '❌', '❌', '❌'] }
+
+function useCountdown() {
+  const [remaining, setRemaining] = useState<number>(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setRemaining(Math.max(0, WORLD_CUP_FINAL - Date.now()))
+    }, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const days = Math.floor(remaining / 86400000)
+  const hours = Math.floor((remaining % 86400000) / 3600000)
+  const minutes = Math.floor((remaining % 3600000) / 60000)
+  const seconds = Math.floor((remaining % 60000) / 1000)
+  return { days, hours, minutes, seconds }
+}
+
+function PickDots({ picks }: { picks: string[] }) {
+  return (
+    <div className="flex gap-1">
+      {picks.map((p, i) => (
+        <span key={i} className="text-xs">
+          {p}
+        </span>
+      ))}
+    </div>
+  )
+}
+
+export function ScoringRanking() {
+  const { days, hours, minutes, seconds } = useCountdown()
+
+  return (
+    <section className="px-4 py-20">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-10 flex items-center justify-between">
+          <h2 className="font-display text-3xl tracking-wide text-[#F5F5F5] sm:text-4xl">
+            📊 La puntuación es simple
+          </h2>
+          <Link href="/reglas" className="text-sm text-texto-secundario transition-colors hover:text-neon">
+            Ver reglas →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {SCORE_CARDS.map((c, i) => (
+            <Reveal key={c.label} delay={i * 100}>
+              <div
+                className="rounded-2xl bg-[#1E1E1E] p-8 text-center"
+                style={{ borderTop: `3px solid ${c.border}` }}
+              >
+                <div className="mb-2 text-3xl">{c.emoji}</div>
+                <p className="text-[14px] uppercase tracking-[2px] text-texto-secundario">{c.label}</p>
+                <p className="mt-2 font-display text-4xl tracking-wide text-[#F5F5F5]">{c.value}</p>
+                <p className="mt-3 text-sm text-texto-secundario">{c.desc}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={300} className="mt-14">
+          <h3 className="mb-5 font-display text-2xl tracking-wide text-[#F5F5F5]">
+            🏆 Ranking en tiempo real
+          </h3>
+
+          <div className="overflow-hidden rounded-2xl bg-[#1E1E1E]">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[560px] text-left">
+                <thead>
+                  <tr className="text-[14px] uppercase text-texto-secundario">
+                    <th className="px-6 py-4 font-normal">#</th>
+                    <th className="px-2 py-4 font-normal">Nombre</th>
+                    <th className="px-2 py-4 font-normal">Puntos</th>
+                    <th className="px-6 py-4 font-normal">Últimos picks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {RANKING.map(p => (
+                    <tr key={p.name} className="border-t border-[#2A2A2A]">
+                      <td className="px-6 py-4 text-sm">{p.medal ?? p.rank}</td>
+                      <td className="px-2 py-4 text-sm font-medium text-[#F5F5F5]">
+                        {p.avatar} {p.name}
+                      </td>
+                      <td className="px-2 py-4 font-mono text-sm text-[#F5F5F5]">{p.points.toFixed(2)}</td>
+                      <td className="px-6 py-4">
+                        <PickDots picks={p.picks} />
+                      </td>
+                    </tr>
+                  ))}
+
+                  <tr className="border-t-2 border-neon bg-neon/5">
+                    <td className="px-6 py-4 text-sm">{YOU.rank}</td>
+                    <td className="px-2 py-4 text-sm font-medium text-[#F5F5F5]">
+                      {YOU.avatar} {YOU.name}
+                    </td>
+                    <td className="px-2 py-4 font-mono text-sm text-[#F5F5F5]">{YOU.points.toFixed(2)}</td>
+                    <td className="px-6 py-4">
+                      <PickDots picks={YOU.picks} />
+                    </td>
+                  </tr>
+
+                  <tr className="border-t border-[#2A2A2A]" style={{ background: 'rgba(255,82,82,0.1)' }}>
+                    <td className="px-6 py-4 text-sm text-[#FF5252]">🔴 {LAST.rank}</td>
+                    <td className="px-2 py-4 text-sm font-medium text-[#F5F5F5]">
+                      {LAST.avatar} {LAST.name}
+                      <p className="mt-0.5 text-xs font-normal text-texto-secundario">
+                        &ldquo;¡La ronda va por mi cuenta!&rdquo;
+                      </p>
+                    </td>
+                    <td className="px-2 py-4 font-mono text-sm text-[#F5F5F5]">{LAST.points.toFixed(2)}</td>
+                    <td className="px-6 py-4">
+                      <PickDots picks={LAST.picks} />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p className="mt-6 text-center text-sm text-texto-secundario">
+            Faltan{' '}
+            <span
+              className={cn(
+                'font-mono text-2xl font-bold text-ambar sm:text-3xl',
+                seconds % 2 === 0 ? 'opacity-100' : 'opacity-80'
+              )}
+            >
+              {days}d {hours}h {minutes}m {seconds}s
+            </span>{' '}
+            para que alguien pague...
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
