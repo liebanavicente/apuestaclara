@@ -1,5 +1,37 @@
 @import "tailwindcss";
 
+/*
+ * Edición especial "España a la final".
+ * Los tokens de marca (neon/ambar/cesped/carbon) se reutilizan para no tocar
+ * cada archivo del sitio — solo cambia su valor. Los alias rojo/amarillo/
+ * azul-marino/noche son para código nuevo, con nombres explícitos.
+ * Para volver a la paleta anterior, basta con restaurar los valores hex aquí.
+ */
+@theme {
+  --color-cesped: #7a0c1e; /* fondo oscuro del hero */
+  --color-neon: #c60b1e; /* rojo España — acento primario / CTAs */
+  --color-ambar: #ffc400; /* amarillo España — acento secundario / destacados */
+  --color-carbon: #0a1220; /* fondo general, azul noche */
+  --color-superficie: #10203f; /* cards, modales */
+  --color-superficie-hover: #1b2e54; /* hover, inputs */
+  --color-texto: #ffffff;
+  --color-texto-secundario: #a8b3cc;
+  --color-texto-terciario: #64708f;
+  --color-error: #ff6b6b;
+  --color-info: #4da3ff;
+
+  /* Alias explícitos para código nuevo de la edición España */
+  --color-rojo: #c60b1e;
+  --color-amarillo: #ffc400;
+  --color-azul-marino: #0b1e3f;
+  --color-noche: #0a1220;
+}
+
+@theme inline {
+  --font-display: var(--font-bebas-neue);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
 :root {
   --font-inter: 'Inter', sans-serif;
 }
@@ -13,8 +45,8 @@ html {
 }
 
 body {
-  background-color: #020617; /* slate-950 */
-  color: #f1f5f9; /* slate-100 */
+  background-color: #0a1220; /* azul noche */
+  color: #f1f5f9;
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
@@ -32,4 +64,150 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
+}
+
+:focus-visible {
+  outline: 2px solid #ffc400;
+  outline-offset: 2px;
+}
+
+/* Textura grano sutil (hero) */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 30px rgba(198, 11, 30, 0.45); }
+  50% { box-shadow: 0 0 60px rgba(255, 196, 0, 0.65); }
+}
+.animate-glow-pulse {
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(16, 32, 63, 0.55);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.glass-strong {
+  background: rgba(10, 18, 32, 0.65);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 196, 0, 0.18);
+}
+
+/* Botón "brillante" — barrido de luz al hover */
+.shine-btn {
+  position: relative;
+  overflow: hidden;
+}
+.shine-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+.shine-btn:hover::after {
+  left: 125%;
+}
+
+/* Skeleton shimmer premium */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #1b2e54 25%, #24406e 37%, #1b2e54 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+    background: #1b2e54;
+  }
+}
+
+/* Marca de agua sutil de bandera (rojo-amarillo-rojo) */
+.flag-watermark {
+  background: repeating-linear-gradient(
+    115deg,
+    rgba(198, 11, 30, 0.05) 0px,
+    rgba(198, 11, 30, 0.05) 2px,
+    rgba(255, 196, 0, 0.05) 2px,
+    rgba(255, 196, 0, 0.05) 4px,
+    rgba(198, 11, 30, 0.05) 4px,
+    rgba(198, 11, 30, 0.05) 6px
+  );
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.reveal.in-view {
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ripple {
+  from { transform: scale(0); opacity: 0.5; }
+  to { transform: scale(2.5); opacity: 0; }
+}
+.animate-ripple {
+  animation: ripple 0.4s ease-out;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(var(--dx, 20px), -36px, 0) rotate(8deg); }
+}
+.particle {
+  animation: drift var(--dur, 12s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform;
+}
+
+@keyframes glow-drift {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.85; transform: translate(-50%, -50%) scale(1.12); }
+}
+.glow-orb {
+  animation: glow-drift 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-glow-pulse,
+  .animate-ripple,
+  .particle,
+  .glow-orb,
+  .shine-btn::after,
+  .reveal {
+    animation: none !important;
+    transition: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }

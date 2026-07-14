@@ -36,7 +36,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
   const tagline = TAGLINES[Math.floor(Math.abs(Math.sin(Date.now() / 86400000) * TAGLINES.length))]
 
   return (
-    <header className="sticky top-0 z-50 border-b border-yellow-500/20 bg-slate-950/95 backdrop-blur-sm">
+    <header className="glass sticky top-0 z-50 border-b border-amarillo/20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
@@ -44,7 +44,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
             <span className="text-2xl group-hover:rotate-12 transition-transform inline-block">🐟</span>
             <div className="hidden sm:block">
               <span className="font-black text-white text-lg tracking-tight">GañanesBets</span>
-              <span className="block text-xs text-yellow-500/70 leading-none -mt-0.5">{tagline}</span>
+              <span className="block text-xs text-neon/70 leading-none -mt-0.5">{tagline}</span>
             </div>
             <span className="sm:hidden font-black text-white text-lg">GañanesBets</span>
           </Link>
@@ -58,8 +58,8 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 className={cn(
                   'px-3 py-1.5 rounded-md text-sm transition-colors',
                   pathname.startsWith(href)
-                    ? 'text-yellow-400 bg-yellow-400/10 font-medium'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                    ? 'text-neon bg-neon/10 font-medium'
+                    : 'text-texto-secundario hover:text-white hover:bg-superficie-hover/60'
                 )}
               >
                 {label}
@@ -73,12 +73,12 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
               <div className="relative">
                 <button
                   onClick={() => setAccountOpen(!accountOpen)}
-                  className="flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
+                  className="flex items-center gap-2 text-sm text-texto-secundario hover:text-white transition-colors"
                 >
                   {profile.avatar_url ? (
                     <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-full" />
                   ) : (
-                    <div className="w-7 h-7 rounded-full bg-yellow-500 flex items-center justify-center text-xs font-black text-slate-950">
+                    <div className="w-7 h-7 rounded-full bg-neon flex items-center justify-center text-xs font-black text-white">
                       {(profile.username ?? profile.email).charAt(0).toUpperCase()}
                     </div>
                   )}
@@ -87,17 +87,17 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 </button>
 
                 {accountOpen && (
-                  <div className="absolute right-0 top-10 w-44 rounded-xl border border-slate-700 bg-slate-900 shadow-2xl py-1 z-50">
-                    <Link href="/dashboard" className="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800" onClick={() => setAccountOpen(false)}>Dashboard</Link>
-                    <Link href="/mis-picks" className="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800" onClick={() => setAccountOpen(false)}>🎯 Mis picks</Link>
-                    <Link href="/ranking" className="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800" onClick={() => setAccountOpen(false)}>🏆 Ranking</Link>
-                    <Link href="/account" className="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800" onClick={() => setAccountOpen(false)}>Mi cuenta</Link>
+                  <div className="absolute right-0 top-10 w-44 rounded-xl border border-superficie-hover bg-superficie shadow-2xl py-1 z-50">
+                    <Link href="/dashboard" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Dashboard</Link>
+                    <Link href="/mis-picks" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>🎯 Mis picks</Link>
+                    <Link href="/ranking" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>🏆 Ranking</Link>
+                    <Link href="/account" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Mi cuenta</Link>
                     {access?.isAdmin && (<>
-                      <Link href="/admin/resolver" className="block px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-slate-800" onClick={() => setAccountOpen(false)}>⚙️ Auto-resolver</Link>
-                      <Link href="/admin/debug" className="block px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-slate-800" onClick={() => setAccountOpen(false)}>Admin debug</Link>
+                      <Link href="/admin/resolver" className="block px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>⚙️ Auto-resolver</Link>
+                      <Link href="/admin/debug" className="block px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Admin debug</Link>
                     </>)}
-                    <hr className="border-slate-700 my-1" />
-                    <button onClick={onSignOut} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-slate-800">
+                    <hr className="border-superficie-hover my-1" />
+                    <button onClick={onSignOut} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-superficie-hover">
                       Salir 👋
                     </button>
                   </div>
@@ -105,10 +105,10 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link href="/login?redirect=/dashboard" className="text-sm text-slate-400 hover:text-white transition-colors px-3 py-1.5">
+                <Link href="/login?redirect=/dashboard" className="text-sm text-texto-secundario hover:text-white transition-colors px-3 py-1.5">
                   Entrar
                 </Link>
-                <Link href="/register?redirect=/dashboard" className="text-sm bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-3 py-1.5 rounded-md transition-colors">
+                <Link href="/register?redirect=/dashboard" className="shine-btn text-sm bg-neon hover:brightness-110 text-white font-black px-3 py-1.5 rounded-md transition-all">
                   Únete 🐟
                 </Link>
               </div>
@@ -116,7 +116,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
 
             {/* Mobile burger */}
             <button
-              className="lg:hidden p-1 text-slate-400 hover:text-white"
+              className="lg:hidden p-1 text-texto-secundario hover:text-white"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -127,7 +127,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-slate-800 bg-slate-950">
+        <div className="lg:hidden border-t border-superficie-hover bg-carbon">
           <nav className="px-4 py-3 space-y-1">
             {NAV_LINKS.map(({ href, label }) => (
               <Link
@@ -136,8 +136,8 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 className={cn(
                   'block px-3 py-2 rounded-md text-sm transition-colors',
                   pathname.startsWith(href)
-                    ? 'text-yellow-400 bg-yellow-400/10 font-medium'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                    ? 'text-neon bg-neon/10 font-medium'
+                    : 'text-texto-secundario hover:text-white hover:bg-superficie-hover/60'
                 )}
                 onClick={() => setMobileOpen(false)}
               >
