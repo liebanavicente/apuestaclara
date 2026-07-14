@@ -5,11 +5,11 @@ import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 const STATUS_CONFIG = {
-  pending: { label: 'Pendiente', icon: Clock, color: 'text-ambar', bg: 'bg-ambar/10 border-ambar/20' },
+  pending: { label: 'Pendiente', icon: Clock, color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
   won:     { label: 'Ganada', icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20' },
   lost:    { label: 'Perdida', icon: XCircle, color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20' },
-  void:    { label: 'Anulada', icon: Ban, color: 'text-texto-secundario', bg: 'bg-texto-terciario/10 border-superficie-hover/20' },
-  cancelled: { label: 'Cancelada', icon: Ban, color: 'text-texto-secundario', bg: 'bg-texto-terciario/10 border-superficie-hover/20' },
+  void:    { label: 'Anulada', icon: Ban, color: 'text-slate-400', bg: 'bg-slate-500/10 border-slate-500/20' },
+  cancelled: { label: 'Cancelada', icon: Ban, color: 'text-slate-400', bg: 'bg-slate-500/10 border-slate-500/20' },
 }
 
 interface SimPick {
@@ -60,10 +60,10 @@ export function SimulationCard({ simulation, onResolved }: Props) {
   }
 
   return (
-    <div className="rounded-xl border border-superficie-hover bg-superficie/40 overflow-hidden">
+    <div className="rounded-xl border border-slate-800 bg-slate-900/40 overflow-hidden">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center gap-3 p-4 text-left hover:bg-superficie-hover/30 transition-colors"
+        className="w-full flex items-center gap-3 p-4 text-left hover:bg-slate-800/30 transition-colors"
       >
         <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${cfg.bg} ${cfg.color} shrink-0`}>
           <Icon className="h-3 w-3" />
@@ -73,32 +73,32 @@ export function SimulationCard({ simulation, onResolved }: Props) {
           <p className="text-sm text-white font-medium">
             {simulation.simulation_type === 'combinada' ? '⛓ Combinada' : '🎯 Simple'} · @{Number(simulation.total_odds).toFixed(2)}
           </p>
-          <p className="text-xs text-texto-secundario">
+          <p className="text-xs text-slate-500">
             {Number(simulation.virtual_stake).toFixed(2)}€ →{' '}
             <span className="text-teal-400">{Number(simulation.potential_virtual_return).toFixed(2)}€</span>
             {' · '}{formatDistanceToNow(new Date(simulation.created_at), { addSuffix: true, locale: es })}
           </p>
         </div>
-        {open ? <ChevronUp className="h-4 w-4 text-texto-secundario shrink-0" /> : <ChevronDown className="h-4 w-4 text-texto-secundario shrink-0" />}
+        {open ? <ChevronUp className="h-4 w-4 text-slate-500 shrink-0" /> : <ChevronDown className="h-4 w-4 text-slate-500 shrink-0" />}
       </button>
 
       {open && (
-        <div className="px-4 pb-4 border-t border-superficie-hover pt-3 space-y-3">
+        <div className="px-4 pb-4 border-t border-slate-800 pt-3 space-y-3">
           <div className="space-y-1.5">
             {simulation.simulation_picks.map(pick => (
-              <div key={pick.id} className="flex items-center justify-between text-xs bg-superficie-hover/40 rounded-lg px-3 py-2">
+              <div key={pick.id} className="flex items-center justify-between text-xs bg-slate-800/40 rounded-lg px-3 py-2">
                 <div className="min-w-0">
                   <p className="text-white truncate">{pick.event_name}</p>
-                  <p className="text-texto-secundario">{pick.league_name} · {pick.selection}</p>
+                  <p className="text-slate-500">{pick.league_name} · {pick.selection}</p>
                 </div>
-                <span className="text-texto-secundario font-semibold ml-2 shrink-0">@{Number(pick.odds).toFixed(2)}</span>
+                <span className="text-slate-300 font-semibold ml-2 shrink-0">@{Number(pick.odds).toFixed(2)}</span>
               </div>
             ))}
           </div>
 
           {simulation.status === 'pending' && (
             <div>
-              <p className="text-xs text-texto-secundario mb-2">¿Cómo quedó?</p>
+              <p className="text-xs text-slate-500 mb-2">¿Cómo quedó?</p>
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => resolve('won')}
@@ -119,7 +119,7 @@ export function SimulationCard({ simulation, onResolved }: Props) {
                 <button
                   onClick={() => resolve('void')}
                   disabled={resolving}
-                  className="flex items-center justify-center gap-1 text-xs py-2 rounded-lg bg-superficie-hover/50 border border-superficie-hover/30 text-texto-secundario hover:bg-superficie-hover transition-colors disabled:opacity-40"
+                  className="flex items-center justify-center gap-1 text-xs py-2 rounded-lg bg-slate-700/50 border border-slate-600/30 text-slate-400 hover:bg-slate-700 transition-colors disabled:opacity-40"
                 >
                   <Ban className="h-3 w-3" />
                   Anular

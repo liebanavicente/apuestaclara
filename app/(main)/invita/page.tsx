@@ -59,13 +59,13 @@ export default async function InvitaPage() {
           <Trophy className="h-4 w-4 text-teal-400" />
           <p className="text-teal-300 font-semibold">Primeros 100 Embajadores</p>
         </div>
-        <p className="text-texto-secundario text-sm leading-relaxed">
+        <p className="text-slate-400 text-sm leading-relaxed">
           Comparte tu enlace personal. Por cada usuario que se registre con tu enlace,
           recibes 30 días de Premium gratis (mientras queden plazas disponibles).
         </p>
         <div className="mt-3 flex items-center gap-3">
           <span className="text-2xl font-black text-white">{Math.max(0, remaining)}</span>
-          <span className="text-texto-secundario text-sm">plazas restantes de 100</span>
+          <span className="text-slate-400 text-sm">plazas restantes de 100</span>
         </div>
       </div>
 
