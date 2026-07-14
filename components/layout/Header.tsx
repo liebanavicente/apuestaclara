@@ -36,7 +36,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
   const tagline = TAGLINES[Math.floor(Math.abs(Math.sin(Date.now() / 86400000) * TAGLINES.length))]
 
   return (
-    <header className="sticky top-0 z-50 border-b border-neon/20 bg-carbon/95 backdrop-blur-sm">
+    <header className="glass sticky top-0 z-50 border-b border-amarillo/20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
@@ -78,7 +78,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                   {profile.avatar_url ? (
                     <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-full" />
                   ) : (
-                    <div className="w-7 h-7 rounded-full bg-neon flex items-center justify-center text-xs font-black text-[#0B3D2E]">
+                    <div className="w-7 h-7 rounded-full bg-neon flex items-center justify-center text-xs font-black text-white">
                       {(profile.username ?? profile.email).charAt(0).toUpperCase()}
                     </div>
                   )}
@@ -108,7 +108,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 <Link href="/login?redirect=/dashboard" className="text-sm text-texto-secundario hover:text-white transition-colors px-3 py-1.5">
                   Entrar
                 </Link>
-                <Link href="/register?redirect=/dashboard" className="text-sm bg-neon hover:brightness-110 text-[#0B3D2E] font-black px-3 py-1.5 rounded-md transition-all">
+                <Link href="/register?redirect=/dashboard" className="shine-btn text-sm bg-neon hover:brightness-110 text-white font-black px-3 py-1.5 rounded-md transition-all">
                   Únete 🐟
                 </Link>
               </div>

@@ -81,7 +81,7 @@ export function ManualSelectionSlip({ picks, onRemove, onClear, isLoggedIn }: Ma
         <div className="mt-2">
           <Link
             href={isLoggedIn ? `/mis-picks?import=${encodeURIComponent(JSON.stringify(picks))}` : '/login?redirect=/mis-picks'}
-            className="flex items-center justify-center gap-1.5 w-full bg-neon hover:brightness-110 text-[#0B3D2E] font-black text-xs py-2 rounded-lg transition-colors"
+            className="flex items-center justify-center gap-1.5 w-full bg-neon hover:brightness-110 text-white font-black text-xs py-2 rounded-lg transition-colors"
           >
             <Target className="h-3.5 w-3.5" /> Apostar combinada 🎯
           </Link>

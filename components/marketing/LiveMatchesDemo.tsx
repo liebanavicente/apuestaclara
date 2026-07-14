@@ -73,8 +73,8 @@ function RippleButton({
       className={cn(
         'group relative flex flex-col items-center overflow-hidden rounded-lg border px-2 py-2.5 text-center transition-all',
         selected
-          ? 'border-neon bg-neon font-bold text-[#0B3D2E]'
-          : 'border-[#2A2A2A] bg-[#2A2A2A] text-[#F5F5F5] hover:border-neon hover:bg-neon/20 hover:text-neon'
+          ? 'border-neon bg-neon font-bold text-[#7A0C1E]'
+          : 'border-[#1B2E54] bg-[#1B2E54] text-[#FFFFFF] hover:border-neon hover:bg-neon/20 hover:text-neon'
       )}
     >
       {ripples.map(id => (
@@ -98,18 +98,18 @@ function MatchCard({ match, delay }: { match: DemoMatch; delay: number }) {
 
   return (
     <Reveal delay={delay}>
-      <div className="group rounded-2xl border border-[#2A2A2A] bg-[#1E1E1E] p-6 transition-all hover:-translate-y-1 hover:border-neon hover:shadow-[0_8px_30px_rgba(0,230,118,0.15)]">
+      <div className="group rounded-2xl border border-[#1B2E54] bg-[#10203F] p-6 transition-all hover:-translate-y-1 hover:border-neon hover:shadow-[0_8px_30px_rgba(198,11,30,0.15)]">
         <span className="inline-block rounded-full bg-neon/15 px-3 py-1 text-[11px] font-medium text-neon">
           {match.tournament}
         </span>
 
         <div className="mt-4 flex items-center justify-between text-center">
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[#F5F5F5]">{match.home.team}</p>
+            <p className="text-sm font-semibold text-[#FFFFFF]">{match.home.team}</p>
           </div>
           <span className="px-2 text-[13px] tracking-[4px] text-texto-secundario">VS</span>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[#F5F5F5]">{match.away.team}</p>
+            <p className="text-sm font-semibold text-[#FFFFFF]">{match.away.team}</p>
           </div>
         </div>
 
@@ -138,7 +138,7 @@ export function LiveMatchesDemo() {
     <section id="partidos" className="px-4 py-20">
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 flex items-center justify-between">
-          <h2 className="font-display text-4xl tracking-wide text-[#F5F5F5] sm:text-6xl">
+          <h2 className="font-display text-4xl tracking-wide text-[#FFFFFF] sm:text-6xl">
             🔥 Próximos Partidos
           </h2>
           <Link href="/dashboard" className="text-sm text-texto-secundario transition-colors hover:text-neon">

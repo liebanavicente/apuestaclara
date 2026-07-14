@@ -3,7 +3,7 @@ import { TrendingUp } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#2A2A2A]" style={{ backgroundColor: '#0A0A0A' }}>
+    <footer className="border-t border-superficie-hover" style={{ backgroundColor: '#0A0A0A' }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
@@ -21,20 +21,20 @@ export function Footer() {
           <div>
             <p className="text-texto-secundario font-semibold text-sm mb-3">Plataforma</p>
             <ul className="space-y-2">
-              <li><Link href="/generador" className="text-texto-secundario hover:text-neon text-sm transition-colors">Generador</Link></li>
-              <li><Link href="/buscar-eventos" className="text-texto-secundario hover:text-neon text-sm transition-colors">Buscar eventos</Link></li>
-              <li><Link href="/simulador" className="text-texto-secundario hover:text-neon text-sm transition-colors">Simulador</Link></li>
-              <li><Link href="/comunidad" className="text-texto-secundario hover:text-neon text-sm transition-colors">Comunidad</Link></li>
-              <li><Link href="/premium" className="text-texto-secundario hover:text-neon text-sm transition-colors">Premium</Link></li>
+              <li><Link href="/generador" className="text-texto-secundario hover:text-amarillo text-sm transition-colors">Generador</Link></li>
+              <li><Link href="/buscar-eventos" className="text-texto-secundario hover:text-amarillo text-sm transition-colors">Buscar eventos</Link></li>
+              <li><Link href="/simulador" className="text-texto-secundario hover:text-amarillo text-sm transition-colors">Simulador</Link></li>
+              <li><Link href="/comunidad" className="text-texto-secundario hover:text-amarillo text-sm transition-colors">Comunidad</Link></li>
+              <li><Link href="/premium" className="text-texto-secundario hover:text-amarillo text-sm transition-colors">Premium</Link></li>
             </ul>
           </div>
 
           <div>
             <p className="text-texto-secundario font-semibold text-sm mb-3">Legal</p>
             <ul className="space-y-2">
-              <li><Link href="/responsable" className="text-texto-secundario hover:text-neon text-sm transition-colors">Juego responsable</Link></li>
-              <li><Link href="/privacidad" className="text-texto-secundario hover:text-neon text-sm transition-colors">Privacidad</Link></li>
-              <li><Link href="/terminos" className="text-texto-secundario hover:text-neon text-sm transition-colors">Términos</Link></li>
+              <li><Link href="/responsable" className="text-texto-secundario hover:text-amarillo text-sm transition-colors">Juego responsable</Link></li>
+              <li><Link href="/privacidad" className="text-texto-secundario hover:text-amarillo text-sm transition-colors">Privacidad</Link></li>
+              <li><Link href="/terminos" className="text-texto-secundario hover:text-amarillo text-sm transition-colors">Términos</Link></li>
             </ul>
           </div>
         </div>

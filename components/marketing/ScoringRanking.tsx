@@ -12,21 +12,21 @@ const SCORE_CARDS = [
     label: 'Aciertas',
     value: '+3.50 pts',
     desc: 'Cuota 3.50 = +3.50 pts',
-    border: '#00E676',
+    border: '#C60B1E',
   },
   {
     emoji: '❌',
     label: 'Fallas',
     value: '0 pts',
     desc: 'No pierdes nada. Solo te quedas sin puntos',
-    border: '#FF5252',
+    border: '#FF6B6B',
   },
   {
     emoji: '🍺',
     label: 'El último paga',
     value: '19 jul 2026',
     desc: 'El ranking decide quién paga las birras',
-    border: '#FFB300',
+    border: '#FFC400',
   },
 ]
 
@@ -77,7 +77,7 @@ export function ScoringRanking() {
     <section className="px-4 py-20">
       <div className="mx-auto max-w-5xl">
         <div className="mb-10 flex items-center justify-between">
-          <h2 className="font-display text-4xl tracking-wide text-[#F5F5F5] sm:text-6xl">
+          <h2 className="font-display text-4xl tracking-wide text-[#FFFFFF] sm:text-6xl">
             📊 La puntuación es simple
           </h2>
           <Link href="/reglas" className="text-sm text-texto-secundario transition-colors hover:text-neon">
@@ -89,12 +89,12 @@ export function ScoringRanking() {
           {SCORE_CARDS.map((c, i) => (
             <Reveal key={c.label} delay={i * 100}>
               <div
-                className="rounded-2xl bg-[#1E1E1E] p-8 text-center"
+                className="rounded-2xl bg-[#10203F] p-8 text-center"
                 style={{ borderTop: `3px solid ${c.border}` }}
               >
                 <div className="mb-2 text-3xl">{c.emoji}</div>
                 <p className="text-[14px] uppercase tracking-[2px] text-texto-secundario">{c.label}</p>
-                <p className="mt-2 font-display text-6xl tracking-wide text-[#F5F5F5]">{c.value}</p>
+                <p className="mt-2 font-display text-6xl tracking-wide text-[#FFFFFF]">{c.value}</p>
                 <p className="mt-3 text-sm text-texto-secundario">{c.desc}</p>
               </div>
             </Reveal>
@@ -102,11 +102,11 @@ export function ScoringRanking() {
         </div>
 
         <Reveal delay={300} className="mt-14">
-          <h3 className="mb-5 font-display text-3xl tracking-wide text-[#F5F5F5]">
+          <h3 className="mb-5 font-display text-3xl tracking-wide text-[#FFFFFF]">
             🏆 Ranking en tiempo real
           </h3>
 
-          <div className="overflow-hidden rounded-2xl bg-[#1E1E1E]">
+          <div className="overflow-hidden rounded-2xl bg-[#10203F]">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[560px] text-left">
                 <thead>
@@ -119,12 +119,12 @@ export function ScoringRanking() {
                 </thead>
                 <tbody>
                   {RANKING.map(p => (
-                    <tr key={p.name} className="border-t border-[#2A2A2A]">
+                    <tr key={p.name} className="border-t border-[#1B2E54]">
                       <td className="px-6 py-4 text-sm">{p.medal ?? p.rank}</td>
-                      <td className="px-2 py-4 text-sm font-medium text-[#F5F5F5]">
+                      <td className="px-2 py-4 text-sm font-medium text-[#FFFFFF]">
                         {p.avatar} {p.name}
                       </td>
-                      <td className="px-2 py-4 font-mono text-sm text-[#F5F5F5]">{p.points.toFixed(2)}</td>
+                      <td className="px-2 py-4 font-mono text-sm text-[#FFFFFF]">{p.points.toFixed(2)}</td>
                       <td className="px-6 py-4">
                         <PickDots picks={p.picks} />
                       </td>
@@ -133,24 +133,24 @@ export function ScoringRanking() {
 
                   <tr className="border-t-2 border-neon bg-neon/5">
                     <td className="px-6 py-4 text-sm">{YOU.rank}</td>
-                    <td className="px-2 py-4 text-sm font-medium text-[#F5F5F5]">
+                    <td className="px-2 py-4 text-sm font-medium text-[#FFFFFF]">
                       {YOU.avatar} {YOU.name}
                     </td>
-                    <td className="px-2 py-4 font-mono text-sm text-[#F5F5F5]">{YOU.points.toFixed(2)}</td>
+                    <td className="px-2 py-4 font-mono text-sm text-[#FFFFFF]">{YOU.points.toFixed(2)}</td>
                     <td className="px-6 py-4">
                       <PickDots picks={YOU.picks} />
                     </td>
                   </tr>
 
-                  <tr className="border-t border-[#2A2A2A]" style={{ background: 'rgba(255,82,82,0.1)' }}>
-                    <td className="px-6 py-4 text-sm text-[#FF5252]">🔴 {LAST.rank}</td>
-                    <td className="px-2 py-4 text-sm font-medium text-[#F5F5F5]">
+                  <tr className="border-t border-[#1B2E54]" style={{ background: 'rgba(255,107,107,0.1)' }}>
+                    <td className="px-6 py-4 text-sm text-[#FF6B6B]">🔴 {LAST.rank}</td>
+                    <td className="px-2 py-4 text-sm font-medium text-[#FFFFFF]">
                       {LAST.avatar} {LAST.name}
                       <p className="mt-0.5 text-xs font-normal text-texto-secundario">
                         &ldquo;¡La ronda va por mi cuenta!&rdquo;
                       </p>
                     </td>
-                    <td className="px-2 py-4 font-mono text-sm text-[#F5F5F5]">{LAST.points.toFixed(2)}</td>
+                    <td className="px-2 py-4 font-mono text-sm text-[#FFFFFF]">{LAST.points.toFixed(2)}</td>
                     <td className="px-6 py-4">
                       <PickDots picks={LAST.picks} />
                     </td>

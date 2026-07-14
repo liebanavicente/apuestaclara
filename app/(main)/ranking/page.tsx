@@ -48,7 +48,7 @@ export default async function RankingPage() {
                 'border-amber-700/30 bg-superficie/50 self-end'
               }`} style={rank === 1 ? {} : { marginTop: rank === 2 ? '1rem' : '2rem' }}>
                 <div className="text-2xl mb-1">{rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉'}</div>
-                <div className={`w-8 h-8 rounded-full mx-auto mb-1 flex items-center justify-center text-sm font-black ${rank === 1 ? 'bg-ambar text-[#0B3D2E]' : 'bg-superficie-hover text-white'}`}>
+                <div className={`w-8 h-8 rounded-full mx-auto mb-1 flex items-center justify-center text-sm font-black ${rank === 1 ? 'bg-ambar text-[#0B1E3F]' : 'bg-superficie-hover text-white'}`}>
                   {p.username?.charAt(0).toUpperCase() ?? '?'}
                 </div>
                 <p className={`text-xs font-bold truncate ${isMe ? 'text-neon' : 'text-white'}`}>{p.username ?? 'Anónimo'}{isMe ? ' 👈' : ''}</p>
@@ -76,7 +76,7 @@ export default async function RankingPage() {
               <span className={`text-sm font-black w-6 text-center ${i === 0 ? 'text-ambar' : i === 1 ? 'text-texto-secundario' : i === 2 ? 'text-amber-600' : 'text-texto-terciario'}`}>
                 {i + 1}
               </span>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black shrink-0 ${isMe ? 'bg-neon text-[#0B3D2E]' : 'bg-superficie-hover text-white'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black shrink-0 ${isMe ? 'bg-neon text-white' : 'bg-superficie-hover text-white'}`}>
                 {p.username?.charAt(0).toUpperCase() ?? '?'}
               </div>
               <div className="flex-1 min-w-0">
@@ -100,7 +100,7 @@ export default async function RankingPage() {
       </div>
 
       <div className="mt-8 text-center">
-        <Link href="/dashboard" className="inline-flex items-center gap-2 bg-neon hover:brightness-110 text-[#0B3D2E] font-black px-5 py-2.5 rounded-lg transition-all text-sm">
+        <Link href="/dashboard" className="shine-btn inline-flex items-center gap-2 bg-neon hover:brightness-110 text-white font-black px-5 py-2.5 rounded-lg transition-all text-sm">
           ⚽ Hacer picks
         </Link>
       </div>

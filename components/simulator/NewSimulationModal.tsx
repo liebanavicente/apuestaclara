@@ -83,7 +83,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-2xl bg-superficie border border-superficie-hover rounded-2xl flex flex-col max-h-[90vh]">
+      <div className="glass-strong w-full max-w-2xl rounded-2xl flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-superficie-hover shrink-0">
           <h2 className="font-semibold text-white">Nueva simulación</h2>

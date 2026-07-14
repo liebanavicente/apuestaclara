@@ -23,7 +23,7 @@ export default function AdminResolverPage() {
       </p>
 
       <button onClick={run} disabled={loading}
-        className="bg-neon hover:brightness-110 disabled:opacity-50 text-[#0B3D2E] font-black px-6 py-3 rounded-xl transition-colors">
+        className="bg-neon hover:brightness-110 disabled:opacity-50 text-white font-black px-6 py-3 rounded-xl transition-colors">
         {loading ? 'Resolviendo…' : '▶ Ejecutar ahora'}
       </button>
 

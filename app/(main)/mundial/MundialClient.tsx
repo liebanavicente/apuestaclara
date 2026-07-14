@@ -129,18 +129,18 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
         {/* Desktop: scrollable tabs */}
         <div className="hidden sm:flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           <button onClick={() => setActiveGroup('all')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === 'all' ? 'bg-neon text-[#0B3D2E]' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === 'all' ? 'bg-neon text-white' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
             Todos
           </button>
           {activeGroups.map(g => (
             <button key={g.id} onClick={() => setActiveGroup(g.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === g.id ? 'bg-neon text-[#0B3D2E]' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === g.id ? 'bg-neon text-white' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
               Grp {g.id}
             </button>
           ))}
           {unassigned.length > 0 && (
             <button onClick={() => setActiveGroup('?')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === '?' ? 'bg-neon text-[#0B3D2E]' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors shrink-0 ${activeGroup === '?' ? 'bg-neon text-white' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
               Otros
             </button>
           )}
@@ -161,7 +161,7 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
           return (
             <section key={group.id}>
               <div className="flex items-center gap-3 mb-3">
-                <div className="bg-neon text-[#0B3D2E] font-black text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
+                <div className="bg-neon text-white font-black text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
                   {group.id}
                 </div>
                 <div>
@@ -286,7 +286,7 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
           </div>
           <button onClick={() => onStage(ev, staged!.selection, staged!.odds)} className="text-xs text-texto-secundario hover:text-white px-3 py-1.5 rounded-lg border border-superficie-hover">Cancelar</button>
           <button onClick={() => onConfirm(ev, competition)} disabled={loading === ev.id}
-            className="text-xs bg-neon hover:brightness-110 disabled:opacity-60 text-[#0B3D2E] font-black px-4 py-1.5 rounded-lg">
+            className="text-xs bg-neon hover:brightness-110 disabled:opacity-60 text-white font-black px-4 py-1.5 rounded-lg">
             {loading === ev.id ? '…' : 'Confirmar ✓'}
           </button>
         </div>

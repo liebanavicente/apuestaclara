@@ -133,7 +133,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
         <div className="flex gap-1.5 overflow-x-auto pb-2 mb-5 scrollbar-none">
           {tabs.map(tab => (
             <button key={tab.key} onClick={() => setActiveLeague(tab.key)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors shrink-0 ${activeLeague === tab.key ? 'bg-neon text-[#0B3D2E] font-black' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors shrink-0 ${activeLeague === tab.key ? 'bg-neon text-white font-black' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
               <span>{tab.emoji}</span><span>{tab.label}</span>
             </button>
           ))}
@@ -269,7 +269,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
                     </div>
                     <button onClick={() => setStaged(null)} className="text-xs text-texto-secundario hover:text-white px-3 py-1.5 rounded-lg border border-superficie-hover transition-colors">Cancelar</button>
                     <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
-                      className="text-xs bg-neon hover:brightness-110 disabled:opacity-60 text-[#0B3D2E] font-black px-4 py-1.5 rounded-lg transition-colors">
+                      className="text-xs bg-neon hover:brightness-110 disabled:opacity-60 text-white font-black px-4 py-1.5 rounded-lg transition-colors">
                       {loading === ev.id ? '…' : 'Confirmar ✓'}
                     </button>
                   </div>

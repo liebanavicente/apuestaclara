@@ -198,7 +198,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
             <span className="text-texto-secundario ml-1">pts acumulados</span>
           </p>
         </div>
-        <button onClick={openForm} className="flex items-center gap-2 bg-neon hover:brightness-110 text-[#0B3D2E] font-black px-4 py-2 rounded-lg transition-colors text-sm">
+        <button onClick={openForm} className="flex items-center gap-2 bg-neon hover:brightness-110 text-white font-black px-4 py-2 rounded-lg transition-colors text-sm">
           <Plus className="h-4 w-4" /> Nuevo pick
         </button>
       </div>
@@ -214,11 +214,11 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
           {/* Single / Combinada */}
           <div className="flex rounded-lg border border-superficie-hover overflow-hidden text-xs">
             <button type="button" onClick={() => setPickType('single')}
-              className={`flex-1 px-3 py-2 transition-colors font-medium ${pickType === 'single' ? 'bg-neon text-[#0B3D2E] font-black' : 'text-texto-secundario hover:text-white'}`}>
+              className={`flex-1 px-3 py-2 transition-colors font-medium ${pickType === 'single' ? 'bg-neon text-white font-black' : 'text-texto-secundario hover:text-white'}`}>
               ⚽ Pick simple
             </button>
             <button type="button" onClick={() => { setPickType('combinada'); loadEvents() }}
-              className={`flex-1 px-3 py-2 transition-colors font-medium ${pickType === 'combinada' ? 'bg-neon text-[#0B3D2E] font-black' : 'text-texto-secundario hover:text-white'}`}>
+              className={`flex-1 px-3 py-2 transition-colors font-medium ${pickType === 'combinada' ? 'bg-neon text-white font-black' : 'text-texto-secundario hover:text-white'}`}>
               🔗 Combinada
             </button>
           </div>
@@ -326,7 +326,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
                       onCustomChange={(sel, odds) => setLegForm(f => ({ ...f, selection: sel, odds }))} />
                   )}
                   {legForm.selection && legForm.odds && (
-                    <button type="button" onClick={addLeg} className="w-full bg-neon hover:brightness-110 text-[#0B3D2E] font-black text-xs py-2 rounded-lg">
+                    <button type="button" onClick={addLeg} className="w-full bg-neon hover:brightness-110 text-white font-black text-xs py-2 rounded-lg">
                       Confirmar selección
                     </button>
                   )}
@@ -343,7 +343,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
                   <input value={legForm.selection} onChange={e => setLegForm(f => ({ ...f, selection: e.target.value }))} placeholder="Tu apuesta" className={INPUT_CLS} />
                   <input type="number" step="0.01" min="1.01" value={legForm.odds} onChange={e => setLegForm(f => ({ ...f, odds: e.target.value }))} placeholder="Cuota" className={INPUT_CLS} />
                   {legForm.description && legForm.selection && legForm.odds && (
-                    <button type="button" onClick={addLeg} className="w-full bg-neon hover:brightness-110 text-[#0B3D2E] font-black text-xs py-2 rounded-lg">Confirmar</button>
+                    <button type="button" onClick={addLeg} className="w-full bg-neon hover:brightness-110 text-white font-black text-xs py-2 rounded-lg">Confirmar</button>
                   )}
                 </div>
               )}
@@ -363,7 +363,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
 
           <div className="flex gap-2">
             <button type="submit" disabled={!canSubmit}
-              className="flex-1 bg-neon hover:brightness-110 disabled:opacity-40 text-[#0B3D2E] font-black py-2.5 rounded-lg text-sm transition-colors">
+              className="flex-1 bg-neon hover:brightness-110 disabled:opacity-40 text-white font-black py-2.5 rounded-lg text-sm transition-colors">
               {loading ? 'Publicando…' : 'Publicar pick 🎯'}
             </button>
             <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 rounded-lg border border-superficie-hover text-texto-secundario hover:text-white text-sm">

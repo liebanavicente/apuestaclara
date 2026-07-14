@@ -1,17 +1,30 @@
 @import "tailwindcss";
 
+/*
+ * Edición especial "España a la final".
+ * Los tokens de marca (neon/ambar/cesped/carbon) se reutilizan para no tocar
+ * cada archivo del sitio — solo cambia su valor. Los alias rojo/amarillo/
+ * azul-marino/noche son para código nuevo, con nombres explícitos.
+ * Para volver a la paleta anterior, basta con restaurar los valores hex aquí.
+ */
 @theme {
-  --color-cesped: #0b3d2e;
-  --color-neon: #00e676;
-  --color-ambar: #ffb300;
-  --color-carbon: #121212;
-  --color-superficie: #1e1e1e;
-  --color-superficie-hover: #2a2a2a;
-  --color-texto: #f5f5f5;
-  --color-texto-secundario: #9e9e9e;
-  --color-texto-terciario: #616161;
-  --color-error: #ff5252;
-  --color-info: #448aff;
+  --color-cesped: #7a0c1e; /* fondo oscuro del hero */
+  --color-neon: #c60b1e; /* rojo España — acento primario / CTAs */
+  --color-ambar: #ffc400; /* amarillo España — acento secundario / destacados */
+  --color-carbon: #0a1220; /* fondo general, azul noche */
+  --color-superficie: #10203f; /* cards, modales */
+  --color-superficie-hover: #1b2e54; /* hover, inputs */
+  --color-texto: #ffffff;
+  --color-texto-secundario: #a8b3cc;
+  --color-texto-terciario: #64708f;
+  --color-error: #ff6b6b;
+  --color-info: #4da3ff;
+
+  /* Alias explícitos para código nuevo de la edición España */
+  --color-rojo: #c60b1e;
+  --color-amarillo: #ffc400;
+  --color-azul-marino: #0b1e3f;
+  --color-noche: #0a1220;
 }
 
 @theme inline {
@@ -32,8 +45,8 @@ html {
 }
 
 body {
-  background-color: #020617; /* slate-950 */
-  color: #f1f5f9; /* slate-100 */
+  background-color: #0a1220; /* azul noche */
+  color: #f1f5f9;
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
@@ -54,7 +67,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid #00e676;
+  outline: 2px solid #ffc400;
   outline-offset: 2px;
 }
 
@@ -73,11 +86,75 @@ body {
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 30px rgba(0, 230, 118, 0.4); }
-  50% { box-shadow: 0 0 60px rgba(0, 230, 118, 0.8); }
+  0%, 100% { box-shadow: 0 0 30px rgba(198, 11, 30, 0.45); }
+  50% { box-shadow: 0 0 60px rgba(255, 196, 0, 0.65); }
 }
 .animate-glow-pulse {
   animation: glow-pulse 4s ease-in-out infinite;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(16, 32, 63, 0.55);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.glass-strong {
+  background: rgba(10, 18, 32, 0.65);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 196, 0, 0.18);
+}
+
+/* Botón "brillante" — barrido de luz al hover */
+.shine-btn {
+  position: relative;
+  overflow: hidden;
+}
+.shine-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+.shine-btn:hover::after {
+  left: 125%;
+}
+
+/* Skeleton shimmer premium */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #1b2e54 25%, #24406e 37%, #1b2e54 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+    background: #1b2e54;
+  }
+}
+
+/* Marca de agua sutil de bandera (rojo-amarillo-rojo) */
+.flag-watermark {
+  background: repeating-linear-gradient(
+    115deg,
+    rgba(198, 11, 30, 0.05) 0px,
+    rgba(198, 11, 30, 0.05) 2px,
+    rgba(255, 196, 0, 0.05) 2px,
+    rgba(255, 196, 0, 0.05) 4px,
+    rgba(198, 11, 30, 0.05) 4px,
+    rgba(198, 11, 30, 0.05) 6px
+  );
 }
 
 @keyframes fade-in-up {
@@ -124,6 +201,7 @@ body {
   .animate-ripple,
   .particle,
   .glow-orb,
+  .shine-btn::after,
   .reveal {
     animation: none !important;
     transition: none !important;

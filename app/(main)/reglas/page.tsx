@@ -95,7 +95,7 @@ export default function ReglasPage() {
       </div>
 
       <div className="mt-10 flex gap-3 justify-center">
-        <a href="/dashboard" className="inline-flex items-center gap-2 bg-neon hover:brightness-110 text-[#0B3D2E] font-black px-6 py-3 rounded-lg transition-all">
+        <a href="/dashboard" className="shine-btn inline-flex items-center gap-2 bg-neon hover:brightness-110 text-white font-black px-6 py-3 rounded-lg transition-all">
           ⚽ Hacer picks
         </a>
         <a href="/ranking" className="inline-flex items-center gap-2 border border-superficie-hover hover:border-neon text-white font-semibold px-6 py-3 rounded-lg transition-colors">
