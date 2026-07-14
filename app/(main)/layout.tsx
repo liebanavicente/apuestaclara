@@ -2,6 +2,7 @@ import { HeaderWrapper } from '@/components/layout/HeaderWrapper'
 import { Footer } from '@/components/layout/Footer'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getUserAccess } from '@/lib/access'
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -15,9 +16,11 @@ export default async function MainLayout({ children }: { children: React.ReactNo
     profile = data
   }
 
+  const access = getUserAccess(profile, null)
+
   return (
     <div className="min-h-screen flex flex-col bg-carbon text-white">
-      <HeaderWrapper profile={profile} access={null} />
+      <HeaderWrapper profile={profile} access={access} />
       <main className="flex-1">
         {children}
       </main>
