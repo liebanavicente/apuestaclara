@@ -1,49 +1,12 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
+import { cn, formatDate } from '@/lib/utils'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { Reveal } from './Reveal'
+import type { NormalizedEvent } from '@/types/odds'
 
 type Outcome = { label: string; team: string; odds: number }
-type DemoMatch = {
-  id: string
-  tournament: string
-  home: Outcome
-  draw?: Outcome
-  away: Outcome
-  time: string
-  status: 'abierto' | 'en_vivo'
-}
-
-const MATCHES: DemoMatch[] = [
-  {
-    id: 'rm-fcb',
-    tournament: 'Champions League',
-    home: { label: '1', team: 'Real Madrid', odds: 1.85 },
-    draw: { label: 'X', team: 'Empate', odds: 3.4 },
-    away: { label: '2', team: 'Barcelona', odds: 4.2 },
-    time: '⏰ Hoy 21:00',
-    status: 'abierto',
-  },
-  {
-    id: 'esp-arg',
-    tournament: 'Mundial 2026',
-    home: { label: '1', team: 'España', odds: 2.1 },
-    draw: { label: 'X', team: 'Empate', odds: 3.25 },
-    away: { label: '2', team: 'Argentina', odds: 3.8 },
-    time: '⏰ 15 jul 20:00',
-    status: 'abierto',
-  },
-  {
-    id: 'mc-ars',
-    tournament: 'Champions League',
-    home: { label: '1', team: 'Man City', odds: 1.6 },
-    draw: { label: 'X', team: 'Empate', odds: 4.0 },
-    away: { label: '2', team: 'Arsenal', odds: 5.5 },
-    time: '⏰ Mañana 18:30',
-    status: 'abierto',
-  },
-]
 
 function RippleButton({
   outcome,
@@ -73,7 +36,7 @@ function RippleButton({
       className={cn(
         'group relative flex flex-col items-center overflow-hidden rounded-lg border px-2 py-2.5 text-center transition-all',
         selected
-          ? 'border-neon bg-neon font-bold text-[#7A0C1E]'
+          ? 'border-neon bg-neon font-bold text-white'
           : 'border-[#1B2E54] bg-[#1B2E54] text-[#FFFFFF] hover:border-neon hover:bg-neon/20 hover:text-neon'
       )}
     >
@@ -92,28 +55,35 @@ function RippleButton({
   )
 }
 
-function MatchCard({ match, delay }: { match: DemoMatch; delay: number }) {
+function MatchCard({ event, delay }: { event: NormalizedEvent; delay: number }) {
   const [selection, setSelection] = useState<string | null>(null)
-  const outcomes = [match.home, match.draw, match.away].filter(Boolean) as Outcome[]
+
+  const outcomes: Outcome[] = [
+    event.best_odds.home != null ? { label: '1', team: event.home_team, odds: event.best_odds.home } : null,
+    event.best_odds.draw != null ? { label: 'X', team: 'Empate', odds: event.best_odds.draw } : null,
+    event.best_odds.away != null ? { label: '2', team: event.away_team, odds: event.best_odds.away } : null,
+  ].filter((o): o is Outcome => o !== null)
+
+  const started = new Date(event.commence_time) < new Date()
 
   return (
     <Reveal delay={delay}>
       <div className="group rounded-2xl border border-[#1B2E54] bg-[#10203F] p-6 transition-all hover:-translate-y-1 hover:border-neon hover:shadow-[0_8px_30px_rgba(198,11,30,0.15)]">
         <span className="inline-block rounded-full bg-neon/15 px-3 py-1 text-[11px] font-medium text-neon">
-          {match.tournament}
+          {event.league}
         </span>
 
         <div className="mt-4 flex items-center justify-between text-center">
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[#FFFFFF]">{match.home.team}</p>
+            <p className="text-sm font-semibold text-[#FFFFFF]">{event.home_team}</p>
           </div>
           <span className="px-2 text-[13px] tracking-[4px] text-texto-secundario">VS</span>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[#FFFFFF]">{match.away.team}</p>
+            <p className="text-sm font-semibold text-[#FFFFFF]">{event.away_team}</p>
           </div>
         </div>
 
-        <div className={cn('mt-4 grid gap-2', match.draw ? 'grid-cols-3' : 'grid-cols-2')}>
+        <div className={cn('mt-4 grid gap-2', outcomes.length === 3 ? 'grid-cols-3' : 'grid-cols-2')}>
           {outcomes.map(o => (
             <RippleButton
               key={o.label}
@@ -125,15 +95,15 @@ function MatchCard({ match, delay }: { match: DemoMatch; delay: number }) {
         </div>
 
         <div className="mt-4 flex items-center justify-between text-[13px] text-texto-secundario">
-          <span>{match.time}</span>
-          <span className="text-neon">🟢 Abierto</span>
+          <span>⏰ {formatDate(event.commence_time)}</span>
+          <span className={started ? 'text-error' : 'text-neon'}>{started ? '🔴 En vivo' : '🟢 Abierto'}</span>
         </div>
       </div>
     </Reveal>
   )
 }
 
-export function LiveMatchesDemo() {
+export function LiveMatchesDemo({ matches }: { matches: NormalizedEvent[] }) {
   return (
     <section id="partidos" className="px-4 py-20">
       <div className="mx-auto max-w-6xl">
@@ -146,11 +116,24 @@ export function LiveMatchesDemo() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {MATCHES.map((m, i) => (
-            <MatchCard key={m.id} match={m} delay={i * 100} />
-          ))}
-        </div>
+        {matches.length === 0 ? (
+          <EmptyState
+            icon={<span className="text-5xl">🐟💤</span>}
+            title="No hay partidos ahora"
+            description="Los Gañanes están descansando... vuelve más tarde o mira el calendario completo."
+            action={
+              <Link href="/dashboard" className="text-neon hover:underline text-sm">
+                Ver calendario →
+              </Link>
+            }
+          />
+        ) : (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {matches.slice(0, 3).map((event, i) => (
+              <MatchCard key={event.id} event={event} delay={i * 100} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
