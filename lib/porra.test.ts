@@ -7,6 +7,7 @@ import {
   isFinalPredictionExact,
   isValidScore,
   opponentLabel,
+  opponentShortName,
   validateFinalPredictionInput,
 } from './porra'
 
@@ -121,5 +122,20 @@ describe('opponentLabel', () => {
   })
   it('handles a missing flag gracefully', () => {
     expect(opponentLabel({ opponent_name: 'Argentina', opponent_flag: null })).toBe('Argentina')
+  })
+})
+
+describe('opponentShortName', () => {
+  it('falls back to the generic "Rival" when there is no match info', () => {
+    expect(opponentShortName(null)).toBe('Rival')
+  })
+  it('falls back to "Rival" when the opponent is not confirmed yet', () => {
+    expect(opponentShortName({ opponent_name: null })).toBe('Rival')
+  })
+  it('uses the confirmed opponent name, without the flag', () => {
+    expect(opponentShortName({ opponent_name: 'Argentina' })).toBe('Argentina')
+  })
+  it('falls back to "Rival" for a blank name', () => {
+    expect(opponentShortName({ opponent_name: '   ' })).toBe('Rival')
   })
 })

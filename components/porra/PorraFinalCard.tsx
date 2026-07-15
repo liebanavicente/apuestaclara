@@ -8,6 +8,7 @@ import {
   FINAL_MULTIPLIER,
   isFinalLocked,
   opponentLabel,
+  opponentShortName,
   validateFinalPredictionInput,
 } from '@/lib/porra'
 import type { FinalMatchInfo, FinalPrediction } from '@/types/porra'
@@ -47,6 +48,7 @@ export function PorraFinalCard({ isLoggedIn }: Props) {
   }, [isLoggedIn])
 
   const locked = matchInfo ? isFinalLocked(matchInfo.kickoff_at) : false
+  const rival = opponentShortName(matchInfo)
   const isDraw = goalsSpain === goalsRival
   const hasChanges =
     !prediction ||
@@ -143,7 +145,7 @@ export function PorraFinalCard({ isLoggedIn }: Props) {
               {prediction ? (
                 <>
                   <p className="font-mono text-3xl font-bold text-white">
-                    España {prediction.goals_spain} – {prediction.goals_rival} Rival
+                    España {prediction.goals_spain} – {prediction.goals_rival} {rival}
                   </p>
                   {prediction.penalty_winner && (
                     <p className="mt-2 text-sm text-texto-secundario">
@@ -164,7 +166,7 @@ export function PorraFinalCard({ isLoggedIn }: Props) {
               <div className="flex items-center justify-center gap-3 sm:gap-8">
                 <GoalStepper label="España" value={goalsSpain} onChange={setGoalsSpain} disabled={saving} />
                 <span className="mb-6 hidden font-display text-3xl text-texto-secundario sm:block">–</span>
-                <GoalStepper label="Rival" value={goalsRival} onChange={setGoalsRival} disabled={saving} />
+                <GoalStepper label={rival} value={goalsRival} onChange={setGoalsRival} disabled={saving} />
               </div>
 
               {isDraw && (
@@ -186,7 +188,7 @@ export function PorraFinalCard({ isLoggedIn }: Props) {
                             : 'border-superficie-hover text-texto-secundario hover:border-amarillo/60 hover:text-amarillo'
                         )}
                       >
-                        {who === 'espana' ? '🇪🇸 España' : 'Rival'}
+                        {who === 'espana' ? '🇪🇸 España' : rival}
                       </button>
                     ))}
                   </div>
@@ -199,7 +201,7 @@ export function PorraFinalCard({ isLoggedIn }: Props) {
                 <div className="mt-6 rounded-2xl border border-neon/40 bg-neon/10 p-5">
                   <p className="font-bold text-white">✅ Tu porra se ha guardado correctamente</p>
                   <p className="mt-2 font-mono text-2xl font-bold text-white">
-                    Tu pronóstico: España {goalsSpain} – {goalsRival} Rival
+                    Tu pronóstico: España {goalsSpain} – {goalsRival} {rival}
                   </p>
                   <p className="mt-1 text-sm text-amarillo">Premio por resultado exacto: x{FINAL_MULTIPLIER}</p>
                 </div>

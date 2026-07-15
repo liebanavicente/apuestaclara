@@ -69,3 +69,12 @@ export function opponentLabel(matchInfo: Pick<FinalMatchInfo, 'opponent_name' | 
   if (!matchInfo.opponent_name) return '❓ Rival por confirmar'
   return `${matchInfo.opponent_flag ?? ''} ${matchInfo.opponent_name}`.trim()
 }
+
+/**
+ * Nombre corto del rival para usar dentro de la card (etiqueta del stepper,
+ * botón de penaltis, resumen del marcador guardado): el nombre confirmado,
+ * o "Rival" genérico mientras no se conozca.
+ */
+export function opponentShortName(matchInfo: Pick<FinalMatchInfo, 'opponent_name'> | null): string {
+  return matchInfo?.opponent_name?.trim() || 'Rival'
+}
