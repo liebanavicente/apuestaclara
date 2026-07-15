@@ -1,12 +1,18 @@
 'use client'
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-export function PorraMagicLinkForm() {
+function PorraMagicLinkFormInner() {
+  const searchParams = useSearchParams()
+  const hadAuthError = searchParams.get('authError') === '1'
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(
+    hadAuthError ? 'El enlace ha caducado o se abrió en otra app/navegador distinto al que lo pidió. Pide uno nuevo.' : null
+  )
   const [sent, setSent] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
@@ -43,8 +49,8 @@ export function PorraMagicLinkForm() {
         <div className="mb-4 text-4xl">✉️</div>
         <h2 className="text-xl font-black text-white">Revisa tu email</h2>
         <p className="mx-auto mt-2 max-w-sm text-sm text-texto-secundario">
-          Te hemos enviado un enlace mágico a <strong className="text-white">{email}</strong>. Ábrelo desde este
-          mismo dispositivo para entrar y hacer tu porra — sin contraseña.
+          Te hemos enviado un enlace mágico a <strong className="text-white">{email}</strong>. Ábrelo desde el mismo
+          navegador/app en el que pediste el enlace para entrar y hacer tu porra — sin contraseña.
         </p>
       </div>
     )
@@ -96,5 +102,13 @@ export function PorraMagicLinkForm() {
         </button>
       </div>
     </form>
+  )
+}
+
+export function PorraMagicLinkForm() {
+  return (
+    <Suspense>
+      <PorraMagicLinkFormInner />
+    </Suspense>
   )
 }
