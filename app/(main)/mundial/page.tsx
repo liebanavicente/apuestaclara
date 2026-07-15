@@ -4,7 +4,6 @@ import { getEvents } from '@/lib/services/odds.service'
 import { redirect } from 'next/navigation'
 import { WC_GROUPS, getGroupForMatch } from './groups'
 import { MundialClient } from './MundialClient'
-import { PorraFinalCard } from '@/components/porra/PorraFinalCard'
 import type { NormalizedEvent } from '@/types/odds'
 
 export const metadata = { title: 'Mundial 2026 — GañanesBets' }
@@ -38,16 +37,11 @@ export default async function MundialPage() {
   }
 
   return (
-    <div>
-      <div className="max-w-3xl mx-auto px-4 pt-8">
-        <PorraFinalCard isLoggedIn={!!user} />
-      </div>
-      <MundialClient
-        groups={WC_GROUPS}
-        matchesByGroup={Object.fromEntries(matchesByGroup)}
-        unassigned={unassigned}
-        myPicks={myPicks ?? []}
-      />
-    </div>
+    <MundialClient
+      groups={WC_GROUPS}
+      matchesByGroup={Object.fromEntries(matchesByGroup)}
+      unassigned={unassigned}
+      myPicks={myPicks ?? []}
+    />
   )
 }

@@ -16,7 +16,6 @@ interface HeaderProps {
 const NAV_LINKS = [
   { href: '/dashboard', label: '⚽ Partidos' },
   { href: '/mundial', label: '🌍 Mundial' },
-  { href: '/porra', label: '🇪🇸 Porra' },
   { href: '/ranking', label: '🏆 Ranking' },
   { href: '/reglas', label: '📋 Reglas' },
   { href: '/herramientas', label: '🔧 Herramientas' },
