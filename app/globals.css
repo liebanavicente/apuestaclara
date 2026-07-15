@@ -195,6 +195,15 @@ body {
   animation: glow-drift 6s ease-in-out infinite;
 }
 
+.ranking-expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease-out;
+}
+.ranking-expand.is-open {
+  grid-template-rows: 1fr;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
   .animate-glow-pulse,
@@ -202,7 +211,8 @@ body {
   .particle,
   .glow-orb,
   .shine-btn::after,
-  .reveal {
+  .reveal,
+  .ranking-expand {
     animation: none !important;
     transition: none !important;
   }
