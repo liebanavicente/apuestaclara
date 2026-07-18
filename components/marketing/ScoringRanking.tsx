@@ -23,9 +23,9 @@ const SCORE_CARDS = [
   },
   {
     emoji: '#',
-    label: 'El último paga',
+    label: 'Cierre',
     value: '19 jul 2026',
-    desc: 'El ranking decide quién paga las birras',
+    desc: 'El ranking queda congelado al cierre de mercado',
     border: '#D7FF4F',
   },
 ]

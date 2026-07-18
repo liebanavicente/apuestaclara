@@ -46,12 +46,12 @@ export default async function PremiumPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-2 text-xs text-teal-400 font-semibold uppercase tracking-wider mb-4">
+        <div className="inline-flex items-center gap-2 text-xs text-neon font-semibold uppercase tracking-wider mb-4">
           <Star className="h-3.5 w-3.5" />
           Premium
         </div>
         <h1 className="text-4xl font-extrabold text-white mb-3">Más herramientas. Más análisis.</h1>
-        <p className="text-slate-400 max-w-xl mx-auto text-lg">
+        <p className="text-texto-secundario max-w-xl mx-auto text-lg">
           Premium desbloquea más herramientas de análisis.
         </p>
         <p className="text-orange-400/80 text-sm mt-2">
@@ -60,10 +60,10 @@ export default async function PremiumPage() {
       </div>
 
       {isPremium && (
-        <div className="mb-8 rounded-xl border border-teal-500/40 bg-teal-950/30 p-5 text-center">
-          <p className="text-teal-300 font-semibold">Ya eres usuario Premium</p>
-          <p className="text-slate-400 text-sm mt-1">Todas las funciones están disponibles en tu cuenta.</p>
-          <Link href="/account" className="inline-block mt-3 text-teal-400 hover:text-teal-300 text-sm underline-offset-2 hover:underline transition-colors">
+        <div className="mb-8 rounded-xl border border-neon/30 bg-neon/10 p-5 text-center">
+          <p className="text-neon font-semibold">Ya eres usuario Premium</p>
+          <p className="text-texto-secundario text-sm mt-1">Todas las funciones están disponibles en tu cuenta.</p>
+          <Link href="/account" className="inline-block mt-3 text-neon hover:text-ambar text-sm underline-offset-2 hover:underline transition-colors">
             Gestionar suscripción
           </Link>
         </div>
@@ -71,41 +71,41 @@ export default async function PremiumPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         {/* Free */}
-        <div className="rounded-xl border border-slate-700 bg-slate-900/50 p-6">
-          <p className="text-slate-400 font-semibold mb-1">Free</p>
+        <div className="rounded-xl border border-neon/10 bg-superficie/80 p-6">
+          <p className="text-texto-secundario font-semibold mb-1">Free</p>
           <p className="text-4xl font-black text-white mb-1">0 €</p>
-          <p className="text-slate-500 text-sm mb-6">Para siempre gratis</p>
+          <p className="text-texto-terciario text-sm mb-6">Para siempre gratis</p>
           <ul className="space-y-3">
             {FREE_FEATURES.map(f => (
-              <li key={f} className="flex items-center gap-2.5 text-sm text-slate-400">
-                <Check className="h-4 w-4 text-slate-600 shrink-0" />
+              <li key={f} className="flex items-center gap-2.5 text-sm text-texto-secundario">
+                <Check className="h-4 w-4 text-texto-terciario shrink-0" />
                 {f}
               </li>
             ))}
           </ul>
           <div className="mt-6">
             {!user ? (
-              <Link href="/register" className="block text-center border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white py-2.5 rounded-lg transition-colors text-sm font-medium">
+              <Link href="/register" className="block text-center border border-slate-600 hover:border-slate-400 text-texto-secundario hover:text-white py-2.5 rounded-lg transition-colors text-sm font-medium">
                 Empezar gratis
               </Link>
             ) : (
-              <p className="text-center text-slate-500 text-sm">Tu plan actual</p>
+              <p className="text-center text-texto-terciario text-sm">Tu plan actual</p>
             )}
           </div>
         </div>
 
         {/* Premium */}
-        <div className="rounded-xl border border-teal-500/40 bg-teal-950/30 p-6 relative overflow-hidden">
-          <div className="absolute top-4 right-4 flex items-center gap-1 bg-teal-500/20 text-teal-300 text-xs font-semibold px-2.5 py-1 rounded-full border border-teal-500/30">
+        <div className="rounded-xl border border-neon/30 bg-neon/10 p-6 relative overflow-hidden">
+          <div className="absolute top-4 right-4 flex items-center gap-1 bg-neon/10 text-neon text-xs font-semibold px-2.5 py-1 rounded-full border border-neon/30">
             <Zap className="h-3 w-3" /> Más popular
           </div>
-          <p className="text-teal-300 font-semibold mb-1">Premium</p>
-          <p className="text-4xl font-black text-white mb-1">4,99 €<span className="text-xl font-normal text-slate-400">/mes</span></p>
-          <p className="text-slate-500 text-sm mb-6">Sin permanencia · Cancela cuando quieras</p>
+          <p className="text-neon font-semibold mb-1">Premium</p>
+          <p className="text-4xl font-black text-white mb-1">4,99 €<span className="text-xl font-normal text-texto-secundario">/mes</span></p>
+          <p className="text-texto-terciario text-sm mb-6">Sin permanencia · Cancela cuando quieras</p>
           <ul className="space-y-3 mb-6">
             {PREMIUM_FEATURES.map(f => (
-              <li key={f} className="flex items-center gap-2.5 text-sm text-slate-300">
-                <Star className="h-4 w-4 text-teal-400 shrink-0" />
+              <li key={f} className="flex items-center gap-2.5 text-sm text-texto-secundario">
+                <Star className="h-4 w-4 text-neon shrink-0" />
                 {f}
               </li>
             ))}
@@ -114,16 +114,16 @@ export default async function PremiumPage() {
             <div className="space-y-2">
               {user ? (
                 <form action="/api/stripe/checkout" method="POST">
-                  <button className="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 rounded-lg transition-colors text-base shadow-lg shadow-teal-900/40">
+                  <button className="w-full bg-neon hover:brightness-110 text-carbon font-bold py-3 rounded-lg transition-colors text-base shadow-lg shadow-neon/10">
                     Activar Premium ahora
                   </button>
                 </form>
               ) : (
-                <Link href="/register" className="block text-center bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 rounded-lg transition-colors text-base">
+                <Link href="/register" className="block text-center bg-neon hover:brightness-110 text-carbon font-bold py-3 rounded-lg transition-colors text-base">
                   Registrarse y activar Premium
                 </Link>
               )}
-              <Link href="/redeem" className="block text-center text-teal-400 hover:text-teal-300 text-sm transition-colors py-1">
+              <Link href="/redeem" className="block text-center text-neon hover:text-ambar text-sm transition-colors py-1">
                 ¿Tienes código promo? Úsalo gratis →
               </Link>
             </div>
@@ -132,7 +132,7 @@ export default async function PremiumPage() {
       </div>
 
       {/* FAQ */}
-      <div className="border-t border-slate-800 pt-10">
+      <div className="border-t border-neon/10 pt-10">
         <h2 className="text-xl font-bold text-white mb-6 text-center">Preguntas frecuentes</h2>
         <div className="space-y-4 max-w-2xl mx-auto">
           {[
@@ -153,9 +153,9 @@ export default async function PremiumPage() {
               a: 'Pagos gestionados por Stripe, el estándar de la industria. No almacenamos datos de tarjetas.',
             },
           ].map(({ q, a }) => (
-            <div key={q} className="rounded-lg border border-slate-800 bg-slate-900/50 p-4">
+            <div key={q} className="rounded-lg border border-neon/10 bg-superficie/80 p-4">
               <p className="text-white font-medium mb-1.5">{q}</p>
-              <p className="text-slate-400 text-sm">{a}</p>
+              <p className="text-texto-secundario text-sm">{a}</p>
             </div>
           ))}
         </div>

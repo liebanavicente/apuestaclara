@@ -48,7 +48,7 @@ type InputMode = 'select' | 'manual'
 type PickType = 'single' | 'combinada'
 type Market = 'result' | 'custom'
 
-const INPUT_CLS = 'w-full rounded-lg border border-superficie-hover bg-superficie-hover px-3 py-2 text-white text-sm placeholder-texto-terciario focus:border-neon focus:outline-none'
+const INPUT_CLS = 'w-full rounded-md border border-neon/10 bg-superficie-hover px-3 py-2 text-white text-sm placeholder-texto-terciario focus:border-neon focus:outline-none'
 
 export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
   const router = useRouter()
@@ -188,52 +188,53 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
   const canSubmit = !loading && (singleReady || combinadaReady)
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-8">
+    <main className="mx-auto max-w-4xl px-4 py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-black text-white">Mis picks 🎯</h1>
+          <p className="mb-1 text-xs font-bold uppercase text-neon">Portfolio</p>
+          <h1 className="text-3xl font-black text-white">Mis picks</h1>
           <p className="text-texto-secundario text-sm mt-0.5">
             <span className="text-neon font-black text-lg">{fmtPts(totalPoints)}</span>
             <span className="text-texto-secundario ml-1">pts acumulados</span>
           </p>
         </div>
-        <button onClick={openForm} className="flex items-center gap-2 bg-neon hover:brightness-110 text-white font-black px-4 py-2 rounded-lg transition-colors text-sm">
+        <button onClick={openForm} className="flex items-center gap-2 rounded-md bg-neon px-4 py-2 text-sm font-black text-carbon transition-colors hover:brightness-110">
           <Plus className="h-4 w-4" /> Nuevo pick
         </button>
       </div>
 
       {/* Form */}
       {showForm && (
-        <form onSubmit={handleSubmit} className="rounded-xl border border-neon/30 bg-superficie p-5 mb-6 space-y-4">
+        <form onSubmit={handleSubmit} className="mb-6 space-y-4 rounded-lg border border-neon/20 bg-superficie p-5">
           <div className="flex items-center justify-between">
             <h2 className="font-bold text-white">Nuevo pick</h2>
             <button type="button" onClick={() => setShowForm(false)} className="text-texto-secundario hover:text-white"><X className="h-4 w-4" /></button>
           </div>
 
           {/* Single / Combinada */}
-          <div className="flex rounded-lg border border-superficie-hover overflow-hidden text-xs">
+          <div className="flex overflow-hidden rounded-md border border-neon/10 text-xs">
             <button type="button" onClick={() => setPickType('single')}
-              className={`flex-1 px-3 py-2 transition-colors font-medium ${pickType === 'single' ? 'bg-neon text-white font-black' : 'text-texto-secundario hover:text-white'}`}>
-              ⚽ Pick simple
+              className={`flex-1 px-3 py-2 font-medium transition-colors ${pickType === 'single' ? 'bg-neon text-carbon font-black' : 'text-texto-secundario hover:text-white'}`}>
+              Pick simple
             </button>
             <button type="button" onClick={() => { setPickType('combinada'); loadEvents() }}
-              className={`flex-1 px-3 py-2 transition-colors font-medium ${pickType === 'combinada' ? 'bg-neon text-white font-black' : 'text-texto-secundario hover:text-white'}`}>
-              🔗 Combinada
+              className={`flex-1 px-3 py-2 font-medium transition-colors ${pickType === 'combinada' ? 'bg-neon text-carbon font-black' : 'text-texto-secundario hover:text-white'}`}>
+              Combinada
             </button>
           </div>
 
           {/* SINGLE */}
           {pickType === 'single' && (
             <>
-              <div className="flex rounded-lg border border-superficie-hover overflow-hidden text-xs">
+              <div className="flex overflow-hidden rounded-md border border-neon/10 text-xs">
                 <button type="button" onClick={() => { setInputMode('select'); loadEvents() }}
                   className={`flex-1 px-3 py-1.5 transition-colors ${inputMode === 'select' ? 'bg-superficie-hover text-white font-bold' : 'text-texto-secundario hover:text-white'}`}>
-                  📅 Elegir partido
+                  Elegir partido
                 </button>
                 <button type="button" onClick={() => setInputMode('manual')}
                   className={`flex-1 px-3 py-1.5 transition-colors ${inputMode === 'manual' ? 'bg-superficie-hover text-white font-bold' : 'text-texto-secundario hover:text-white'}`}>
-                  ✏️ Manual
+                  Manual
                 </button>
               </div>
 
@@ -281,7 +282,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
               {legs.length > 0 && (
                 <div className="space-y-2">
                   {legs.map((leg, i) => (
-                    <div key={i} className="flex items-center gap-3 rounded-lg border border-superficie-hover bg-superficie-hover px-3 py-2.5">
+                    <div key={i} className="flex items-center gap-3 rounded-md border border-neon/10 bg-superficie-hover px-3 py-2.5">
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-xs font-medium truncate">{leg.description}</p>
                         <p className="text-neon text-xs">→ {leg.selection}</p>
@@ -300,18 +301,18 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
               {addingLeg === null && (
                 <div className="flex gap-2">
                   <button type="button" onClick={() => { setAddingLeg('event'); setLegEvent(null); setLegForm({ description: '', selection: '', odds: '' }) }}
-                    className="flex-1 border border-dashed border-superficie-hover hover:border-neon/50 text-texto-secundario hover:text-neon rounded-lg py-2 text-xs transition-colors">
+                    className="flex-1 rounded-md border border-dashed border-neon/20 py-2 text-xs text-texto-secundario transition-colors hover:border-neon/50 hover:text-neon">
                     + Partido real
                   </button>
                   <button type="button" onClick={() => { setAddingLeg('manual'); setLegForm({ description: '', selection: '', odds: '' }) }}
-                    className="flex-1 border border-dashed border-superficie-hover hover:border-neon/50 text-texto-secundario hover:text-neon rounded-lg py-2 text-xs transition-colors">
+                    className="flex-1 rounded-md border border-dashed border-neon/20 py-2 text-xs text-texto-secundario transition-colors hover:border-neon/50 hover:text-neon">
                     + Manual
                   </button>
                 </div>
               )}
 
               {addingLeg === 'event' && (
-                <div className="rounded-lg border border-superficie-hover bg-superficie-hover/50 p-3 space-y-3">
+                <div className="space-y-3 rounded-md border border-neon/10 bg-superficie-hover/50 p-3">
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-medium text-texto-secundario">Añadir selección</p>
                     <button type="button" onClick={() => setAddingLeg(null)} className="text-texto-secundario hover:text-white"><X className="h-3.5 w-3.5" /></button>
@@ -326,7 +327,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
                       onCustomChange={(sel, odds) => setLegForm(f => ({ ...f, selection: sel, odds }))} />
                   )}
                   {legForm.selection && legForm.odds && (
-                    <button type="button" onClick={addLeg} className="w-full bg-neon hover:brightness-110 text-white font-black text-xs py-2 rounded-lg">
+                    <button type="button" onClick={addLeg} className="w-full rounded-md bg-neon py-2 text-xs font-black text-carbon hover:brightness-110">
                       Confirmar selección
                     </button>
                   )}
@@ -334,7 +335,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
               )}
 
               {addingLeg === 'manual' && (
-                <div className="rounded-lg border border-superficie-hover bg-superficie-hover/50 p-3 space-y-2">
+                <div className="space-y-2 rounded-md border border-neon/10 bg-superficie-hover/50 p-3">
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-medium text-texto-secundario">Añadir manual</p>
                     <button type="button" onClick={() => setAddingLeg(null)} className="text-texto-secundario hover:text-white"><X className="h-3.5 w-3.5" /></button>
@@ -343,7 +344,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
                   <input value={legForm.selection} onChange={e => setLegForm(f => ({ ...f, selection: e.target.value }))} placeholder="Tu apuesta" className={INPUT_CLS} />
                   <input type="number" step="0.01" min="1.01" value={legForm.odds} onChange={e => setLegForm(f => ({ ...f, odds: e.target.value }))} placeholder="Cuota" className={INPUT_CLS} />
                   {legForm.description && legForm.selection && legForm.odds && (
-                    <button type="button" onClick={addLeg} className="w-full bg-neon hover:brightness-110 text-white font-black text-xs py-2 rounded-lg">Confirmar</button>
+                    <button type="button" onClick={addLeg} className="w-full rounded-md bg-neon py-2 text-xs font-black text-carbon hover:brightness-110">Confirmar</button>
                   )}
                 </div>
               )}
@@ -354,8 +355,8 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
           {(singleReady || combinadaReady) && (
             <div className="space-y-2 pt-1 border-t border-superficie-hover">
               <input value={note} onChange={e => setNote(e.target.value)} placeholder="Nota opcional…" className={INPUT_CLS} />
-              <div className="text-xs bg-superficie-hover rounded-lg px-3 py-2 text-texto-secundario">
-                Si aciertas: <span className="text-green-400 font-bold">+{(pickType === 'single' ? parseFloat(form.odds || '0') : combinedOdds).toFixed(2)} pts</span>
+              <div className="rounded-md bg-superficie-hover px-3 py-2 text-xs text-texto-secundario">
+                Si aciertas: <span className="font-bold text-neon">+{(pickType === 'single' ? parseFloat(form.odds || '0') : combinedOdds).toFixed(2)} pts</span>
                 {' '}· Si fallas: <span className="text-texto-secundario">0 pts</span>
               </div>
             </div>
@@ -363,10 +364,10 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
 
           <div className="flex gap-2">
             <button type="submit" disabled={!canSubmit}
-              className="flex-1 bg-neon hover:brightness-110 disabled:opacity-40 text-white font-black py-2.5 rounded-lg text-sm transition-colors">
-              {loading ? 'Publicando…' : 'Publicar pick 🎯'}
+              className="flex-1 rounded-md bg-neon py-2.5 text-sm font-black text-carbon transition-colors hover:brightness-110 disabled:opacity-40">
+              {loading ? 'Publicando…' : 'Publicar pick'}
             </button>
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 rounded-lg border border-superficie-hover text-texto-secundario hover:text-white text-sm">
+            <button type="button" onClick={() => setShowForm(false)} className="rounded-md border border-neon/10 px-4 py-2 text-sm text-texto-secundario hover:text-white">
               Cancelar
             </button>
           </div>
@@ -376,7 +377,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
       {/* Pendientes */}
       {pending.length > 0 && (
         <section className="mb-6">
-          <h2 className="text-xs font-bold text-texto-secundario uppercase tracking-widest mb-3 flex items-center gap-2">
+          <h2 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase text-texto-secundario">
             <Clock className="h-3.5 w-3.5" /> Pendientes ({pending.length})
           </h2>
           <div className="space-y-2.5">
@@ -388,7 +389,7 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
       {/* Historial */}
       {resolved.length > 0 && (
         <section>
-          <h2 className="text-xs font-bold text-texto-secundario uppercase tracking-widest mb-3 flex items-center gap-2">
+          <h2 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase text-texto-secundario">
             <Trophy className="h-3.5 w-3.5" /> Historial ({resolved.length})
           </h2>
           <div className="space-y-2.5">
@@ -399,9 +400,9 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
 
       {picks.length === 0 && !showForm && (
         <div className="text-center py-16 text-texto-secundario">
-          <p className="text-4xl mb-3">🐟</p>
+          <p className="mb-3 font-mono text-4xl text-neon">--</p>
           <p className="text-white font-medium mb-1">Sin picks todavía</p>
-          <p className="text-sm">Cada acierto suma la cuota en puntos</p>
+          <p className="text-sm">Cada acierto suma su cuota en puntos</p>
         </div>
       )}
     </main>
@@ -417,13 +418,13 @@ function EventSelector({ events, loading, search, onSearch, selectedId, onSelect
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-texto-secundario" />
         <input value={search} onChange={e => onSearch(e.target.value)} placeholder="Buscar partido…"
-          className="w-full rounded-lg border border-superficie-hover bg-superficie-hover pl-9 pr-3 py-2 text-white text-sm placeholder-texto-terciario focus:border-neon focus:outline-none" />
+          className="w-full rounded-md border border-neon/10 bg-superficie-hover py-2 pl-9 pr-3 text-sm text-white placeholder-texto-terciario focus:border-neon focus:outline-none" />
       </div>
       {loading ? <p className="text-texto-secundario text-xs text-center py-3">Cargando…</p> : (
         <div className="max-h-44 overflow-y-auto space-y-1.5 pr-1">
           {events.map(ev => (
             <button key={ev.id} type="button" onClick={() => onSelect(ev)}
-              className={`w-full text-left rounded-lg border px-3 py-2 transition-colors text-xs ${selectedId === ev.id ? 'border-neon/50 bg-neon/10' : 'border-superficie-hover bg-superficie-hover hover:border-neon'}`}>
+              className={`w-full rounded-md border px-3 py-2 text-left text-xs transition-colors ${selectedId === ev.id ? 'border-neon/50 bg-neon/10' : 'border-neon/10 bg-superficie-hover hover:border-neon'}`}>
               <p className="text-white font-medium">{ev.event_name}</p>
               <p className="text-texto-secundario">{ev.league} · {new Date(ev.commence_time).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</p>
             </button>
@@ -441,12 +442,12 @@ function MarketSelector({ event, market, selection, onMarketChange, onSelectOutc
   customSelection: string; customOdds: string; onCustomChange: (s: string, o: string) => void
 }) {
   return (
-    <div className="rounded-lg border border-superficie-hover bg-superficie-hover p-3 space-y-2">
-      <div className="flex rounded-md border border-superficie-hover overflow-hidden text-xs mb-2">
+    <div className="space-y-2 rounded-md border border-neon/10 bg-superficie-hover p-3">
+      <div className="mb-2 flex overflow-hidden rounded-md border border-neon/10 text-xs">
         <button type="button" onClick={() => onMarketChange('result')}
-          className={`flex-1 px-2 py-1 transition-colors ${market === 'result' ? 'bg-superficie-hover text-white font-bold' : 'text-texto-secundario hover:text-white'}`}>⚽ 1X2</button>
+          className={`flex-1 px-2 py-1 transition-colors ${market === 'result' ? 'bg-neon/10 text-neon font-bold' : 'text-texto-secundario hover:text-white'}`}>1X2</button>
         <button type="button" onClick={() => onMarketChange('custom')}
-          className={`flex-1 px-2 py-1 transition-colors ${market === 'custom' ? 'bg-superficie-hover text-white font-bold' : 'text-texto-secundario hover:text-white'}`}>🎲 Otro</button>
+          className={`flex-1 px-2 py-1 transition-colors ${market === 'custom' ? 'bg-neon/10 text-neon font-bold' : 'text-texto-secundario hover:text-white'}`}>Otro</button>
       </div>
       {market === 'result' && (
         <div className="grid grid-cols-3 gap-2">
@@ -456,7 +457,7 @@ function MarketSelector({ event, market, selection, onMarketChange, onSelectOutc
             { label: event.away_team.split(' ').pop()!, full: `${event.away_team} gana`, odds: event.best_odds.away },
           ].map(({ label, full, odds }) => odds ? (
             <button key={full} type="button" onClick={() => onSelectOutcome(full, odds)}
-              className={`rounded-lg border px-2 py-2 text-xs text-center transition-colors ${selection === full ? 'border-neon/50 bg-neon/10 text-neon' : 'border-superficie-hover hover:border-neon text-texto-secundario'}`}>
+              className={`rounded-md border px-2 py-2 text-center text-xs transition-colors ${selection === full ? 'border-neon/50 bg-neon/10 text-neon' : 'border-neon/10 text-texto-secundario hover:border-neon'}`}>
               <div className="font-semibold truncate">{label}</div>
               <div className="text-neon font-black mt-0.5">{odds.toFixed(2)}</div>
             </button>
@@ -469,7 +470,7 @@ function MarketSelector({ event, market, selection, onMarketChange, onSelectOutc
           <input type="number" step="0.01" min="1.01" value={customOdds} onChange={e => onCustomChange(customSelection, e.target.value)} placeholder="Cuota" className={INPUT_CLS} />
         </div>
       )}
-      {selection && <p className="text-xs text-teal-400">✓ {selection}</p>}
+      {selection && <p className="text-xs text-neon">Seleccionado: {selection}</p>}
     </div>
   )
 }
@@ -480,23 +481,23 @@ function PickCard({ pick, onResolve, onDelete }: { pick: Pick; onResolve?: (id: 
   const isCombinada = pick.legs && pick.legs.length > 0
 
   return (
-    <div className={`rounded-xl border p-3.5 ${
-      pick.status === 'won' ? 'border-green-500/30 bg-green-500/5' :
+    <div className={`rounded-lg border p-3.5 ${
+      pick.status === 'won' ? 'border-neon/30 bg-neon/5' :
       pick.status === 'lost' ? 'border-red-500/20 bg-red-500/5' :
-      'border-superficie-hover bg-superficie/50'
+      'border-neon/10 bg-superficie/60'
     }`}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            {isCombinada && <span className="text-xs bg-neon/20 text-neon px-2 py-0.5 rounded-full font-medium">🔗 {pick.legs!.length} sel.</span>}
-            {pick.competition && !isCombinada && <span className="text-xs bg-superficie-hover text-texto-secundario px-2 py-0.5 rounded-full">{pick.competition}</span>}
+            {isCombinada && <span className="rounded-full bg-neon/10 px-2 py-0.5 text-xs font-medium text-neon">{pick.legs!.length} sel.</span>}
+            {pick.competition && !isCombinada && <span className="rounded-full bg-superficie-hover px-2 py-0.5 text-xs text-texto-secundario">{pick.competition}</span>}
             {pick.match_date && !isCombinada && <span className="text-xs text-texto-secundario">{new Date(pick.match_date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>}
           </div>
           <p className="text-white font-medium text-sm">{pick.description}</p>
           {!isCombinada && <p className="text-neon text-xs mt-0.5">→ {pick.selection}</p>}
           {isCombinada && (
             <button type="button" onClick={() => setExpanded(!expanded)} className="text-xs text-texto-secundario hover:text-texto mt-0.5">
-              {expanded ? '▲ Ocultar' : '▼ Ver selecciones'}
+              {expanded ? 'Ocultar selecciones' : 'Ver selecciones'}
             </button>
           )}
           {isCombinada && expanded && (
@@ -509,7 +510,7 @@ function PickCard({ pick, onResolve, onDelete }: { pick: Pick; onResolve?: (id: 
               ))}
             </div>
           )}
-          {pick.note && <p className="text-texto-secundario text-xs mt-1 italic">"{pick.note}"</p>}
+          {pick.note && <p className="mt-1 text-xs italic text-texto-secundario">&ldquo;{pick.note}&rdquo;</p>}
         </div>
         <div className="text-right shrink-0">
           <div className="text-white font-bold">{pick.odds.toFixed(2)}</div>
@@ -520,23 +521,23 @@ function PickCard({ pick, onResolve, onDelete }: { pick: Pick; onResolve?: (id: 
       <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-superficie-hover/50">
         <div className="text-xs">
           {isPending
-            ? <span className="text-texto-secundario">Si aciertas: <span className="text-green-400 font-medium">+{pick.odds.toFixed(2)} pts</span></span>
+            ? <span className="text-texto-secundario">Si aciertas: <span className="font-medium text-neon">+{pick.odds.toFixed(2)} pts</span></span>
             : pick.status === 'won'
-            ? <span className="text-green-400 font-semibold">+{fmtPts(pick.points)} pts ✓</span>
-            : <span className="text-texto-secundario">0 pts ✗</span>}
+            ? <span className="font-semibold text-neon">+{fmtPts(pick.points)} pts</span>
+            : <span className="text-texto-secundario">0 pts</span>}
         </div>
         {isPending && (
           <div className="flex gap-2">
             {onResolve && <>
-              <button onClick={() => onResolve(pick.id, 'won')} className="flex items-center gap-1 text-xs bg-green-500/20 hover:bg-green-500/30 text-green-400 px-3 py-1.5 rounded-lg font-medium">
+              <button onClick={() => onResolve(pick.id, 'won')} className="flex items-center gap-1 rounded-md bg-neon/10 px-3 py-1.5 text-xs font-medium text-neon hover:bg-neon/20">
                 <Check className="h-3 w-3" /> Acerté
               </button>
-              <button onClick={() => onResolve(pick.id, 'lost')} className="flex items-center gap-1 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-1.5 rounded-lg font-medium">
+              <button onClick={() => onResolve(pick.id, 'lost')} className="flex items-center gap-1 rounded-md bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/20">
                 <X className="h-3 w-3" /> Fallé
               </button>
             </>}
             {onDelete && (
-              <button onClick={() => onDelete(pick.id)} className="flex items-center gap-1 text-xs text-texto-terciario hover:text-red-400 px-2 py-1.5 rounded-lg transition-colors ml-auto">
+              <button onClick={() => onDelete(pick.id)} className="ml-auto flex items-center gap-1 rounded-md px-2 py-1.5 text-xs text-texto-terciario transition-colors hover:text-red-400">
                 <Trash2 className="h-3 w-3" />
               </button>
             )}

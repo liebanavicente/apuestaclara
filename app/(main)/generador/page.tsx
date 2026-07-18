@@ -27,10 +27,10 @@ export default async function GeneradorPage() {
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
-          <TrendingUp className="h-6 w-6 text-teal-400" />
+          <TrendingUp className="h-6 w-6 text-neon" />
           <h1 className="text-2xl font-bold text-white">Generador de Combinadas</h1>
         </div>
-        <p className="text-slate-400 text-sm">Construye combinadas con cuotas reales. El análisis IA llega en la próxima fase.</p>
+        <p className="text-texto-secundario text-sm">Construye combinadas con cuotas reales. El análisis IA llega en la próxima fase.</p>
       </div>
 
       <ResponsibleNotice variant="compact" className="mb-6" />

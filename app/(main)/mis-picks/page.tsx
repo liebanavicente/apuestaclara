@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { MisPicksClient } from './MisPicksClient'
 
-export const metadata = { title: 'Mis picks — GañanesBets' }
+export const metadata = { title: 'Mis picks — ApuestaClara' }
 
 export default async function MisPicksPage({
   searchParams,

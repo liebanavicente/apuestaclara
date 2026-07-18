@@ -3,8 +3,8 @@ import type { UserRankingStats } from '@/types/ranking'
 
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-superficie-hover bg-carbon/40 px-3 py-2.5 text-center">
-      <div className="text-lg font-black text-white">{value}</div>
+    <div className="rounded-md border border-neon/10 bg-carbon/40 px-3 py-2.5 text-center">
+      <div className="font-mono text-lg font-black text-white">{value}</div>
       <div className="mt-0.5 text-[11px] text-texto-secundario">{label}</div>
     </div>
   )
@@ -17,7 +17,7 @@ export function UserStatsPanel({ stats }: { stats: UserRankingStats }) {
     return (
       <EmptyState
         className="py-6"
-        icon={<span className="text-3xl">📊</span>}
+        icon={<span className="font-mono text-3xl text-neon">--</span>}
         title="Sin picks resueltos todavía"
         description="En cuanto se resuelva algún pick de este usuario, aquí aparecerán sus estadísticas."
       />
@@ -32,7 +32,7 @@ export function UserStatsPanel({ stats }: { stats: UserRankingStats }) {
       {/* Stat tiles */}
       <div className="grid grid-cols-3 gap-2">
         <StatTile label="Predicciones" value={String(totalResolved)} />
-        <StatTile label="Racha actual" value={currentStreak > 0 ? `🔥 ${currentStreak}` : '0'} />
+        <StatTile label="Racha actual" value={currentStreak > 0 ? `+${currentStreak}` : '0'} />
         <StatTile label="Mejor racha" value={String(bestStreak)} />
       </div>
 
@@ -44,7 +44,7 @@ export function UserStatsPanel({ stats }: { stats: UserRankingStats }) {
         </div>
         <div className="h-2.5 w-full overflow-hidden rounded-full bg-superficie-hover">
           <div
-            className="h-full rounded-full bg-ambar transition-[width] duration-500"
+            className="h-full rounded-full bg-gradient-to-r from-neon to-ambar transition-[width] duration-500"
             style={{ width: `${winRate ?? 0}%` }}
             role="img"
             aria-label={`${winRate}% de acierto`}
@@ -59,14 +59,14 @@ export function UserStatsPanel({ stats }: { stats: UserRankingStats }) {
         </div>
         <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full">
           {totalWon > 0 && (
-            <div className="h-full rounded-full bg-ambar" style={{ width: `${wonPct}%` }} />
+            <div className="h-full rounded-full bg-neon" style={{ width: `${wonPct}%` }} />
           )}
           {totalLost > 0 && (
             <div className="h-full rounded-full bg-error" style={{ width: `${lostPct}%` }} />
           )}
         </div>
         <div className="mt-1.5 flex gap-4 text-xs text-texto-secundario">
-          <span><span className="text-ambar">●</span> {totalWon} acierto{totalWon === 1 ? '' : 's'}</span>
+          <span><span className="text-neon">●</span> {totalWon} acierto{totalWon === 1 ? '' : 's'}</span>
           <span><span className="text-error">●</span> {totalLost} fallo{totalLost === 1 ? '' : 's'}</span>
         </div>
       </div>
@@ -81,8 +81,8 @@ export function UserStatsPanel({ stats }: { stats: UserRankingStats }) {
             <div
               key={i}
               title={f.status === 'won' ? 'Acierto' : 'Fallo'}
-              className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold text-[#0B1E3F] ${
-                f.status === 'won' ? 'bg-ambar' : 'bg-error'
+              className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold ${
+                f.status === 'won' ? 'bg-neon text-carbon' : 'bg-error text-white'
               }`}
             >
               {f.status === 'won' ? '✓' : '✗'}

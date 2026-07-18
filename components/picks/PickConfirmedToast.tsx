@@ -18,8 +18,10 @@ export function PickConfirmedToast({ odds, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="glass-strong w-full max-w-sm rounded-2xl shadow-2xl p-5">
-        <div className="text-2xl mb-3">🎯</div>
+      <div className="glass-strong w-full max-w-sm rounded-lg p-5 shadow-2xl">
+        <div className="mb-3 inline-flex rounded-md border border-neon/20 bg-neon/10 px-2 py-1 font-mono text-xs font-bold text-neon">
+          PICK
+        </div>
         <h3 className="text-white font-black text-lg mb-2">Pick guardado</h3>
         <p className="text-texto-secundario text-sm leading-relaxed mb-4">
           Tu pick se ha registrado a cuota <strong className="text-neon">{odds.toFixed(2)}</strong>.
@@ -31,8 +33,8 @@ export function PickConfirmedToast({ odds, onClose }: Props) {
           No volver a mostrar
         </label>
         <button onClick={handleClose}
-          className="w-full bg-neon hover:brightness-110 text-white font-black py-2.5 rounded-xl transition-colors">
-          Entendido ✓
+          className="w-full rounded-md bg-neon py-2.5 font-black text-carbon transition-colors hover:brightness-110">
+          Entendido
         </button>
       </div>
     </div>

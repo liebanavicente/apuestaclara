@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export const metadata = { title: 'Herramientas — GañanesBets' }
+export const metadata = { title: 'Herramientas — ApuestaClara' }
 
 const TOOLS = [
   {
@@ -38,20 +38,20 @@ export default function HerramientasPage() {
     <main className="max-w-2xl mx-auto px-4 py-12">
       <div className="mb-10">
         <h1 className="text-2xl font-black text-white mb-2">Herramientas de análisis</h1>
-        <p className="text-slate-400 text-sm">
+        <p className="text-texto-secundario text-sm">
           Estas herramientas son independientes de la competición. Úsalas para analizar combinadas, simular resultados o consultar cuotas — sin que afecte a tu ranking.
         </p>
       </div>
 
       <div className="space-y-4">
         {TOOLS.map(tool => (
-          <div key={tool.title} className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 flex items-start gap-4">
+          <div key={tool.title} className="rounded-xl border border-neon/10 bg-superficie/80 p-5 flex items-start gap-4">
             <span className="text-3xl shrink-0">{tool.emoji}</span>
             <div className="flex-1 min-w-0">
               <h2 className="text-white font-bold mb-1">{tool.title}</h2>
-              <p className="text-slate-400 text-sm leading-relaxed mb-3">{tool.desc}</p>
+              <p className="text-texto-secundario text-sm leading-relaxed mb-3">{tool.desc}</p>
               <Link href={tool.href}
-                className="inline-flex items-center gap-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-1.5 rounded-lg transition-colors font-medium">
+                className="inline-flex items-center gap-1.5 text-xs bg-superficie-hover hover:bg-superficie-hover text-texto-secundario hover:text-white px-3 py-1.5 rounded-lg transition-colors font-medium">
                 {tool.cta} →
               </Link>
             </div>

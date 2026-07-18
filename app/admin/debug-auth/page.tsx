@@ -44,16 +44,16 @@ export default async function DebugAuthPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <h1 className="text-2xl font-bold text-white mb-6">Debug Auth</h1>
-      <div className="rounded-xl border border-slate-700 bg-slate-900 overflow-hidden mb-6">
+      <div className="rounded-xl border border-neon/10 bg-superficie overflow-hidden mb-6">
         {Object.entries(info).map(([key, value]) => (
-          <div key={key} className="flex justify-between px-4 py-2.5 border-b border-slate-800 last:border-0">
-            <span className="text-slate-400 text-sm font-mono">{key}</span>
-            <span className="text-slate-200 text-sm font-mono">{String(value)}</span>
+          <div key={key} className="flex justify-between px-4 py-2.5 border-b border-neon/10 last:border-0">
+            <span className="text-texto-secundario text-sm font-mono">{key}</span>
+            <span className="text-white text-sm font-mono">{String(value)}</span>
           </div>
         ))}
       </div>
       <form action="/api/admin/repair-profile" method="POST">
-        <button className="bg-teal-600 hover:bg-teal-500 text-white font-medium px-5 py-2 rounded-lg transition-colors">
+        <button className="bg-neon hover:brightness-110 text-carbon font-medium px-5 py-2 rounded-lg transition-colors">
           Reparar mi perfil
         </button>
       </form>

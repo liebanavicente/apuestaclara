@@ -4,7 +4,7 @@ import { RankingList } from '@/components/ranking/RankingList'
 import type { LeaderboardRow } from '@/types/ranking'
 import type { RawPick } from '@/lib/ranking-stats'
 
-export const metadata = { title: 'Ranking — GañanesBets' }
+export const metadata = { title: 'Ranking — ApuestaClara' }
 export const revalidate = 60
 
 export default async function RankingPage() {
@@ -29,19 +29,19 @@ export default async function RankingPage() {
   const totalPending = players.reduce((s, p) => s + (p.total_pending ?? 0), 0)
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-10">
+    <main className="mx-auto max-w-4xl px-4 py-10">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-2">
-        <span className="text-3xl">🏆</span>
+      <div className="mb-3">
+        <p className="mb-2 text-xs font-bold uppercase text-neon">Leaderboard</p>
         <div>
-          <h1 className="text-2xl font-black text-white">Ranking Gañanes</h1>
-          <p className="text-texto-secundario text-sm">acierto = cuota en puntos · fallo = 0 pts</p>
+          <h1 className="font-display text-5xl text-white">Ranking de mercado</h1>
+          <p className="mt-2 text-sm text-texto-secundario">Acierto = cuota en puntos · fallo = 0 pts</p>
         </div>
       </div>
-      <div className="flex gap-4 text-xs text-texto-terciario mb-6 pl-1">
-        <span>{players.length} participantes</span>
-        <span>{totalPicks} picks resueltos</span>
-        <span>{totalPending} pendientes</span>
+      <div className="mb-6 grid gap-2 text-xs text-texto-secundario sm:grid-cols-3">
+        <span className="rounded-md border border-neon/10 bg-superficie/70 px-3 py-2">{players.length} participantes</span>
+        <span className="rounded-md border border-neon/10 bg-superficie/70 px-3 py-2">{totalPicks} picks resueltos</span>
+        <span className="rounded-md border border-neon/10 bg-superficie/70 px-3 py-2">{totalPending} pendientes</span>
       </div>
 
       <RankingList players={players} picksByUser={picksByUser} currentUserId={user?.id ?? null} />

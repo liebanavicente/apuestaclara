@@ -6,7 +6,7 @@ import { WC_GROUPS, getGroupForMatch } from './groups'
 import { MundialClient } from './MundialClient'
 import type { NormalizedEvent } from '@/types/odds'
 
-export const metadata = { title: 'Mundial 2026 — GañanesBets' }
+export const metadata = { title: 'Mundial 2026 — ApuestaClara' }
 export const revalidate = 300
 
 export default async function MundialPage() {
