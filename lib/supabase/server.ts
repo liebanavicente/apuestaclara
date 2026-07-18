@@ -1,7 +1,13 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { getMissingSupabasePublicConfig } from './config'
 
 export async function createClient() {
+  const missing = getMissingSupabasePublicConfig()
+  if (missing.length > 0) {
+    throw new Error(`Supabase public config missing: ${missing.join(', ')}`)
+  }
+
   const cookieStore = await cookies()
 
   return createServerClient(

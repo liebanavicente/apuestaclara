@@ -1,11 +1,12 @@
 import { Search } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { hasSupabasePublicConfig } from '@/lib/supabase/config'
 import { EventsClient } from './EventsClient'
 import { ResponsibleNotice } from '@/components/shared/ResponsibleNotice'
 
 export default async function BuscarEventosPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = hasSupabasePublicConfig() ? await createClient() : null
+  const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } }
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">

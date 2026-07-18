@@ -1,0 +1,11 @@
+id,user_id,email,username,avatar_url,bio,plan,role,premium_forever,premium_until,daily_generations_used,last_generation_reset,personal_limit_amount,responsible_mode_enabled,created_at,updated_at
+18fb56b5-327d-4fc8-9194-9ce598f1113c,c1fb6215-8e0b-4b88-afac-2486a03e329c,mbravob@gmail.com,mbravob,,,free,user,false,,0,,,true,2026-06-11 09:44:10.189188+00,2026-06-11 09:44:10.189188+00
+34c22490-61ff-435a-8a69-fbb5988c3617,83d84e97-7676-4ea1-a30e-d195dc67ce34,mlieban3@xtec.cat,Mike,,,free,user,false,,0,,,true,2026-07-15 23:04:46.324047+00,2026-07-15 23:04:46.324047+00
+38ab35ef-525e-4e29-953f-3566a1281cab,d1492637-27b0-4279-85de-e9fecf57b2d9,rekenas@gmail.com,rekenas,,,free,user,false,,0,,,true,2026-06-12 08:56:02.229828+00,2026-06-12 08:56:02.229828+00
+406f1764-77e0-452e-8127-6553421a08b4,004c046c-7af9-4051-a3d0-c9626351a705,diekert@gmail.com,diekert,,,free,user,false,,0,,,true,2026-05-29 20:42:11.052153+00,2026-05-29 20:42:11.052153+00
+6584d7ea-f45a-49d3-90c4-25dfcecf18d6,062caa7e-0770-4e66-bed9-fc6787051f37,isaac.llovera79@gmail.com,isaac.llovera79,,,free,user,false,,0,,,true,2026-06-11 12:18:42.75289+00,2026-06-11 12:18:42.75289+00
+678b699d-59bb-4b59-9ccf-2cacde5d93e9,53d81582-cf97-4652-ad79-41f029301fdf,shurlorito@gmail.com,shurlorito,,,free,user,false,,0,,,true,2026-05-30 14:28:59.999373+00,2026-05-30 14:28:59.999373+00
+7c32a516-9046-4ebe-8541-32680ceb214d,610d1485-9fa9-45cf-9dab-11cfd00e9275,rastak.pinxo@gmail.com,rastak.pinxo,,,free,user,false,,0,,,true,2026-06-11 13:21:26.509951+00,2026-06-11 13:21:26.509951+00
+9d6cf667-ea06-40b4-9f19-229d06e5d042,68a83cbd-391d-4430-a5ee-32c58db12bb2,joan.albornoz@gmail.com,joan.albornoz,,,free,user,false,,0,,,true,2026-06-11 12:31:30.740803+00,2026-06-11 12:31:30.740803+00
+f0d03fa9-7f7d-404c-81fe-052422031805,14915f3f-b191-4113-823c-9609f9e6c440,mlieban3@gmail.com,mlieban3,,,premium,admin,true,,0,,,true,2026-05-29 11:28:58.188174+00,2026-05-29 11:28:58.188174+00
+fcfab3de-5dc3-43e0-9e51-3cb38c8cd9a2,63e1b0ce-5e28-4679-88bf-5196406a822a,queesunahipotenusa@gmail.com,queesunahipotenusa,,,free,user,false,,0,,,true,2026-06-11 14:36:08.313023+00,2026-06-11 14:36:08.313023+00

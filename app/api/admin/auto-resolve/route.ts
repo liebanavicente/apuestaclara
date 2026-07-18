@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { hasSupabaseAdminConfig } from '@/lib/supabase/config'
+import { supabaseAdminUnavailableResponse } from '@/lib/supabase/unavailable'
 import { FEATURED_SPORTS, getCompletedMatches, getMatchResult } from '@/lib/services/odds.service'
 
 async function runAutoResolve(req: NextRequest) {
+  if (!hasSupabaseAdminConfig()) return supabaseAdminUnavailableResponse()
+
   // Auth: Vercel cron secret OR admin session
   const authHeader = req.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET

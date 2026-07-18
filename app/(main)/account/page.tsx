@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { getMissingSupabasePublicConfig, hasSupabasePublicConfig } from '@/lib/supabase/config'
 import { getUserAccess } from '@/lib/access'
 import { PlanBadge } from '@/components/shared/PlanBadge'
 import { formatDate } from '@/lib/utils'
@@ -8,6 +9,19 @@ import { Settings, CreditCard, Gift, Share2, LogOut } from 'lucide-react'
 import type { Profile, Subscriber } from '@/types/database'
 
 export default async function AccountPage() {
+  if (!hasSupabasePublicConfig()) {
+    const missing = getMissingSupabasePublicConfig().join(', ')
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-12">
+        <p className="mb-2 text-xs font-bold uppercase text-neon">Cuenta</p>
+        <h1 className="font-display text-4xl text-white">Conecta Supabase para acceder</h1>
+        <p className="mt-3 text-sm text-texto-secundario">
+          Falta configuración pública: {missing}. Añádela en `.env.local` y en Vercel para activar sesión y perfil.
+        </p>
+      </main>
+    )
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

@@ -1,10 +1,24 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getMissingSupabaseAdminConfig, hasSupabaseAdminConfig, hasSupabasePublicConfig } from '@/lib/supabase/config'
 import { Share2, Trophy } from 'lucide-react'
 import { InvitaClient } from './InvitaClient'
 
 export default async function InvitaPage() {
+  if (!hasSupabasePublicConfig() || !hasSupabaseAdminConfig()) {
+    const missing = getMissingSupabaseAdminConfig().join(', ')
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-12">
+        <p className="mb-2 text-xs font-bold uppercase text-neon">Invita</p>
+        <h1 className="font-display text-4xl text-white">Conecta Supabase para referidos</h1>
+        <p className="mt-3 text-sm text-texto-secundario">
+          Falta configuración de servidor: {missing}. Cuando esté lista, se generará tu enlace personal.
+        </p>
+      </main>
+    )
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

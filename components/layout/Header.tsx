@@ -1,8 +1,9 @@
 'use client'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { Menu, X, ChevronDown, Waves } from 'lucide-react'
+import { Activity, Menu, X, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Profile } from '@/types/database'
 import type { UserAccess } from '@/lib/access'
@@ -22,7 +23,7 @@ const NAV_LINKS = [
 ]
 
 const TAGLINES = [
-  'lee la marea antes del pick',
+  'Gananesbets: picks sin dinero real',
   'cuotas claras, riesgo controlado',
   'mercado limpio, decisiones rápidas',
   'sin dinero real, con ranking real',
@@ -43,7 +44,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
             <span className="grid h-9 w-9 place-items-center rounded-md border border-neon/20 bg-neon/10 text-neon transition-colors group-hover:bg-neon group-hover:text-carbon">
-              <Waves className="h-5 w-5" />
+              <Activity className="h-5 w-5" />
             </span>
             <div className="hidden sm:block">
               <span className="text-lg font-black tracking-tight text-white">ApuestaClara</span>
@@ -79,7 +80,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                   className="flex items-center gap-2 text-sm text-texto-secundario hover:text-white transition-colors"
                 >
                   {profile.avatar_url ? (
-                    <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-full" />
+                    <Image src={profile.avatar_url} alt="" width={28} height={28} className="h-7 w-7 rounded-full" />
                   ) : (
                     <div className="w-7 h-7 rounded-full bg-neon flex items-center justify-center text-xs font-black text-white">
                       {(profile.username ?? profile.email).charAt(0).toUpperCase()}

@@ -1,8 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { hasSupabaseAdminConfig } from '@/lib/supabase/config'
+import { supabaseAdminUnavailableResponse } from '@/lib/supabase/unavailable'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
+  if (!hasSupabaseAdminConfig()) return supabaseAdminUnavailableResponse()
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

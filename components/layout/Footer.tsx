@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Waves } from 'lucide-react'
+import { Activity } from 'lucide-react'
 
 export function Footer() {
   return (
@@ -9,12 +9,13 @@ export function Footer() {
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-3">
               <span className="grid h-8 w-8 place-items-center rounded-md border border-neon/20 bg-neon/10 text-neon">
-                <Waves className="h-4 w-4" />
+                <Activity className="h-4 w-4" />
               </span>
               <span className="font-bold text-white">ApuestaClara</span>
             </Link>
             <p className="text-texto-secundario text-sm leading-relaxed">
-              Herramienta social para leer cuotas, hacer picks ficticios y competir por puntos.
+              ApuestaClara aloja Gananesbets: competición social para leer cuotas,
+              hacer picks ficticios y competir por puntos.
               No opera apuestas ni mueve dinero real.
             </p>
             <p className="text-texto-terciario text-xs mt-3 font-medium">+18 · Solo mayores de edad · Juega con responsabilidad</p>

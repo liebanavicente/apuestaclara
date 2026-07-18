@@ -68,16 +68,19 @@ function MatchCard({ event, delay }: { event: NormalizedEvent; delay: number }) 
 
   return (
     <Reveal delay={delay}>
-      <div className="group rounded-lg border border-neon/10 bg-superficie/80 p-6 transition-all hover:-translate-y-1 hover:border-neon/50 hover:shadow-[0_8px_30px_rgba(63,245,211,0.1)]">
-        <span className="inline-block rounded-full bg-neon/10 px-3 py-1 text-[11px] font-medium uppercase text-neon">
-          {event.league}
-        </span>
+      <div className="cryptix-panel group rounded-lg p-5 transition-all hover:-translate-y-1 hover:border-neon/40">
+        <div className="flex items-center justify-between">
+          <span className="inline-block rounded-full bg-neon/10 px-3 py-1 text-[11px] font-semibold uppercase text-neon">
+            {event.league}
+          </span>
+          <span className="font-mono text-[11px] uppercase text-ambar">Pick abierto</span>
+        </div>
 
-        <div className="mt-4 flex items-center justify-between text-center">
+        <div className="mt-5 flex items-center justify-between rounded-md border border-white/10 bg-carbon/50 px-3 py-4 text-center">
           <div className="flex-1">
             <p className="text-sm font-semibold text-[#FFFFFF]">{event.home_team}</p>
           </div>
-          <span className="px-2 text-[13px] text-texto-secundario">VS</span>
+          <span className="px-3 font-mono text-[11px] text-texto-secundario">VS</span>
           <div className="flex-1">
             <p className="text-sm font-semibold text-[#FFFFFF]">{event.away_team}</p>
           </div>
@@ -94,7 +97,7 @@ function MatchCard({ event, delay }: { event: NormalizedEvent; delay: number }) 
           ))}
         </div>
 
-        <div className="mt-4 flex items-center justify-between text-[13px] text-texto-secundario">
+        <div className="mt-4 flex items-center justify-between border-t border-neon/10 pt-4 text-[13px] text-texto-secundario">
           <span>{formatDate(event.commence_time)}</span>
           <span className={started ? 'text-error' : 'text-neon'}>{started ? 'En vivo' : 'Abierto'}</span>
         </div>
@@ -105,13 +108,20 @@ function MatchCard({ event, delay }: { event: NormalizedEvent; delay: number }) 
 
 export function LiveMatchesDemo({ matches }: { matches: NormalizedEvent[] }) {
   return (
-    <section id="partidos" className="px-4 py-20">
+    <section id="partidos" className="px-4 py-24">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-10 flex items-center justify-between">
-          <h2 className="font-display text-4xl tracking-wide text-[#FFFFFF] sm:text-6xl">
-            Próximos mercados
-          </h2>
-          <Link href="/dashboard" className="text-sm text-texto-secundario transition-colors hover:text-neon">
+        <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="mb-3 font-mono text-xs font-semibold uppercase text-neon">Partidos reales</p>
+            <h2 className="font-display text-4xl leading-[0.98] text-[#FFFFFF] sm:text-6xl">
+              Próximos partidos para elegir 1X2
+            </h2>
+            <p className="mt-4 max-w-2xl text-lg text-texto-secundario">
+              Estos son los mismos datos que alimentan el dashboard:
+              partido, cuota, selección y puntos potenciales.
+            </p>
+          </div>
+          <Link href="/dashboard" className="inline-flex rounded-full border border-neon/20 px-4 py-2 text-sm text-texto-secundario transition-colors hover:bg-neon/10 hover:text-neon">
             Ver todos
           </Link>
         </div>

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 
-const COLORS = ['#3FF5D3', '#D7FF4F', '#FFFFFF', '#3FF5D3', '#D7FF4F']
+const COLORS = ['#B7FF38', '#5EF2C2', '#FFFFFF', '#B7FF38', '#5EF2C2']
 
 type Piece = {
   x: number

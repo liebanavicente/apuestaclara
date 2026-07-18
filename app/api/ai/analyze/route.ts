@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { hasSupabaseAdminConfig, hasSupabasePublicConfig } from '@/lib/supabase/config'
 import { getUserAccess } from '@/lib/access'
 import { analyzeParlay } from '@/lib/services/ai.service'
 import type { AnalysisRequest } from '@/types/ai'
 
 export async function POST(req: NextRequest) {
-  const supabase = await createServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = hasSupabasePublicConfig() ? await createServerClient() : null
+  const { data: { user } } = supabase
+    ? await supabase.auth.getUser()
+    : { data: { user: null } }
 
   const body: AnalysisRequest = await req.json()
 
@@ -18,7 +21,7 @@ export async function POST(req: NextRequest) {
   // MVP: todos tienen acceso premium, logueados o no
   let isPremium = true
 
-  if (user) {
+  if (user && hasSupabaseAdminConfig()) {
     const admin = createAdminClient()
     const [{ data: profile }, { data: subscriber }] = await Promise.all([
       admin.from('profiles').select('*').eq('user_id', user.id).single(),

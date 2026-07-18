@@ -1,11 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
+import { hasSupabasePublicConfig } from '@/lib/supabase/config'
 import { SimuladorClient } from './SimuladorClient'
 
 export const metadata = { title: 'Simulador — ApuestaClara' }
 
 export default async function SimuladorPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = hasSupabasePublicConfig() ? await createClient() : null
+  const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } }
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">

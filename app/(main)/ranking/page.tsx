@@ -1,13 +1,35 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
+import { hasSupabaseAdminConfig } from '@/lib/supabase/config'
 import { RankingList } from '@/components/ranking/RankingList'
 import type { LeaderboardRow } from '@/types/ranking'
 import type { RawPick } from '@/lib/ranking-stats'
 
-export const metadata = { title: 'Ranking — ApuestaClara' }
+export const metadata = { title: 'Ranking — Gañanesbets' }
 export const revalidate = 60
 
 export default async function RankingPage() {
+  if (!hasSupabaseAdminConfig()) {
+    return (
+      <main className="mx-auto max-w-4xl px-4 py-10">
+        <div className="mb-3">
+          <p className="mb-2 text-xs font-bold uppercase text-neon">Leaderboard</p>
+          <div>
+            <h1 className="font-display text-5xl text-white">Ranking de mercado</h1>
+            <p className="mt-2 text-sm text-texto-secundario">Acierto = cuota en puntos · fallo = 0 pts</p>
+          </div>
+        </div>
+        <div className="mb-6 grid gap-2 text-xs text-texto-secundario sm:grid-cols-3">
+          <span className="rounded-md border border-neon/10 bg-superficie/70 px-3 py-2">0 participantes</span>
+          <span className="rounded-md border border-neon/10 bg-superficie/70 px-3 py-2">0 picks resueltos</span>
+          <span className="rounded-md border border-neon/10 bg-superficie/70 px-3 py-2">0 pendientes</span>
+        </div>
+
+        <RankingList players={[]} picksByUser={{}} currentUserId={null} />
+      </main>
+    )
+  }
+
   const admin = createAdminClient()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

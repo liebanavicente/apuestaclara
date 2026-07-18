@@ -1,7 +1,19 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { hasSupabasePublicConfig } from '@/lib/supabase/config'
 
 export default async function DebugPage() {
+  if (!hasSupabasePublicConfig()) {
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-10">
+        <h1 className="mb-6 text-2xl font-bold text-white">Debug Sistema</h1>
+        <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+          Falta configurar Supabase antes de consultar tablas y sesión.
+        </div>
+      </main>
+    )
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

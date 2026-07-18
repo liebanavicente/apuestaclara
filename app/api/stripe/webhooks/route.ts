@@ -1,8 +1,12 @@
 import Stripe from 'stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { hasSupabaseAdminConfig } from '@/lib/supabase/config'
+import { supabaseAdminUnavailableResponse } from '@/lib/supabase/unavailable'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
+  if (!hasSupabaseAdminConfig()) return supabaseAdminUnavailableResponse()
+
   if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 })
   }

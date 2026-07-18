@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { hasSupabaseAdminConfig } from '@/lib/supabase/config'
+import { supabaseAdminUnavailableResponse } from '@/lib/supabase/unavailable'
 
 // PATCH /api/simulator/simulations/[id] — resolve a simulation manually
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!hasSupabaseAdminConfig()) return supabaseAdminUnavailableResponse()
+
   const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

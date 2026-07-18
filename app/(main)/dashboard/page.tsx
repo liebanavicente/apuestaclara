@@ -1,13 +1,28 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getMissingSupabaseAdminConfig, hasSupabaseAdminConfig } from '@/lib/supabase/config'
 import { getMultipleSportsEvents, FEATURED_SPORTS } from '@/lib/services/odds.service'
 import { redirect } from 'next/navigation'
 import { DashboardClient } from './DashboardClient'
 
-export const metadata = { title: 'ApuestaClara — Partidos' }
+export const metadata = { title: 'Gañanesbets — Partidos' }
 export const revalidate = 0
 
 export default async function DashboardPage() {
+  if (!hasSupabaseAdminConfig()) {
+    const missing = getMissingSupabaseAdminConfig().join(', ')
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-12">
+        <p className="mb-2 text-xs font-bold uppercase text-neon">Partidos</p>
+        <h1 className="font-display text-4xl text-white">Conecta Supabase para competir</h1>
+        <p className="mt-3 text-sm text-texto-secundario">
+          Falta configuración de servidor: {missing}. Al añadirla, esta página cargará partidos,
+          tus picks y los puntos del ranking.
+        </p>
+      </main>
+    )
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?redirect=/dashboard')

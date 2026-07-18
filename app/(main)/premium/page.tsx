@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { hasSupabasePublicConfig } from '@/lib/supabase/config'
 import { getUserAccess } from '@/lib/access'
 import { Star, Check, Zap } from 'lucide-react'
 import type { Subscriber } from '@/types/database'
@@ -30,11 +31,11 @@ const PREMIUM_FEATURES = [
 ]
 
 export default async function PremiumPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = hasSupabasePublicConfig() ? await createClient() : null
+  const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } }
 
   let isPremium = false
-  if (user) {
+  if (user && supabase) {
     const [profileRes, subscriberRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('user_id', user.id).single(),
       supabase.from('subscribers').select('*').eq('user_id', user.id).maybeSingle(),

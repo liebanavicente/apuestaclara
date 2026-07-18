@@ -1,6 +1,7 @@
 import { Hero } from '@/components/marketing/Hero'
 import { LiveMatchesDemo } from '@/components/marketing/LiveMatchesDemo'
 import { HowItWorks } from '@/components/marketing/HowItWorks'
+import { GananesbetsSystem } from '@/components/marketing/GananesbetsSystem'
 import { ScoringRanking } from '@/components/marketing/ScoringRanking'
 import { FinalCta } from '@/components/marketing/FinalCta'
 import { getMultipleSportsEvents } from '@/lib/services/odds.service'
@@ -14,6 +15,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-carbon">
       <Hero />
+      <GananesbetsSystem />
       <LiveMatchesDemo matches={upcoming} />
       <HowItWorks />
       <ScoringRanking />

@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cesped: #062724;
-  --color-neon: #3ff5d3;
-  --color-ambar: #d7ff4f;
-  --color-carbon: #04080c;
-  --color-superficie: #0b1419;
-  --color-superficie-hover: #14252b;
-  --color-texto: #f4fbf8;
-  --color-texto-secundario: #9fb3b0;
-  --color-texto-terciario: #607673;
+  --color-cesped: #102015;
+  --color-neon: #b7ff38;
+  --color-ambar: #5ef2c2;
+  --color-carbon: #050705;
+  --color-superficie: #0d110d;
+  --color-superficie-hover: #172017;
+  --color-texto: #f7fff3;
+  --color-texto-secundario: #aeb8aa;
+  --color-texto-terciario: #697365;
   --color-error: #ff637a;
   --color-info: #62a8ff;
 
-  --color-rojo: #3ff5d3;
-  --color-amarillo: #d7ff4f;
-  --color-azul-marino: #081217;
-  --color-noche: #04080c;
+  --color-rojo: #b7ff38;
+  --color-amarillo: #5ef2c2;
+  --color-azul-marino: #0a100b;
+  --color-noche: #050705;
 }
 
 @theme inline {
@@ -38,10 +38,10 @@ html {
 
 body {
   background:
-    radial-gradient(circle at 18% 8%, rgba(63, 245, 211, 0.16), transparent 28rem),
-    radial-gradient(circle at 84% 18%, rgba(215, 255, 79, 0.1), transparent 24rem),
-    linear-gradient(180deg, #04080c 0%, #071115 42%, #04080c 100%);
-  color: #f4fbf8;
+    radial-gradient(circle at 18% 6%, rgba(183, 255, 56, 0.14), transparent 26rem),
+    radial-gradient(circle at 82% 12%, rgba(94, 242, 194, 0.12), transparent 22rem),
+    linear-gradient(180deg, #050705 0%, #091109 46%, #050705 100%);
+  color: #f7fff3;
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
@@ -51,18 +51,18 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #061014;
+  background: #080d08;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1c3638;
+  background: #24301f;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a5554;
+  background: #3c502f;
 }
 
 :focus-visible {
-  outline: 2px solid #3ff5d3;
+  outline: 2px solid #b7ff38;
   outline-offset: 2px;
 }
 
@@ -81,8 +81,8 @@ body {
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 28px rgba(63, 245, 211, 0.28); }
-  50% { box-shadow: 0 0 54px rgba(215, 255, 79, 0.38); }
+  0%, 100% { box-shadow: 0 0 28px rgba(183, 255, 56, 0.24); }
+  50% { box-shadow: 0 0 54px rgba(94, 242, 194, 0.28); }
 }
 .animate-glow-pulse {
   animation: glow-pulse 4s ease-in-out infinite;
@@ -90,16 +90,16 @@ body {
 
 /* Glassmorphism */
 .glass {
-  background: rgba(8, 18, 23, 0.68);
+  background: rgba(10, 15, 10, 0.76);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid rgba(127, 255, 232, 0.12);
+  border: 1px solid rgba(183, 255, 56, 0.12);
 }
 .glass-strong {
-  background: rgba(6, 15, 19, 0.78);
+  background: rgba(10, 14, 10, 0.86);
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
-  border: 1px solid rgba(63, 245, 211, 0.18);
+  border: 1px solid rgba(183, 255, 56, 0.2);
 }
 
 /* Botón "brillante" — barrido de luz al hover */
@@ -128,23 +128,41 @@ body {
   100% { background-position: 400px 0; }
 }
 .skeleton-shimmer {
-  background: linear-gradient(90deg, #112329 25%, #17363a 37%, #112329 63%);
+  background: linear-gradient(90deg, #121b12 25%, #1d2b18 37%, #121b12 63%);
   background-size: 800px 100%;
   animation: shimmer 1.6s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer {
     animation: none;
-    background: #112329;
+    background: #121b12;
   }
 }
 
 .flag-watermark {
   background-image:
-    linear-gradient(rgba(63, 245, 211, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(63, 245, 211, 0.05) 1px, transparent 1px);
-  background-size: 56px 56px;
+    linear-gradient(rgba(183, 255, 56, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(183, 255, 56, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
   mask-image: linear-gradient(180deg, black, transparent 78%);
+}
+
+.cryptix-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(13, 17, 13, 0.84);
+  border: 1px solid rgba(183, 255, 56, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+.cryptix-line {
+  background: linear-gradient(90deg, transparent, rgba(183, 255, 56, 0.65), rgba(94, 242, 194, 0.45), transparent);
+}
+
+.market-noise {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(183, 255, 56, 0.12), transparent 18rem),
+    radial-gradient(circle at 80% 0%, rgba(94, 242, 194, 0.1), transparent 16rem);
 }
 
 @keyframes fade-in-up {

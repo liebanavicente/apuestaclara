@@ -9,21 +9,22 @@ export function FinalCta() {
       <Image src="/spain-cta.webp" alt="" fill className="-z-40 object-cover object-[50%_35%] opacity-[0.18] grayscale" />
       <div
         className="absolute inset-0 -z-30"
-        style={{ background: 'linear-gradient(180deg, rgba(4,8,12,0.78) 0%, rgba(6,39,36,0.84) 55%, rgba(4,8,12,0.96) 100%)' }}
+        style={{ background: 'linear-gradient(180deg, rgba(5,7,5,0.86) 0%, rgba(10,18,10,0.9) 55%, rgba(5,7,5,0.98) 100%)' }}
       />
       <div className="flag-watermark pointer-events-none absolute inset-0 -z-20" />
       <FloatingBackground />
       <div
         className="glow-orb pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[520px] w-[520px] rounded-full blur-[120px]"
-        style={{ background: 'radial-gradient(circle, rgba(63,245,211,0.28) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(183,255,56,0.25) 0%, transparent 70%)' }}
       />
 
-      <div className="relative mx-auto max-w-xl text-center">
-        <h2 className="font-display text-5xl text-white sm:text-7xl">
-          Entra antes de que cambie la marea
+      <div className="relative mx-auto max-w-2xl text-center">
+        <p className="mb-4 font-mono text-xs font-semibold uppercase text-neon">Final call</p>
+        <h2 className="font-display text-5xl leading-[0.96] text-white sm:text-7xl">
+          Entra antes de que el mercado corrija
         </h2>
         <p className="mx-auto mt-6 mb-8 max-w-md text-lg text-texto-secundario sm:text-xl">
-          Regístrate gratis y empieza a convertir lectura de mercado en puntos.
+          Regístrate gratis y convierte tu lectura deportiva en puntos, ranking y orgullo.
         </p>
 
         <Link

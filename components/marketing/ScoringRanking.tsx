@@ -12,7 +12,7 @@ const SCORE_CARDS = [
     label: 'Aciertas',
     value: '+3.50 pts',
     desc: 'Cuota 3.50 = +3.50 pts',
-    border: '#3FF5D3',
+    border: '#B7FF38',
   },
   {
     emoji: '0',
@@ -26,7 +26,7 @@ const SCORE_CARDS = [
     label: 'Cierre',
     value: '19 jul 2026',
     desc: 'El ranking queda congelado al cierre de mercado',
-    border: '#D7FF4F',
+    border: '#5EF2C2',
   },
 ]
 
@@ -80,13 +80,20 @@ export function ScoringRanking() {
   const { days, hours, minutes, seconds } = useCountdown()
 
   return (
-    <section className="px-4 py-20">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-10 flex items-center justify-between">
-          <h2 className="font-display text-4xl tracking-wide text-[#FFFFFF] sm:text-6xl">
-            La puntuación es simple
-          </h2>
-          <Link href="/reglas" className="text-sm text-texto-secundario transition-colors hover:text-neon">
+    <section className="px-4 py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="mb-3 font-mono text-xs font-semibold uppercase text-neon">Tabla Gananesbets</p>
+            <h2 className="font-display text-4xl leading-[0.98] text-[#FFFFFF] sm:text-6xl">
+              La cuota es la puntuación
+            </h2>
+            <p className="mt-4 max-w-2xl text-lg text-texto-secundario">
+              No hay saldo ni staking: solo picks ficticios. La tabla premia a quien
+              acierta cuotas más altas sin hundirse a base de fallos.
+            </p>
+          </div>
+          <Link href="/reglas" className="inline-flex rounded-full border border-neon/20 px-4 py-2 text-sm text-texto-secundario transition-colors hover:bg-neon/10 hover:text-neon">
             Ver reglas
           </Link>
         </div>
@@ -95,12 +102,12 @@ export function ScoringRanking() {
           {SCORE_CARDS.map((c, i) => (
             <Reveal key={c.label} delay={i * 100}>
               <div
-                className="rounded-lg border border-neon/10 bg-superficie/80 p-8 text-center"
+                className="cryptix-panel rounded-lg p-8 text-center"
                 style={{ borderTop: `3px solid ${c.border}` }}
               >
-                <div className="mx-auto mb-3 grid h-10 w-10 place-items-center rounded-md bg-white/5 font-mono text-lg font-black text-neon">{c.emoji}</div>
+                <div className="mx-auto mb-3 grid h-10 w-10 place-items-center rounded-md bg-neon/10 font-mono text-lg font-black text-neon">{c.emoji}</div>
                 <p className="text-[14px] uppercase tracking-[2px] text-texto-secundario">{c.label}</p>
-                <p className="mt-2 font-display text-6xl text-[#FFFFFF]">{c.value}</p>
+                <p className="mt-2 font-display text-5xl text-[#FFFFFF] sm:text-6xl">{c.value}</p>
                 <p className="mt-3 text-sm text-texto-secundario">{c.desc}</p>
               </div>
             </Reveal>
@@ -112,11 +119,11 @@ export function ScoringRanking() {
             Ranking en tiempo real
           </h3>
 
-          <div className="overflow-hidden rounded-lg border border-neon/10 bg-superficie/80">
+          <div className="cryptix-panel overflow-hidden rounded-lg">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[560px] text-left">
                 <thead>
-                  <tr className="text-[14px] uppercase text-texto-secundario">
+                  <tr className="bg-white/[0.03] font-mono text-[12px] uppercase text-texto-secundario">
                     <th className="px-6 py-4 font-normal">#</th>
                     <th className="px-2 py-4 font-normal">Nombre</th>
                     <th className="px-2 py-4 font-normal">Puntos</th>
@@ -125,7 +132,7 @@ export function ScoringRanking() {
                 </thead>
                 <tbody>
                   {RANKING.map(p => (
-                    <tr key={p.name} className="border-t border-neon/10">
+                    <tr key={p.name} className="border-t border-neon/10 transition-colors hover:bg-neon/[0.035]">
                       <td className="px-6 py-4 text-sm">{p.medal ?? p.rank}</td>
                       <td className="px-2 py-4 text-sm font-medium text-[#FFFFFF]">
                         <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md bg-white/5 font-mono text-[10px] text-neon">{p.avatar}</span>

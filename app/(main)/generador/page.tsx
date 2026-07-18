@@ -1,19 +1,20 @@
 import { TrendingUp } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { hasSupabasePublicConfig } from '@/lib/supabase/config'
 import { getUserAccess } from '@/lib/access'
 import { GeneradorClient } from './GeneradorClient'
 import { ResponsibleNotice } from '@/components/shared/ResponsibleNotice'
 import type { Subscriber } from '@/types/database'
 
 export default async function GeneradorPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = hasSupabasePublicConfig() ? await createClient() : null
+  const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } }
 
   // MVP: premium gratis para todos
   let maxPicks = 6
   let isPremium = true
 
-  if (user) {
+  if (user && supabase) {
     const [profileRes, subscriberRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('user_id', user.id).single(),
       supabase.from('subscribers').select('*').eq('user_id', user.id).maybeSingle(),
