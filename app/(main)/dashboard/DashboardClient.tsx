@@ -91,6 +91,16 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
         odds: staged.odds,
         stake: 1,
         match_date: event.commence_time,
+        event_id: event.id,
+        sport_key: event.sport_key,
+        market_key: 'h2h',
+        selection_key: staged.selection === 'Empate'
+          ? 'draw'
+          : staged.selection === `${event.home_team} gana`
+            ? 'home'
+            : 'away',
+        home_team: event.home_team,
+        away_team: event.away_team,
       }),
     })
     setStaged(null)

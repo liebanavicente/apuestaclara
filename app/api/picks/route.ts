@@ -12,7 +12,22 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const { description, competition, selection, odds, stake, note, match_date, legs } = body
+  const {
+    description,
+    competition,
+    selection,
+    odds,
+    stake,
+    note,
+    match_date,
+    legs,
+    event_id,
+    sport_key,
+    market_key,
+    selection_key,
+    home_team,
+    away_team,
+  } = body
   const normalizedOdds = Number(odds)
   const competitionStake = Number(stake ?? 1)
 
@@ -36,6 +51,12 @@ export async function POST(req: NextRequest) {
     note: note || null,
     match_date: match_date || null,
     legs: legs || null,
+    event_id: event_id || null,
+    sport_key: sport_key || null,
+    market_key: market_key || 'h2h',
+    selection_key: selection_key || null,
+    home_team: home_team || null,
+    away_team: away_team || null,
   }).select().single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

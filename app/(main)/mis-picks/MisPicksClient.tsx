@@ -25,6 +25,7 @@ interface Pick {
 
 interface OddsEvent {
   id: string
+  sport_key: string
   event_name: string
   league: string
   commence_time: string
@@ -156,6 +157,18 @@ export function MisPicksClient({ picks, totalPoints, importedLegs }: Props) {
         note: note || null,
         match_date: isCombinada ? null : (form.match_date || null),
         legs: isCombinada ? legs : null,
+        event_id: !isCombinada && inputMode === 'select' ? selectedEvent?.id : null,
+        sport_key: !isCombinada && inputMode === 'select' ? selectedEvent?.sport_key : null,
+        market_key: !isCombinada && inputMode === 'select' ? 'h2h' : null,
+        selection_key: !isCombinada && inputMode === 'select' && selectedEvent
+          ? form.selection === 'Empate'
+            ? 'draw'
+            : form.selection === `${selectedEvent.home_team} gana`
+              ? 'home'
+              : 'away'
+          : null,
+        home_team: !isCombinada && inputMode === 'select' ? selectedEvent?.home_team : null,
+        away_team: !isCombinada && inputMode === 'select' ? selectedEvent?.away_team : null,
       }),
     })
     setLoading(false)

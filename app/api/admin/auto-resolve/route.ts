@@ -59,14 +59,23 @@ async function runAutoResolve(req: NextRequest, options: { enforceMadridTwoAm?: 
       const result = getMatchResult(match)
       if (!result) continue
 
-      // Find all pending picks for this match
+      // Find all pending picks for this match. New Framer picks store the
+      // upstream event id; legacy picks still fall back to the old description.
       const eventName = `${match.home_team} vs ${match.away_team}`
-      const { data: pendingPicks } = await admin
+      const { data: eventIdPicks } = await admin
         .from('picks')
-        .select('id, selection, odds, user_id')
+        .select('id, selection, odds, user_id, selection_key')
+        .eq('event_id', match.id)
+        .eq('status', 'pending')
+
+      const { data: legacyPicks } = await admin
+        .from('picks')
+        .select('id, selection, odds, user_id, selection_key')
+        .is('event_id', null)
         .eq('description', eventName)
         .eq('status', 'pending')
 
+      const pendingPicks = [...(eventIdPicks ?? []), ...(legacyPicks ?? [])]
       if (!pendingPicks || pendingPicks.length === 0) continue
 
       log.push(`${eventName}: result=${result}, picks=${pendingPicks.length}`)
@@ -74,10 +83,15 @@ async function runAutoResolve(req: NextRequest, options: { enforceMadridTwoAm?: 
       for (const pick of pendingPicks) {
         // Determine if pick won
         const sel = pick.selection.toLowerCase()
+        const selectionKey = pick.selection_key?.toLowerCase()
         let won = false
-        if (result === 'home' && sel.includes(match.home_team.toLowerCase())) won = true
-        if (result === 'away' && sel.includes(match.away_team.toLowerCase())) won = true
-        if (result === 'draw' && sel === 'empate') won = true
+        if (selectionKey) {
+          won = selectionKey === result
+        } else {
+          if (result === 'home' && sel.includes(match.home_team.toLowerCase())) won = true
+          if (result === 'away' && sel.includes(match.away_team.toLowerCase())) won = true
+          if (result === 'draw' && (sel === 'empate' || sel === 'draw')) won = true
+        }
 
         const status = won ? 'won' : 'lost'
         const points = won ? Math.round(pick.odds * 100) / 100 : 0
