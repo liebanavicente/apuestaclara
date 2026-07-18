@@ -1,100 +1,113 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { ArrowDown, ArrowRight, Activity, ShieldCheck } from 'lucide-react'
 import { FloatingBackground } from './FloatingBackground'
-import { Confetti } from './Confetti'
 
 export function Hero() {
   return (
-    <section className="relative z-0 flex min-h-[calc(100vh-64px)] items-center justify-center overflow-hidden px-4 py-20">
-      {/* Background photo */}
+    <section className="relative z-0 flex min-h-[calc(100vh-64px)] items-center justify-center overflow-hidden px-4 py-16">
       <Image
         src="/spain-hero.webp"
         alt=""
         fill
         priority
-        className="-z-40 object-cover object-[50%_30%]"
+        className="-z-40 object-cover object-[50%_30%] opacity-20 grayscale"
       />
       <div
         className="absolute inset-0 -z-30"
         style={{
           background:
-            'linear-gradient(160deg, rgba(122,12,30,0.88) 0%, rgba(74,15,36,0.85) 28%, rgba(11,30,63,0.88) 62%, rgba(10,18,32,0.94) 100%)',
+            'linear-gradient(135deg, rgba(4,8,12,0.86) 0%, rgba(6,39,36,0.82) 44%, rgba(4,8,12,0.96) 100%)',
         }}
       />
       <div className="flag-watermark pointer-events-none absolute inset-0 -z-20" />
       <div className="grain-overlay pointer-events-none absolute inset-0 -z-20" />
-      <Confetti density={36} />
       <FloatingBackground />
-
-      {/* Illuminated glow orbs */}
       <div
-        className="glow-orb pointer-events-none absolute left-[26%] top-[36%] -z-10 h-[440px] w-[440px] rounded-full blur-[110px]"
-        style={{ background: 'radial-gradient(circle, rgba(198,11,30,0.55) 0%, transparent 70%)' }}
+        className="glow-orb pointer-events-none absolute left-[24%] top-[38%] -z-10 h-[460px] w-[460px] rounded-full blur-[120px]"
+        style={{ background: 'radial-gradient(circle, rgba(63,245,211,0.34) 0%, transparent 70%)' }}
       />
       <div
-        className="glow-orb pointer-events-none absolute left-[74%] top-[62%] -z-10 h-[340px] w-[340px] rounded-full blur-[100px]"
-        style={{ background: 'radial-gradient(circle, rgba(255,196,0,0.45) 0%, transparent 70%)', animationDelay: '2s' }}
+        className="glow-orb pointer-events-none absolute left-[76%] top-[58%] -z-10 h-[360px] w-[360px] rounded-full blur-[100px]"
+        style={{ background: 'radial-gradient(circle, rgba(215,255,79,0.22) 0%, transparent 70%)', animationDelay: '2s' }}
       />
 
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-between">
-        {/* Copy */}
         <div className="max-w-2xl text-center lg:text-left">
-          <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-amarillo/30 bg-amarillo/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[2px] text-amarillo">
-            🇪🇸 Edición especial · Final del Mundial
+          <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-neon/20 bg-neon/10 px-4 py-1.5 text-xs font-semibold uppercase text-neon">
+            <Activity className="h-3.5 w-3.5" />
+            Señal de mercado en tiempo real
           </span>
 
           <h1
-            className="font-display text-6xl leading-[0.95] tracking-wide text-white sm:text-8xl"
-            style={{ textShadow: '0 4px 30px rgba(198,11,30,0.5), 0 0 80px rgba(255,196,0,0.25)' }}
+            className="font-display text-5xl leading-[0.95] text-white sm:text-7xl lg:text-8xl"
+            style={{ textShadow: '0 4px 30px rgba(63,245,211,0.18), 0 0 80px rgba(215,255,79,0.12)' }}
           >
-            🏆 ¡Españita a la final!
+            Apuestas ficticias. Lectura clara.
           </h1>
 
-          <p className="mt-7 font-display text-3xl tracking-wide text-amarillo sm:text-4xl">
-            🍻 Se acercan las birras.
+          <p className="mt-7 text-xl font-semibold text-ambar sm:text-2xl">
+            Compite por puntos leyendo cuotas, calendario y probabilidad.
           </p>
 
-          <p className="mt-4 text-lg text-texto-secundario sm:text-xl">
-            Elige el resultado de la Final y sigue arrasando en la Champions.
+          <p className="mt-4 max-w-xl text-lg text-texto-secundario sm:text-xl">
+            Elige 1X2, anticipa movimientos y sube en el ranking.
             <br />
-            Sin dinero real. Solo el orgullo.
+            Sin dinero real. Solo criterio, orgullo y una tabla que no perdona.
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
             <Link
               href="/register?redirect=/dashboard"
-              className="shine-btn w-full rounded-xl bg-rojo px-10 py-4 text-base font-bold text-white shadow-[0_0_30px_rgba(198,11,30,0.45)] transition-all hover:scale-105 hover:shadow-[0_0_45px_rgba(198,11,30,0.65)] sm:w-auto sm:text-lg"
+              className="shine-btn inline-flex w-full items-center justify-center gap-2 rounded-md bg-neon px-10 py-4 text-base font-black text-carbon shadow-[0_0_34px_rgba(63,245,211,0.24)] transition-all hover:scale-[1.02] hover:shadow-[0_0_48px_rgba(63,245,211,0.34)] sm:w-auto sm:text-lg"
             >
-              🏆 Entrar a la fiesta
+              Empezar ahora
+              <ArrowRight className="h-4 w-4" />
             </Link>
             <a
               href="#partidos"
-              className="w-full rounded-xl border border-amarillo/60 px-10 py-4 text-base font-semibold text-amarillo transition-colors hover:bg-amarillo/10 sm:w-auto sm:text-lg"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-white/15 px-10 py-4 text-base font-semibold text-white transition-colors hover:border-ambar/50 hover:bg-ambar/10 hover:text-ambar sm:w-auto sm:text-lg"
             >
-              ↓ Ver cómo funciona
+              Ver cuotas
+              <ArrowDown className="h-4 w-4" />
             </a>
           </div>
         </div>
 
-        {/* Demo card flotante */}
-        <div className="hidden w-full max-w-xs shrink-0 animate-float lg:block" style={{ animationDuration: '4s' }}>
-          <div className="glass rounded-2xl p-5 shadow-2xl shadow-[0_0_50px_rgba(198,11,30,0.18)]">
-            <p className="mb-1 text-xs font-semibold text-texto-secundario">🇪🇸 España vs Argentina</p>
-            <p className="mb-4 text-xs text-texto-terciario">Final del Mundial · Domingo 20:00</p>
-            <div className="grid grid-cols-3 gap-2">
+        <div className="w-full max-w-sm shrink-0 animate-float" style={{ animationDuration: '4s' }}>
+          <div className="glass-strong rounded-lg p-5 shadow-2xl shadow-[0_0_54px_rgba(63,245,211,0.12)]">
+            <div className="mb-5 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase text-neon">ODDSTIDE board</p>
+                <p className="mt-1 text-xs text-texto-terciario">Local vs Visitante · Domingo 20:00</p>
+              </div>
+              <span className="rounded-full bg-ambar/10 px-2.5 py-1 text-xs font-bold text-ambar">LIVE</span>
+            </div>
+            <div className="mb-5 grid grid-cols-3 gap-2">
               {[
-                { label: '1', odds: '2.10' },
-                { label: 'X', odds: '3.25' },
-                { label: '2', odds: '3.80' },
+                { label: '1', odds: '2.10', move: '+0.08' },
+                { label: 'X', odds: '3.25', move: '-0.04' },
+                { label: '2', odds: '3.80', move: '+0.12' },
               ].map(({ label, odds }) => (
                 <div
                   key={label}
-                  className="flex flex-col items-center rounded-lg border border-superficie-hover bg-superficie-hover/60 py-2 text-center"
+                  className="flex flex-col items-center rounded-md border border-neon/10 bg-superficie-hover/60 py-3 text-center"
                 >
                   <span className="text-[10px] text-texto-terciario">{label}</span>
-                  <span className="font-mono text-sm font-bold text-white">{odds}</span>
+                  <span className="font-mono text-lg font-bold text-white">{odds}</span>
+                  <span className="font-mono text-[10px] text-ambar">{label === 'X' ? '-0.04' : label === '1' ? '+0.08' : '+0.12'}</span>
                 </div>
               ))}
+            </div>
+            <div className="rounded-md border border-white/10 bg-carbon/60 p-3">
+              <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-texto-secundario">
+                <ShieldCheck className="h-3.5 w-3.5 text-neon" />
+                Pick sin dinero real
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-superficie-hover">
+                <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-neon to-ambar" />
+              </div>
+              <p className="mt-2 text-xs text-texto-terciario">66% de confianza social · +3.80 pts potenciales</p>
             </div>
           </div>
         </div>

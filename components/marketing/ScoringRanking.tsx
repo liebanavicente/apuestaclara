@@ -8,38 +8,38 @@ const WORLD_CUP_FINAL = new Date('2026-07-19T20:00:00Z').getTime()
 
 const SCORE_CARDS = [
   {
-    emoji: '✅',
+    emoji: '+',
     label: 'Aciertas',
     value: '+3.50 pts',
     desc: 'Cuota 3.50 = +3.50 pts',
-    border: '#C60B1E',
+    border: '#3FF5D3',
   },
   {
-    emoji: '❌',
+    emoji: '0',
     label: 'Fallas',
     value: '0 pts',
     desc: 'No pierdes nada. Solo te quedas sin puntos',
     border: '#FF6B6B',
   },
   {
-    emoji: '🍺',
+    emoji: '#',
     label: 'El último paga',
     value: '19 jul 2026',
     desc: 'El ranking decide quién paga las birras',
-    border: '#FFC400',
+    border: '#D7FF4F',
   },
 ]
 
 const RANKING = [
-  { rank: 1, medal: '🥇', avatar: '😎', name: 'ElBicho', points: 45.2, picks: ['✅', '✅', '✅', '❌', '✅'] },
-  { rank: 2, medal: '🥈', avatar: '🤠', name: 'DonCagao', points: 38.75, picks: ['✅', '❌', '✅', '✅', '✅'] },
-  { rank: 3, medal: '🥉', avatar: '🦁', name: 'LaFiera', points: 32.1, picks: ['✅', '✅', '❌', '✅', '❌'] },
-  { rank: 4, medal: null, avatar: '🦊', name: 'Zorro', points: 28.5, picks: ['❌', '✅', '✅', '❌', '✅'] },
-  { rank: 5, medal: null, avatar: '🐸', name: 'ElRana', points: 22.3, picks: ['❌', '❌', '✅', '✅', '❌'] },
+  { rank: 1, medal: '01', avatar: 'EB', name: 'ElBicho', points: 45.2, picks: ['W', 'W', 'W', 'L', 'W'] },
+  { rank: 2, medal: '02', avatar: 'DC', name: 'DonCagao', points: 38.75, picks: ['W', 'L', 'W', 'W', 'W'] },
+  { rank: 3, medal: '03', avatar: 'LF', name: 'LaFiera', points: 32.1, picks: ['W', 'W', 'L', 'W', 'L'] },
+  { rank: 4, medal: null, avatar: 'ZO', name: 'Zorro', points: 28.5, picks: ['L', 'W', 'W', 'L', 'W'] },
+  { rank: 5, medal: null, avatar: 'ER', name: 'ElRana', points: 22.3, picks: ['L', 'L', 'W', 'W', 'L'] },
 ]
 
-const YOU = { rank: 12, avatar: '😰', name: 'TÚ (si te registras)', points: 5.2, picks: ['❌', '❌', '❌', '❌', '❌'] }
-const LAST = { rank: 15, avatar: '🍺', name: 'ElÚltimo', points: 0, picks: ['❌', '❌', '❌', '❌', '❌'] }
+const YOU = { rank: 12, avatar: 'TU', name: 'TÚ (si te registras)', points: 5.2, picks: ['L', 'L', 'L', 'L', 'L'] }
+const LAST = { rank: 15, avatar: 'EU', name: 'ElÚltimo', points: 0, picks: ['L', 'L', 'L', 'L', 'L'] }
 
 function useCountdown() {
   const [remaining, setRemaining] = useState<number>(0)
@@ -62,7 +62,13 @@ function PickDots({ picks }: { picks: string[] }) {
   return (
     <div className="flex gap-1">
       {picks.map((p, i) => (
-        <span key={i} className="text-xs">
+        <span
+          key={i}
+          className={cn(
+            'grid h-5 w-5 place-items-center rounded-sm font-mono text-[10px] font-bold',
+            p === 'W' ? 'bg-neon/10 text-neon' : 'bg-error/10 text-error'
+          )}
+        >
           {p}
         </span>
       ))}
@@ -78,10 +84,10 @@ export function ScoringRanking() {
       <div className="mx-auto max-w-5xl">
         <div className="mb-10 flex items-center justify-between">
           <h2 className="font-display text-4xl tracking-wide text-[#FFFFFF] sm:text-6xl">
-            📊 La puntuación es simple
+            La puntuación es simple
           </h2>
           <Link href="/reglas" className="text-sm text-texto-secundario transition-colors hover:text-neon">
-            Ver reglas →
+            Ver reglas
           </Link>
         </div>
 
@@ -89,12 +95,12 @@ export function ScoringRanking() {
           {SCORE_CARDS.map((c, i) => (
             <Reveal key={c.label} delay={i * 100}>
               <div
-                className="rounded-2xl bg-[#10203F] p-8 text-center"
+                className="rounded-lg border border-neon/10 bg-superficie/80 p-8 text-center"
                 style={{ borderTop: `3px solid ${c.border}` }}
               >
-                <div className="mb-2 text-3xl">{c.emoji}</div>
+                <div className="mx-auto mb-3 grid h-10 w-10 place-items-center rounded-md bg-white/5 font-mono text-lg font-black text-neon">{c.emoji}</div>
                 <p className="text-[14px] uppercase tracking-[2px] text-texto-secundario">{c.label}</p>
-                <p className="mt-2 font-display text-6xl tracking-wide text-[#FFFFFF]">{c.value}</p>
+                <p className="mt-2 font-display text-6xl text-[#FFFFFF]">{c.value}</p>
                 <p className="mt-3 text-sm text-texto-secundario">{c.desc}</p>
               </div>
             </Reveal>
@@ -103,10 +109,10 @@ export function ScoringRanking() {
 
         <Reveal delay={300} className="mt-14">
           <h3 className="mb-5 font-display text-3xl tracking-wide text-[#FFFFFF]">
-            🏆 Ranking en tiempo real
+            Ranking en tiempo real
           </h3>
 
-          <div className="overflow-hidden rounded-2xl bg-[#10203F]">
+          <div className="overflow-hidden rounded-lg border border-neon/10 bg-superficie/80">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[560px] text-left">
                 <thead>
@@ -119,10 +125,11 @@ export function ScoringRanking() {
                 </thead>
                 <tbody>
                   {RANKING.map(p => (
-                    <tr key={p.name} className="border-t border-[#1B2E54]">
+                    <tr key={p.name} className="border-t border-neon/10">
                       <td className="px-6 py-4 text-sm">{p.medal ?? p.rank}</td>
                       <td className="px-2 py-4 text-sm font-medium text-[#FFFFFF]">
-                        {p.avatar} {p.name}
+                        <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md bg-white/5 font-mono text-[10px] text-neon">{p.avatar}</span>
+                        {p.name}
                       </td>
                       <td className="px-2 py-4 font-mono text-sm text-[#FFFFFF]">{p.points.toFixed(2)}</td>
                       <td className="px-6 py-4">
@@ -134,7 +141,8 @@ export function ScoringRanking() {
                   <tr className="border-t-2 border-neon bg-neon/5">
                     <td className="px-6 py-4 text-sm">{YOU.rank}</td>
                     <td className="px-2 py-4 text-sm font-medium text-[#FFFFFF]">
-                      {YOU.avatar} {YOU.name}
+                      <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md bg-white/5 font-mono text-[10px] text-neon">{YOU.avatar}</span>
+                      {YOU.name}
                     </td>
                     <td className="px-2 py-4 font-mono text-sm text-[#FFFFFF]">{YOU.points.toFixed(2)}</td>
                     <td className="px-6 py-4">
@@ -142,10 +150,11 @@ export function ScoringRanking() {
                     </td>
                   </tr>
 
-                  <tr className="border-t border-[#1B2E54]" style={{ background: 'rgba(255,107,107,0.1)' }}>
-                    <td className="px-6 py-4 text-sm text-[#FF6B6B]">🔴 {LAST.rank}</td>
+                  <tr className="border-t border-error/20" style={{ background: 'rgba(255,99,122,0.08)' }}>
+                    <td className="px-6 py-4 text-sm text-error">{LAST.rank}</td>
                     <td className="px-2 py-4 text-sm font-medium text-[#FFFFFF]">
-                      {LAST.avatar} {LAST.name}
+                      <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md bg-error/10 font-mono text-[10px] text-error">{LAST.avatar}</span>
+                      {LAST.name}
                       <p className="mt-0.5 text-xs font-normal text-texto-secundario">
                         &ldquo;¡La ronda va por mi cuenta!&rdquo;
                       </p>
@@ -170,7 +179,7 @@ export function ScoringRanking() {
             >
               {days}d {hours}h {minutes}m {seconds}s
             </span>{' '}
-            para que alguien pague...
+            para el cierre de mercado
           </p>
         </Reveal>
       </div>
