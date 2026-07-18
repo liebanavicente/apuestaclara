@@ -103,7 +103,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
                   onClick={() => setSelectedSport(s.key)}
                   className={`text-xs px-2.5 py-1 rounded-full transition-colors ${
                     selectedSport === s.key
-                      ? 'bg-teal-600 text-white'
+                      ? 'bg-neon text-carbon'
                       : 'bg-superficie-hover text-texto-secundario hover:text-white'
                   }`}
                 >
@@ -128,7 +128,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
                 {events.map(event => {
                   const selected = picks.find(p => p.event_id === event.id)
                   return (
-                    <div key={event.id} className={`rounded-lg border p-3 transition-colors ${selected ? 'border-teal-500/40 bg-teal-950/20' : 'border-superficie-hover bg-superficie-hover/30'}`}>
+                    <div key={event.id} className={`rounded-lg border p-3 transition-colors ${selected ? 'border-neon/30 bg-neon/10' : 'border-superficie-hover bg-superficie-hover/30'}`}>
                       <p className="text-xs font-medium text-white mb-2">{event.event_name}</p>
                       <div className="grid grid-cols-3 gap-1.5">
                         {(['home', 'draw', 'away'] as const).map(outcome => {
@@ -142,7 +142,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
                               onClick={() => addPick(event, outcome)}
                               className={`text-xs py-1.5 rounded transition-colors ${
                                 isSelected
-                                  ? 'bg-teal-600 text-white font-bold'
+                                  ? 'bg-neon text-carbon font-bold'
                                   : 'bg-superficie-hover text-texto-secundario hover:bg-superficie-hover'
                               }`}
                             >
@@ -196,14 +196,14 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
                 value={stake}
                 onChange={e => setStake(e.target.value)}
                 min="1" max={balance} step="1"
-                className="w-full rounded-lg border border-superficie-hover bg-superficie-hover px-3 py-2 text-white text-sm focus:outline-none focus:border-teal-500"
+                className="w-full rounded-lg border border-superficie-hover bg-superficie-hover px-3 py-2 text-white text-sm focus:outline-none focus:border-neon"
               />
             </div>
             {picks.length > 0 && (
               <div className="text-right shrink-0">
                 <p className="text-xs text-texto-secundario">Cuota total</p>
                 <p className="text-lg font-black text-white">{totalOdds.toFixed(2)}</p>
-                <p className="text-xs text-teal-400">Retorno: {potentialReturn.toFixed(2)}€</p>
+                <p className="text-xs text-neon">Retorno: {potentialReturn.toFixed(2)}€</p>
               </div>
             )}
           </div>
@@ -211,7 +211,7 @@ export function NewSimulationModal({ balance, onClose, onCreated }: Props) {
           <button
             onClick={handleSubmit}
             disabled={picks.length === 0 || stakeNum < 1 || stakeNum > balance || submitting}
-            className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-neon hover:brightness-110 disabled:opacity-50 text-carbon font-semibold py-3 rounded-xl transition-colors"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
             {submitting ? 'Creando...' : `Simular ${picks.length > 1 ? 'combinada' : 'simple'}`}

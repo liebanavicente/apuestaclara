@@ -59,24 +59,24 @@ export function OddsCard({ event, selectedPicks, onAddPick, onRemovePick }: Odds
 
   return (
     <div className={cn(
-      'rounded-xl border bg-slate-900/50 p-4 transition-colors',
-      isSelected ? 'border-teal-500/50 bg-teal-950/20' : 'border-slate-800 hover:border-slate-700'
+      'rounded-lg border bg-superficie/70 p-4 transition-colors',
+      isSelected ? 'border-neon/50 bg-neon/10' : 'border-neon/10 hover:border-neon/30'
     )}>
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="text-xs text-teal-400 font-medium">{event.league}</span>
+            <span className="text-xs font-medium uppercase text-neon">{event.league}</span>
             <RealDataBadge />
-            {started && <span className="text-xs text-orange-400 font-medium">En curso</span>}
+            {started && <span className="text-xs font-medium text-ambar">En curso</span>}
           </div>
-          <p className="text-slate-200 font-medium text-sm leading-snug">{event.event_name}</p>
-          <div className="flex items-center gap-1.5 mt-1 text-xs text-slate-500">
+          <p className="text-sm font-medium leading-snug text-white">{event.event_name}</p>
+          <div className="mt-1 flex items-center gap-1.5 text-xs text-texto-terciario">
             <Clock className="h-3 w-3" />
             <span>{formatDate(event.commence_time)}</span>
-            {!started && <span className="text-teal-500">({timeUntil(event.commence_time)})</span>}
+            {!started && <span className="text-neon">({timeUntil(event.commence_time)})</span>}
           </div>
         </div>
-        <span className="text-xs text-slate-600 shrink-0">{event.bookmakers_count} casas</span>
+        <span className="shrink-0 rounded-full bg-white/5 px-2 py-1 text-xs text-texto-terciario">{event.bookmakers_count} casas</span>
       </div>
 
       {/* Odds buttons */}
@@ -95,19 +95,19 @@ export function OddsCard({ event, selectedPicks, onAddPick, onRemovePick }: Odds
                 onClick={() => handlePick(outcome)}
                 disabled={started}
                 className={cn(
-                  'flex flex-col items-center rounded-lg border px-2 py-2.5 transition-all text-center disabled:opacity-40 disabled:cursor-not-allowed',
+                  'flex flex-col items-center rounded-md border px-2 py-2.5 text-center transition-all disabled:cursor-not-allowed disabled:opacity-40',
                   isPickSelected
-                    ? 'border-teal-500 bg-teal-500/20 text-teal-300'
-                    : 'border-slate-700 hover:border-teal-500/50 hover:bg-teal-500/5 text-slate-300'
+                    ? 'border-neon bg-neon/15 text-neon'
+                    : 'border-neon/10 text-texto-secundario hover:border-neon/50 hover:bg-neon/5'
                 )}
               >
-                <span className="text-xs text-slate-500 mb-0.5">{OUTCOME_LABELS[outcome]}</span>
-                <span className="font-bold text-white text-base">{formatOdds(odds)}</span>
-                <span className="text-xs text-slate-500 truncate w-full">{prob}%</span>
-                <span className="text-xs text-slate-600 truncate w-full mt-0.5" title={teamName}>
+                <span className="mb-0.5 text-xs text-texto-terciario">{OUTCOME_LABELS[outcome]}</span>
+                <span className="font-mono text-base font-bold text-white">{formatOdds(odds)}</span>
+                <span className="w-full truncate text-xs text-texto-terciario">{prob}%</span>
+                <span className="mt-0.5 w-full truncate text-xs text-texto-terciario" title={teamName}>
                   {teamName.length > 12 ? teamName.slice(0, 12) + '…' : teamName}
                 </span>
-                {isPickSelected && <Check className="h-3 w-3 text-teal-400 mt-1" />}
+                {isPickSelected && <Check className="mt-1 h-3 w-3 text-neon" />}
               </button>
             )
           })}
@@ -116,7 +116,7 @@ export function OddsCard({ event, selectedPicks, onAddPick, onRemovePick }: Odds
       {!isSelected && !started && (
         <button
           onClick={() => handlePick(event.best_odds.home !== null ? 'home' : 'away')}
-          className="mt-2 w-full flex items-center justify-center gap-1 text-xs text-slate-500 hover:text-teal-400 transition-colors py-1"
+          className="mt-2 flex w-full items-center justify-center gap-1 py-1 text-xs text-texto-terciario transition-colors hover:text-neon"
         >
           <Plus className="h-3 w-3" /> Añadir a selección
         </button>

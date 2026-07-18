@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, X, ChevronDown, Waves } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Profile } from '@/types/database'
 import type { UserAccess } from '@/lib/access'
@@ -14,39 +14,42 @@ interface HeaderProps {
 }
 
 const NAV_LINKS = [
-  { href: '/dashboard', label: '⚽ Partidos' },
-  { href: '/mundial', label: '🌍 Mundial' },
-  { href: '/ranking', label: '🏆 Ranking' },
-  { href: '/reglas', label: '📋 Reglas' },
-  { href: '/herramientas', label: '🔧 Herramientas' },
+  { href: '/dashboard', label: 'Partidos' },
+  { href: '/mundial', label: 'Mundial' },
+  { href: '/ranking', label: 'Ranking' },
+  { href: '/reglas', label: 'Reglas' },
+  { href: '/herramientas', label: 'Herramientas' },
 ]
 
 const TAGLINES = [
-  'quien pierda paga unas birras',
-  'apuestas ficticias, birras reales',
-  'aquí se viene a perder con estilo',
-  'el último paga la ronda',
-  'birras o gloria, no hay más opciones',
+  'lee la marea antes del pick',
+  'cuotas claras, riesgo controlado',
+  'mercado limpio, decisiones rápidas',
+  'sin dinero real, con ranking real',
+  'predicción social sin ruido',
 ]
+
+const TAGLINE = TAGLINES[0]
 
 export function Header({ profile, access, onSignOut }: HeaderProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
-  const tagline = TAGLINES[Math.floor(Math.abs(Math.sin(Date.now() / 86400000) * TAGLINES.length))]
 
   return (
-    <header className="glass sticky top-0 z-50 border-b border-amarillo/20">
+    <header className="glass sticky top-0 z-50 border-b border-neon/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0 group">
-            <span className="text-2xl group-hover:rotate-12 transition-transform inline-block">🐟</span>
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+            <span className="grid h-9 w-9 place-items-center rounded-md border border-neon/20 bg-neon/10 text-neon transition-colors group-hover:bg-neon group-hover:text-carbon">
+              <Waves className="h-5 w-5" />
+            </span>
             <div className="hidden sm:block">
-              <span className="font-black text-white text-lg tracking-tight">GañanesBets</span>
-              <span className="block text-xs text-neon/70 leading-none -mt-0.5">{tagline}</span>
+              <span className="text-lg font-black tracking-tight text-white">ApuestaClara</span>
+              <span className="block text-xs leading-none text-neon/70">{TAGLINE}</span>
             </div>
-            <span className="sm:hidden font-black text-white text-lg">GañanesBets</span>
+            <span className="text-lg font-black text-white sm:hidden">ApuestaClara</span>
           </Link>
 
           {/* Desktop nav */}
@@ -56,9 +59,9 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 key={href}
                 href={href}
                 className={cn(
-                  'px-3 py-1.5 rounded-md text-sm transition-colors',
+                  'rounded-md px-3 py-1.5 text-sm transition-colors',
                   pathname.startsWith(href)
-                    ? 'text-neon bg-neon/10 font-medium'
+                    ? 'bg-neon/10 font-medium text-neon'
                     : 'text-texto-secundario hover:text-white hover:bg-superficie-hover/60'
                 )}
               >
@@ -89,12 +92,12 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 {accountOpen && (
                   <div className="absolute right-0 top-10 w-44 rounded-xl border border-superficie-hover bg-superficie shadow-2xl py-1 z-50">
                     <Link href="/dashboard" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Dashboard</Link>
-                    <Link href="/mis-picks" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>🎯 Mis picks</Link>
-                    <Link href="/ranking" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>🏆 Ranking</Link>
+                    <Link href="/mis-picks" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Mis picks</Link>
+                    <Link href="/ranking" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Ranking</Link>
                     <Link href="/account" className="block px-4 py-2 text-sm text-texto-secundario hover:text-white hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Mi cuenta</Link>
                     {access?.isAdmin && (<>
-                      <Link href="/admin/resolver" className="block px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>⚙️ Auto-resolver</Link>
-                      <Link href="/admin/debug" className="block px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Admin debug</Link>
+                      <Link href="/admin/resolver" className="block px-4 py-2 text-sm text-ambar hover:text-ambar hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Auto-resolver</Link>
+                      <Link href="/admin/debug" className="block px-4 py-2 text-sm text-ambar hover:text-ambar hover:bg-superficie-hover" onClick={() => setAccountOpen(false)}>Admin debug</Link>
                     </>)}
                     <hr className="border-superficie-hover my-1" />
                     <button onClick={onSignOut} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-superficie-hover">
@@ -108,8 +111,8 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 <Link href="/login?redirect=/dashboard" className="text-sm text-texto-secundario hover:text-white transition-colors px-3 py-1.5">
                   Entrar
                 </Link>
-                <Link href="/register?redirect=/dashboard" className="shine-btn text-sm bg-neon hover:brightness-110 text-white font-black px-3 py-1.5 rounded-md transition-all">
-                  Únete 🐟
+                <Link href="/register?redirect=/dashboard" className="shine-btn rounded-md bg-neon px-3 py-1.5 text-sm font-black text-carbon transition-all hover:brightness-110">
+                  Únete
                 </Link>
               </div>
             )}

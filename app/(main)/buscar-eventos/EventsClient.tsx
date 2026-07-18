@@ -89,15 +89,15 @@ export function EventsClient({ isLoggedIn }: EventsClientProps) {
     <div className="flex flex-col lg:flex-row gap-6">
       {/* Sidebar filtros */}
       <aside className="lg:w-56 shrink-0">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 sticky top-20">
+        <div className="rounded-xl border border-neon/10 bg-superficie/80 p-4 sticky top-20">
           <div className="flex items-center gap-2 mb-4">
-            <Filter className="h-4 w-4 text-teal-400" />
+            <Filter className="h-4 w-4 text-neon" />
             <span className="text-sm font-semibold text-white">Filtros</span>
           </div>
 
           {/* Deportes */}
           <div className="mb-4">
-            <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Deporte / Liga</p>
+            <p className="text-xs text-texto-terciario uppercase tracking-wider mb-2">Deporte / Liga</p>
             <div className="space-y-1.5">
               {FEATURED_SPORTS.map(s => (
                 <label key={s.key} className="flex items-center gap-2 cursor-pointer group">
@@ -105,9 +105,9 @@ export function EventsClient({ isLoggedIn }: EventsClientProps) {
                     type="checkbox"
                     checked={selectedSports.includes(s.key)}
                     onChange={() => toggleSport(s.key)}
-                    className="w-3.5 h-3.5 accent-teal-500"
+                    className="w-3.5 h-3.5 accent-neon"
                   />
-                  <span className="text-xs text-slate-400 group-hover:text-slate-200 transition-colors">
+                  <span className="text-xs text-texto-secundario group-hover:text-white transition-colors">
                     {s.emoji} {s.label}
                   </span>
                 </label>
@@ -120,7 +120,7 @@ export function EventsClient({ isLoggedIn }: EventsClientProps) {
 
           {/* Fecha */}
           <div className="mb-4">
-            <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Fecha</p>
+            <p className="text-xs text-texto-terciario uppercase tracking-wider mb-2">Fecha</p>
             <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-2">
               {DATE_FILTERS.map(f => (
                 <button
@@ -128,8 +128,8 @@ export function EventsClient({ isLoggedIn }: EventsClientProps) {
                   onClick={() => setDateFilter(f.value)}
                   className={`text-xs py-1.5 rounded-md transition-colors ${
                     dateFilter === f.value
-                      ? 'bg-teal-600 text-white'
-                      : 'bg-slate-800 text-slate-400 hover:text-white'
+                      ? 'bg-neon text-carbon'
+                      : 'bg-superficie-hover text-texto-secundario hover:text-white'
                   }`}
                 >
                   {f.label}
@@ -140,14 +140,14 @@ export function EventsClient({ isLoggedIn }: EventsClientProps) {
 
           {/* Cuotas */}
           <div className="mb-4">
-            <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Cuota</p>
+            <p className="text-xs text-texto-terciario uppercase tracking-wider mb-2">Cuota</p>
             <div className="flex gap-2">
               <input
                 type="number"
                 placeholder="Min"
                 value={minOdds}
                 onChange={e => setMinOdds(e.target.value)}
-                className="w-full rounded-md border border-slate-700 bg-slate-800 px-2 py-1.5 text-xs text-white focus:outline-none focus:border-teal-500"
+                className="w-full rounded-md border border-neon/10 bg-superficie-hover px-2 py-1.5 text-xs text-white focus:outline-none focus:border-neon"
                 step="0.1" min="1"
               />
               <input
@@ -155,7 +155,7 @@ export function EventsClient({ isLoggedIn }: EventsClientProps) {
                 placeholder="Max"
                 value={maxOdds}
                 onChange={e => setMaxOdds(e.target.value)}
-                className="w-full rounded-md border border-slate-700 bg-slate-800 px-2 py-1.5 text-xs text-white focus:outline-none focus:border-teal-500"
+                className="w-full rounded-md border border-neon/10 bg-superficie-hover px-2 py-1.5 text-xs text-white focus:outline-none focus:border-neon"
                 step="0.1" min="1"
               />
             </div>
@@ -167,9 +167,9 @@ export function EventsClient({ isLoggedIn }: EventsClientProps) {
               type="checkbox"
               checked={hideStarted}
               onChange={e => setHideStarted(e.target.checked)}
-              className="w-3.5 h-3.5 accent-teal-500"
+              className="w-3.5 h-3.5 accent-neon"
             />
-            <span className="text-xs text-slate-400">Ocultar empezados</span>
+            <span className="text-xs text-texto-secundario">Ocultar empezados</span>
           </label>
         </div>
       </aside>
@@ -178,25 +178,25 @@ export function EventsClient({ isLoggedIn }: EventsClientProps) {
       <div className="flex-1 min-w-0">
         {/* Search */}
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-texto-terciario" />
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar equipo, jugador o liga..."
-            className="w-full rounded-xl border border-slate-700 bg-slate-800/60 pl-9 pr-4 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-teal-500"
+            className="w-full rounded-xl border border-neon/10 bg-superficie-hover/80 pl-9 pr-4 py-2.5 text-white placeholder-texto-terciario text-sm focus:outline-none focus:border-neon"
           />
         </div>
 
         {/* Stats bar */}
         <div className="flex items-center justify-between mb-4">
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-texto-secundario">
             {loading ? 'Cargando...' : `${filtered.length} eventos`}
           </p>
           <button
             onClick={loadEvents}
             disabled={loading}
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-teal-400 transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 text-xs text-texto-terciario hover:text-neon transition-colors disabled:opacity-40"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
             Actualizar

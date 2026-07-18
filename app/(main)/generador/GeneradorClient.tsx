@@ -162,15 +162,15 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
       {/* Config panel */}
       <div className="lg:col-span-1 space-y-4">
         {/* Mode selector */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-          <p className="text-xs text-slate-500 uppercase tracking-wider mb-3">Modo</p>
+        <div className="rounded-xl border border-neon/10 bg-superficie/80 p-4">
+          <p className="text-xs text-texto-terciario uppercase tracking-wider mb-3">Modo</p>
           <div className="grid grid-cols-2 gap-2">
             {(['auto', 'manual'] as const).map(m => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
                 className={`py-2 rounded-lg text-sm font-medium transition-colors ${
-                  mode === m ? 'bg-teal-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+                  mode === m ? 'bg-neon text-carbon' : 'bg-superficie-hover text-texto-secundario hover:text-white'
                 }`}
               >
                 {m === 'auto' ? '⚡ Automático' : '🔧 Manual'}
@@ -180,15 +180,15 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
         </div>
 
         {/* Config */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 space-y-4">
+        <div className="rounded-xl border border-neon/10 bg-superficie/80 p-4 space-y-4">
           <div className="flex items-center gap-2 mb-2">
-            <Settings2 className="h-4 w-4 text-teal-400" />
+            <Settings2 className="h-4 w-4 text-neon" />
             <span className="text-sm font-semibold text-white">Configuración</span>
           </div>
 
           {/* Riesgo */}
           <div>
-            <p className="text-xs text-slate-500 mb-2">Nivel de riesgo</p>
+            <p className="text-xs text-texto-terciario mb-2">Nivel de riesgo</p>
             <div className="grid grid-cols-3 gap-1.5">
               {(['bajo', 'medio', 'alto'] as const).map(r => (
                 <button
@@ -199,7 +199,7 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
                       ? r === 'bajo' ? 'bg-green-600 text-white'
                         : r === 'medio' ? 'bg-yellow-600 text-white'
                         : 'bg-orange-600 text-white'
-                      : 'bg-slate-800 text-slate-400 hover:text-white'
+                      : 'bg-superficie-hover text-texto-secundario hover:text-white'
                   }`}
                 >
                   {r}
@@ -210,36 +210,36 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
 
           {/* Cuota objetivo */}
           <div>
-            <p className="text-xs text-slate-500 mb-1.5">Cuota objetivo</p>
+            <p className="text-xs text-texto-terciario mb-1.5">Cuota objetivo</p>
             <input
               type="number"
               value={targetOdds}
               onChange={e => setTargetOdds(e.target.value)}
               step="0.5" min="1.5" max="50"
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white text-sm focus:outline-none focus:border-teal-500"
+              className="w-full rounded-lg border border-neon/10 bg-superficie-hover px-3 py-2 text-white text-sm focus:outline-none focus:border-neon"
             />
           </div>
 
           {/* Nº picks */}
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <p className="text-xs text-slate-500">Nº de selecciones</p>
-              {!isPremium && <span className="text-xs text-slate-600">máx. {maxPicks}</span>}
+              <p className="text-xs text-texto-terciario">Nº de selecciones</p>
+              {!isPremium && <span className="text-xs text-texto-terciario">máx. {maxPicks}</span>}
             </div>
             <input
               type="range"
               min="2" max={maxPicks}
               value={numPicks}
               onChange={e => setNumPicks(parseInt(e.target.value))}
-              className="w-full accent-teal-500"
+              className="w-full accent-neon"
             />
-            <div className="flex justify-between text-xs text-slate-500 mt-1">
+            <div className="flex justify-between text-xs text-texto-terciario mt-1">
               <span>2</span>
-              <span className="text-teal-400 font-bold">{numPicks}</span>
+              <span className="text-neon font-bold">{numPicks}</span>
               <span>{maxPicks}</span>
             </div>
             {!isPremium && maxPicks < 6 && (
-              <Link href="/premium" className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 mt-1 transition-colors">
+              <Link href="/premium" className="flex items-center gap-1 text-xs text-neon hover:text-ambar mt-1 transition-colors">
                 <Lock className="h-3 w-3" /> Hasta 6 picks con Premium
               </Link>
             )}
@@ -248,8 +248,8 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
           {/* Deportes */}
           <div>
             <div className="flex justify-between items-center mb-2">
-              <p className="text-xs text-slate-500">Deportes / Ligas</p>
-              {!isPremium && <span className="text-xs text-slate-600">máx. 2 (Free)</span>}
+              <p className="text-xs text-texto-terciario">Deportes / Ligas</p>
+              {!isPremium && <span className="text-xs text-texto-terciario">máx. 2 (Free)</span>}
             </div>
             <div className="space-y-1.5">
               {FEATURED_SPORTS.map(s => {
@@ -261,15 +261,15 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
                       checked={selectedSports.includes(s.key)}
                       onChange={() => toggleSport(s.key)}
                       disabled={disabled}
-                      className="w-3.5 h-3.5 accent-teal-500"
+                      className="w-3.5 h-3.5 accent-neon"
                     />
-                    <span className="text-xs text-slate-400">{s.emoji} {s.label}</span>
+                    <span className="text-xs text-texto-secundario">{s.emoji} {s.label}</span>
                   </label>
                 )
               })}
             </div>
             {!isPremium && (
-              <Link href="/premium" className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 mt-2 transition-colors">
+              <Link href="/premium" className="flex items-center gap-1 text-xs text-neon hover:text-ambar mt-2 transition-colors">
                 <Lock className="h-3 w-3" /> Deportes mixtos con Premium
               </Link>
             )}
@@ -278,14 +278,14 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
 
         {/* Generate button */}
         {!isLoggedIn ? (
-          <Link href="/login?redirect=/generador" className="block text-center bg-teal-600 hover:bg-teal-500 text-white font-semibold py-3 rounded-xl transition-colors">
+          <Link href="/login?redirect=/generador" className="block text-center bg-neon hover:brightness-110 text-carbon font-semibold py-3 rounded-xl transition-colors">
             Entrar para generar
           </Link>
         ) : (
           <button
             onClick={handleGenerateClick}
             disabled={loading || selectedSports.length === 0}
-            className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-neon hover:brightness-110 disabled:opacity-60 text-carbon font-semibold py-3 rounded-xl transition-colors"
           >
             <Shuffle className="h-4 w-4" />
             {loading ? 'Cargando eventos...' : 'Generar combinada'}
@@ -311,14 +311,14 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
         {generated && picks.length > 0 && !loading && (
           <>
             {/* Summary */}
-            <div className="rounded-xl border border-teal-500/30 bg-teal-950/30 p-4 mb-4">
+            <div className="rounded-xl border border-neon/30 bg-neon/10 p-4 mb-4">
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
-                  <p className="text-teal-300 font-semibold mb-0.5">Combinada generada</p>
-                  <p className="text-slate-400 text-sm">{picks.length} selecciones · <RiskBadge level={riskLevel} className="inline-flex" /></p>
+                  <p className="text-neon font-semibold mb-0.5">Combinada generada</p>
+                  <p className="text-texto-secundario text-sm">{picks.length} selecciones · <RiskBadge level={riskLevel} className="inline-flex" /></p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-slate-500">Cuota combinada</p>
+                  <p className="text-xs text-texto-terciario">Cuota combinada</p>
                   <p className="text-2xl font-black text-white">{formatOdds(combined)}</p>
                 </div>
               </div>
@@ -335,7 +335,7 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
                   {analyzing ? 'Analizando...' : 'Analizar con IA'}
                 </button>
               ) : (
-                <Link href="/premium" className="flex items-center gap-1.5 text-xs text-teal-400 hover:text-teal-300 mt-2 transition-colors">
+                <Link href="/premium" className="flex items-center gap-1.5 text-xs text-neon hover:text-ambar mt-2 transition-colors">
                   <TrendingUp className="h-3.5 w-3.5" />
                   Analizar con IA — disponible con Premium <ChevronRight className="h-3 w-3" />
                 </Link>
@@ -361,7 +361,7 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
 
             <button
               onClick={handleGenerateClick}
-              className="mt-4 w-full flex items-center justify-center gap-2 border border-slate-700 hover:border-teal-500/40 text-slate-400 hover:text-white text-sm py-2.5 rounded-xl transition-colors"
+              className="mt-4 w-full flex items-center justify-center gap-2 border border-neon/10 hover:border-neon/30 text-texto-secundario hover:text-white text-sm py-2.5 rounded-xl transition-colors"
             >
               <Shuffle className="h-4 w-4" /> Regenerar
             </button>
@@ -378,10 +378,10 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
         )}
 
         {!generated && !loading && (
-          <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-12 text-center">
+          <div className="rounded-xl border border-neon/10 bg-superficie/60 p-12 text-center">
             <TrendingUp className="h-12 w-12 text-slate-700 mx-auto mb-4" />
-            <p className="text-slate-400 font-medium mb-1">Configura y genera tu combinada</p>
-            <p className="text-slate-600 text-sm">Selecciona deportes, riesgo y número de picks, luego pulsa "Generar".</p>
+            <p className="text-texto-secundario font-medium mb-1">Configura y genera tu combinada</p>
+            <p className="text-texto-terciario text-sm">Selecciona deportes, riesgo y número de picks, luego pulsa "Generar".</p>
           </div>
         )}
       </div>

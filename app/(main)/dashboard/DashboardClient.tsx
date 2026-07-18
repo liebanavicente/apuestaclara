@@ -114,17 +114,20 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
   }
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-6">
+    <main className="mx-auto max-w-4xl px-4 py-8">
       {toast && <PickConfirmedToast odds={toast.odds} onClose={() => { setToast(null); router.refresh() }} />}
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
-        <h1 className="text-xl font-black text-white">⚽ Partidos</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <p className="mb-1 text-xs font-bold uppercase text-neon">Market board</p>
+          <h1 className="text-3xl font-black text-white">Partidos</h1>
+        </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <span className="text-2xl font-black text-neon">{totalPoints.toFixed(2)}</span>
+            <span className="font-mono text-2xl font-black text-neon">{totalPoints.toFixed(2)}</span>
             <span className="text-xs text-texto-secundario ml-1">pts</span>
           </div>
-          <Link href="/ranking" className="text-xs bg-superficie-hover hover:bg-superficie-hover text-texto-secundario px-3 py-1.5 rounded-lg transition-colors">🏆 Ranking</Link>
+          <Link href="/ranking" className="rounded-md border border-neon/10 bg-superficie-hover px-3 py-1.5 text-xs text-texto-secundario transition-colors hover:text-neon">Ranking</Link>
         </div>
       </div>
 
@@ -133,7 +136,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
         <div className="flex gap-1.5 overflow-x-auto pb-2 mb-5 scrollbar-none">
           {tabs.map(tab => (
             <button key={tab.key} onClick={() => setActiveLeague(tab.key)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors shrink-0 ${activeLeague === tab.key ? 'bg-neon text-white font-black' : 'bg-superficie-hover text-texto-secundario hover:text-white'}`}>
+              className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeLeague === tab.key ? 'bg-neon text-carbon font-black' : 'border border-neon/10 bg-superficie-hover text-texto-secundario hover:text-white'}`}>
               <span>{tab.emoji}</span><span>{tab.label}</span>
             </button>
           ))}
@@ -148,15 +151,15 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
             En juego — resultado pendiente
           </h2>
           {inProgressPicks.map(p => (
-            <div key={p.id} className="rounded-xl border border-green-500/20 bg-green-500/5 px-4 py-3 flex items-center justify-between gap-3">
+            <div key={p.id} className="flex items-center justify-between gap-3 rounded-lg border border-neon/20 bg-neon/5 px-4 py-3">
               <div className="min-w-0">
                 <p className="text-white font-medium text-sm truncate">{p.description}</p>
                 <p className="text-neon text-xs mt-0.5">
                   → {p.selection === 'Empate' ? 'Empate' : teamShort(p.selection.replace(' gana', ''))} @ {p.odds.toFixed(2)}
                 </p>
               </div>
-              <span className="text-xs text-green-400 font-medium shrink-0 flex items-center gap-1">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="flex shrink-0 items-center gap-1 text-xs font-medium text-neon">
+                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-neon" />
                 En juego
               </span>
             </div>
@@ -166,14 +169,14 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
 
       {filtered.length === 0 ? (
         <div className="text-center py-16 text-texto-secundario">
-          <p className="text-4xl mb-3">😴</p>
+          <p className="mb-3 font-mono text-4xl text-neon">--</p>
           <p className="text-white font-medium">Sin partidos disponibles</p>
         </div>
       ) : (
         <div className="space-y-8">
           {Object.entries(byDay).map(([day, dayEvents]) => (
             <section key={day}>
-              <h2 className="text-xs font-bold text-texto-secundario uppercase tracking-widest mb-3 capitalize">{day}</h2>
+              <h2 className="mb-3 text-xs font-bold uppercase capitalize text-texto-secundario">{day}</h2>
               <div className="space-y-2.5">
           {dayEvents.map(ev => {
             const myPick = myPickMap.get(ev.event_name)
@@ -191,10 +194,10 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
             const matchStarted = new Date(ev.commence_time).getTime() < Date.now()
 
             return (
-              <div key={ev.id} className={`rounded-xl border p-3.5 transition-colors ${
+              <div key={ev.id} className={`rounded-lg border p-4 transition-colors ${
                 myPick ? 'border-neon/30 bg-neon/5' :
                 isStagingThis ? 'border-neon/20 bg-superficie' :
-                'border-superficie-hover bg-superficie/60'
+                'border-neon/10 bg-superficie/70 hover:border-neon/30'
               }`}>
                 {/* Match header */}
                 <div className="flex items-start justify-between gap-2 mb-2.5">
@@ -241,7 +244,7 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
                       <button key={full}
                         onClick={() => !myPick && stagePick(ev, full, odds)}
                         disabled={!!myPick}
-                        className={`rounded-lg border px-2 py-2.5 text-center transition-all ${
+                        className={`rounded-md border px-2 py-2.5 text-center transition-all ${
                           isMyPick ? 'border-neon/60 bg-neon/15 cursor-default' :
                           isStaged ? 'border-neon bg-neon/20 ring-1 ring-neon/40' :
                           myPick ? 'border-superficie-hover bg-superficie opacity-30 cursor-default' :
@@ -267,9 +270,9 @@ export function DashboardClient({ events, sports, totalPoints, myPicks, inProgre
                       {' '}@ <span className="text-neon font-black">{staged.odds.toFixed(2)}</span>
                       <span className="text-texto-terciario ml-1">→ +{staged.odds.toFixed(2)} pts si aciertas</span>
                     </div>
-                    <button onClick={() => setStaged(null)} className="text-xs text-texto-secundario hover:text-white px-3 py-1.5 rounded-lg border border-superficie-hover transition-colors">Cancelar</button>
+                    <button onClick={() => setStaged(null)} className="rounded-md border border-neon/10 px-3 py-1.5 text-xs text-texto-secundario transition-colors hover:text-white">Cancelar</button>
                     <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
-                      className="text-xs bg-neon hover:brightness-110 disabled:opacity-60 text-white font-black px-4 py-1.5 rounded-lg transition-colors">
+                      className="rounded-md bg-neon px-4 py-1.5 text-xs font-black text-carbon transition-colors hover:brightness-110 disabled:opacity-60">
                       {loading === ev.id ? '…' : 'Confirmar ✓'}
                     </button>
                   </div>

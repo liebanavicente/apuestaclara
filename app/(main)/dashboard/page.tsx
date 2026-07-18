@@ -4,7 +4,7 @@ import { getMultipleSportsEvents, FEATURED_SPORTS } from '@/lib/services/odds.se
 import { redirect } from 'next/navigation'
 import { DashboardClient } from './DashboardClient'
 
-export const metadata = { title: 'GañanesBets 🐟' }
+export const metadata = { title: 'ApuestaClara — Partidos' }
 export const revalidate = 0
 
 export default async function DashboardPage() {

@@ -34,23 +34,23 @@ export default async function DebugPage() {
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-2xl font-bold text-white mb-6">Debug Sistema</h1>
 
-      <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Variables de entorno</h2>
-      <div className="rounded-xl border border-slate-700 bg-slate-900 overflow-hidden mb-8">
+      <h2 className="text-sm font-semibold text-texto-secundario uppercase tracking-wider mb-3">Variables de entorno</h2>
+      <div className="rounded-xl border border-neon/10 bg-superficie overflow-hidden mb-8">
         {Object.entries(checks).map(([key, value]) => (
-          <div key={key} className="flex justify-between px-4 py-2.5 border-b border-slate-800 last:border-0">
-            <span className="text-slate-400 text-sm font-mono">{key}</span>
+          <div key={key} className="flex justify-between px-4 py-2.5 border-b border-neon/10 last:border-0">
+            <span className="text-texto-secundario text-sm font-mono">{key}</span>
             <span className={`text-sm font-mono ${value.startsWith('✅') ? 'text-green-400' : 'text-red-400'}`}>{value}</span>
           </div>
         ))}
       </div>
 
-      <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Tablas Supabase</h2>
-      <div className="rounded-xl border border-slate-700 bg-slate-900 overflow-hidden">
+      <h2 className="text-sm font-semibold text-texto-secundario uppercase tracking-wider mb-3">Tablas Supabase</h2>
+      <div className="rounded-xl border border-neon/10 bg-superficie overflow-hidden">
         {tableStatus.map(({ table, count, ok, error }) => (
-          <div key={table} className="flex justify-between items-center px-4 py-2.5 border-b border-slate-800 last:border-0">
-            <span className="text-slate-300 text-sm font-mono">{table}</span>
+          <div key={table} className="flex justify-between items-center px-4 py-2.5 border-b border-neon/10 last:border-0">
+            <span className="text-texto-secundario text-sm font-mono">{table}</span>
             <div className="flex items-center gap-3">
-              <span className="text-slate-500 text-xs">{count} registros</span>
+              <span className="text-texto-terciario text-xs">{count} registros</span>
               <span className={`text-xs font-medium ${ok ? 'text-green-400' : 'text-red-400'}`}>
                 {ok ? '✅ OK' : `❌ ${error}`}
               </span>

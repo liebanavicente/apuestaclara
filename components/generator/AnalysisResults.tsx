@@ -17,15 +17,15 @@ export function AnalysisResults({ analysis }: Props) {
   return (
     <div className="space-y-4 mt-4">
       {/* Global summary */}
-      <div className="rounded-xl border border-teal-500/30 bg-teal-950/30 p-4">
+      <div className="rounded-xl border border-neon/30 bg-neon/10 p-4">
         <div className="flex items-center gap-2 mb-2">
-          <Info className="h-4 w-4 text-teal-400" />
-          <span className="text-sm font-semibold text-teal-300">Análisis global</span>
+          <Info className="h-4 w-4 text-neon" />
+          <span className="text-sm font-semibold text-neon">Análisis global</span>
           <span className={`ml-auto text-xs px-2 py-0.5 rounded-full border ${RISK_STYLE[analysis.risk_level]}`}>
             Riesgo {analysis.risk_level}
           </span>
         </div>
-        <p className="text-sm text-slate-300 leading-relaxed">{analysis.global_risk_summary}</p>
+        <p className="text-sm text-texto-secundario leading-relaxed">{analysis.global_risk_summary}</p>
 
         {analysis.no_data_warning && (
           <p className="text-xs text-yellow-400/80 mt-2 flex items-start gap-1.5">
@@ -36,7 +36,7 @@ export function AnalysisResults({ analysis }: Props) {
 
       {/* Pick by pick */}
       <div className="space-y-2">
-        <p className="text-xs text-slate-500 uppercase tracking-wider">Análisis por selección</p>
+        <p className="text-xs text-texto-terciario uppercase tracking-wider">Análisis por selección</p>
         {analysis.picks_analysis.map((pick, i) => (
           <PickAnalysisCard key={i} pick={pick} index={i} />
         ))}
@@ -58,7 +58,7 @@ export function AnalysisResults({ analysis }: Props) {
               <Icon className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${color}`} />
               <div>
                 <span className={`text-xs font-semibold ${color}`}>{label}: </span>
-                <span className="text-xs text-slate-400">{value}</span>
+                <span className="text-xs text-texto-secundario">{value}</span>
               </div>
             </div>
           ))}
@@ -66,7 +66,7 @@ export function AnalysisResults({ analysis }: Props) {
       )}
 
       {/* Disclaimer */}
-      <p className="text-xs text-slate-600 italic text-center">{analysis.disclaimer}</p>
+      <p className="text-xs text-texto-terciario italic text-center">{analysis.disclaimer}</p>
     </div>
   )
 }

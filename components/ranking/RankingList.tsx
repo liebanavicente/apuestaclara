@@ -7,12 +7,12 @@ import { computeUserRankingStats, type RawPick } from '@/lib/ranking-stats'
 import { UserStatsPanel } from './UserStatsPanel'
 import type { LeaderboardRow } from '@/types/ranking'
 
-const MEDALS = ['🥇', '🥈', '🥉']
+const MEDALS = ['01', '02', '03']
 
 const RANK_STYLES = [
-  'border-ambar/50 bg-ambar/5',
-  'border-superficie-hover bg-superficie/60',
-  'border-[#8a5a2a]/40 bg-superficie/50',
+  'border-ambar/40 bg-ambar/5',
+  'border-neon/20 bg-superficie/70',
+  'border-neon/10 bg-superficie/60',
 ]
 
 interface Props {
@@ -27,12 +27,12 @@ export function RankingList({ players, picksByUser, currentUserId }: Props) {
   if (players.length === 0) {
     return (
       <EmptyState
-        icon={<span className="text-5xl">🐟</span>}
+        icon={<span className="font-mono text-4xl text-neon">--</span>}
         title="Nadie ha resuelto picks todavía"
         description="En cuanto se resuelva el primer pick, aparecerá aquí el ranking."
         action={
           <Link href="/dashboard" className="text-neon text-sm hover:underline">
-            Hacer picks →
+            Hacer picks
           </Link>
         }
       />
@@ -51,7 +51,7 @@ export function RankingList({ players, picksByUser, currentUserId }: Props) {
           <div
             key={p.user_id}
             className={cn(
-              'rounded-2xl border transition-colors',
+              'rounded-lg border transition-colors',
               isOpen ? 'border-neon/50 bg-superficie/70' : (rankStyle ?? 'border-superficie-hover bg-superficie/40'),
               isMe && !isOpen && 'ring-1 ring-neon/30'
             )}
@@ -63,15 +63,15 @@ export function RankingList({ players, picksByUser, currentUserId }: Props) {
               className="flex w-full items-center gap-3 px-4 py-3 text-left"
             >
               <span className={cn(
-                'w-7 shrink-0 text-center text-sm font-black',
-                i === 0 ? 'text-ambar text-lg' : i === 1 ? 'text-texto-secundario' : i === 2 ? 'text-[#c88a4a]' : 'text-texto-terciario'
+                'w-8 shrink-0 text-center font-mono text-xs font-black',
+                i === 0 ? 'text-ambar' : i === 1 ? 'text-neon/80' : i === 2 ? 'text-neon/60' : 'text-texto-terciario'
               )}>
                 {MEDALS[i] ?? i + 1}
               </span>
 
               <div className={cn(
-                'flex shrink-0 items-center justify-center rounded-full font-black text-white',
-                i === 0 ? 'h-10 w-10 bg-ambar text-[#0B1E3F] text-sm' : 'h-8 w-8 bg-superficie-hover text-xs'
+                'flex shrink-0 items-center justify-center rounded-md font-black text-white',
+                i === 0 ? 'h-10 w-10 bg-ambar text-carbon text-sm' : 'h-8 w-8 bg-superficie-hover text-xs'
               )}>
                 {p.username?.charAt(0).toUpperCase() ?? '?'}
               </div>

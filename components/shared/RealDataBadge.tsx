@@ -4,11 +4,11 @@ export function RealDataBadge({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium bg-teal-500/15 text-teal-400 border border-teal-500/25',
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium bg-neon/10 text-neon border border-neon/25',
         className
       )}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+      <span className="w-1.5 h-1.5 rounded-full bg-neon animate-pulse" />
       Datos reales
     </span>
   )

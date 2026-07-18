@@ -34,10 +34,10 @@ function RippleButton({
       aria-label={`Elegir ${outcome.team}, cuota ${outcome.odds.toFixed(2)}`}
       title={`+${outcome.odds.toFixed(2)} pts si aciertas`}
       className={cn(
-        'group relative flex flex-col items-center overflow-hidden rounded-lg border px-2 py-2.5 text-center transition-all',
+        'group relative flex flex-col items-center overflow-hidden rounded-md border px-2 py-2.5 text-center transition-all',
         selected
-          ? 'border-neon bg-neon font-bold text-white'
-          : 'border-[#1B2E54] bg-[#1B2E54] text-[#FFFFFF] hover:border-neon hover:bg-neon/20 hover:text-neon'
+          ? 'border-neon bg-neon font-bold text-carbon'
+          : 'border-neon/10 bg-superficie-hover/70 text-[#FFFFFF] hover:border-neon/60 hover:bg-neon/10 hover:text-neon'
       )}
     >
       {ripples.map(id => (
@@ -68,8 +68,8 @@ function MatchCard({ event, delay }: { event: NormalizedEvent; delay: number }) 
 
   return (
     <Reveal delay={delay}>
-      <div className="group rounded-2xl border border-[#1B2E54] bg-[#10203F] p-6 transition-all hover:-translate-y-1 hover:border-neon hover:shadow-[0_8px_30px_rgba(198,11,30,0.15)]">
-        <span className="inline-block rounded-full bg-neon/15 px-3 py-1 text-[11px] font-medium text-neon">
+      <div className="group rounded-lg border border-neon/10 bg-superficie/80 p-6 transition-all hover:-translate-y-1 hover:border-neon/50 hover:shadow-[0_8px_30px_rgba(63,245,211,0.1)]">
+        <span className="inline-block rounded-full bg-neon/10 px-3 py-1 text-[11px] font-medium uppercase text-neon">
           {event.league}
         </span>
 
@@ -77,7 +77,7 @@ function MatchCard({ event, delay }: { event: NormalizedEvent; delay: number }) 
           <div className="flex-1">
             <p className="text-sm font-semibold text-[#FFFFFF]">{event.home_team}</p>
           </div>
-          <span className="px-2 text-[13px] tracking-[4px] text-texto-secundario">VS</span>
+          <span className="px-2 text-[13px] text-texto-secundario">VS</span>
           <div className="flex-1">
             <p className="text-sm font-semibold text-[#FFFFFF]">{event.away_team}</p>
           </div>
@@ -95,8 +95,8 @@ function MatchCard({ event, delay }: { event: NormalizedEvent; delay: number }) 
         </div>
 
         <div className="mt-4 flex items-center justify-between text-[13px] text-texto-secundario">
-          <span>⏰ {formatDate(event.commence_time)}</span>
-          <span className={started ? 'text-error' : 'text-neon'}>{started ? '🔴 En vivo' : '🟢 Abierto'}</span>
+          <span>{formatDate(event.commence_time)}</span>
+          <span className={started ? 'text-error' : 'text-neon'}>{started ? 'En vivo' : 'Abierto'}</span>
         </div>
       </div>
     </Reveal>
@@ -109,21 +109,21 @@ export function LiveMatchesDemo({ matches }: { matches: NormalizedEvent[] }) {
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 flex items-center justify-between">
           <h2 className="font-display text-4xl tracking-wide text-[#FFFFFF] sm:text-6xl">
-            🔥 Próximos Partidos
+            Próximos mercados
           </h2>
           <Link href="/dashboard" className="text-sm text-texto-secundario transition-colors hover:text-neon">
-            Ver todos →
+            Ver todos
           </Link>
         </div>
 
         {matches.length === 0 ? (
           <EmptyState
-            icon={<span className="text-5xl">🐟💤</span>}
+            icon={<span className="font-mono text-4xl text-neon">--</span>}
             title="No hay partidos ahora"
-            description="Los Gañanes están descansando... vuelve más tarde o mira el calendario completo."
+            description="El mercado está en pausa. Vuelve más tarde o mira el calendario completo."
             action={
               <Link href="/dashboard" className="text-neon hover:underline text-sm">
-                Ver calendario →
+                Ver calendario
               </Link>
             }
           />
