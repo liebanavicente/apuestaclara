@@ -4,6 +4,12 @@ import { hasSupabaseAdminConfig } from '@/lib/supabase/config'
 import { supabaseAdminUnavailableResponse } from '@/lib/supabase/unavailable'
 import { FEATURED_SPORTS, getCompletedMatches, getMatchResult } from '@/lib/services/odds.service'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+
 function getMadridHour(date = new Date()) {
   return new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Europe/Madrid',
@@ -12,31 +18,50 @@ function getMadridHour(date = new Date()) {
   }).format(date)
 }
 
+function json(body: unknown, init?: ResponseInit) {
+  return NextResponse.json(body, {
+    ...init,
+    headers: corsHeaders,
+  })
+}
+
 async function runAutoResolve(req: NextRequest, options: { enforceMadridTwoAm?: boolean } = {}) {
   if (!hasSupabaseAdminConfig()) return supabaseAdminUnavailableResponse()
 
-  // Auth: Vercel cron secret OR admin session
+  const admin = createAdminClient()
+
+  // Auth: Vercel cron secret, Supabase bearer token from Framer, or Next session cookie.
   const authHeader = req.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET
 
   const isVercelCron = cronSecret && authHeader === `Bearer ${cronSecret}`
 
   if (!isVercelCron) {
-    // Check if request comes from admin user
-    const { createClient } = await import('@/lib/supabase/server')
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    let userId: string | null = null
 
-    const admin = createAdminClient()
-    const { data: profile } = await admin.from('profiles').select('role').eq('user_id', user.id).single()
-    if (profile?.role !== 'admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice('Bearer '.length) : null
+    if (bearerToken) {
+      const { data } = await admin.auth.getUser(bearerToken)
+      userId = data.user?.id ?? null
+    }
+
+    if (!userId) {
+      const { createClient } = await import('@/lib/supabase/server')
+      const supabase = await createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      userId = user?.id ?? null
+    }
+
+    if (!userId) return json({ error: 'Unauthorized' }, { status: 401 })
+
+    const { data: profile } = await admin.from('profiles').select('role').eq('user_id', userId).single()
+    if (profile?.role !== 'admin') return json({ error: 'Forbidden' }, { status: 403 })
   }
 
   if (options.enforceMadridTwoAm) {
     const madridHour = getMadridHour()
     if (madridHour !== '02') {
-      return NextResponse.json({
+      return json({
         ok: true,
         skipped: true,
         reason: 'outside_madrid_2am',
@@ -45,7 +70,6 @@ async function runAutoResolve(req: NextRequest, options: { enforceMadridTwoAm?: 
     }
   }
 
-  const admin = createAdminClient()
   const sportKeys = FEATURED_SPORTS.map(s => s.key)
 
   let totalResolved = 0
@@ -110,7 +134,11 @@ async function runAutoResolve(req: NextRequest, options: { enforceMadridTwoAm?: 
     }
   }
 
-  return NextResponse.json({ ok: true, totalResolved, totalFailed, log })
+  return json({ ok: true, totalResolved, totalFailed, log })
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: corsHeaders })
 }
 
 // Vercel cron calls GET
