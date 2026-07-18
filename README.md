@@ -96,7 +96,7 @@ Si falla: ir a `/admin/debug-auth` → "Reparar mi perfil".
 
 ## Auto-resolve diario
 
-Vercel ejecuta `/api/admin/auto-resolve` cada día a las 00:00 UTC, que equivale a las 02:00 en Madrid durante horario de verano. Configura en Vercel `THE_ODDS_API_KEY`, `CRON_SECRET` y las variables de Supabase para que pueda resolver picks pendientes automáticamente.
+Vercel ejecuta `/api/admin/auto-resolve` a las 00:00 y 01:00 UTC. El endpoint solo resuelve cuando en `Europe/Madrid` son las 02:00, así que mantiene la hora local correcta tanto en horario de verano como de invierno. Configura en Vercel `THE_ODDS_API_KEY`, `CRON_SECRET` y las variables de Supabase para que pueda resolver picks pendientes automáticamente.
 
 ## Fases
 

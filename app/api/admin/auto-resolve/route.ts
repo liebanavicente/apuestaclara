@@ -4,7 +4,15 @@ import { hasSupabaseAdminConfig } from '@/lib/supabase/config'
 import { supabaseAdminUnavailableResponse } from '@/lib/supabase/unavailable'
 import { FEATURED_SPORTS, getCompletedMatches, getMatchResult } from '@/lib/services/odds.service'
 
-async function runAutoResolve(req: NextRequest) {
+function getMadridHour(date = new Date()) {
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Madrid',
+    hour: '2-digit',
+    hour12: false,
+  }).format(date)
+}
+
+async function runAutoResolve(req: NextRequest, options: { enforceMadridTwoAm?: boolean } = {}) {
   if (!hasSupabaseAdminConfig()) return supabaseAdminUnavailableResponse()
 
   // Auth: Vercel cron secret OR admin session
@@ -23,6 +31,18 @@ async function runAutoResolve(req: NextRequest) {
     const admin = createAdminClient()
     const { data: profile } = await admin.from('profiles').select('role').eq('user_id', user.id).single()
     if (profile?.role !== 'admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  if (options.enforceMadridTwoAm) {
+    const madridHour = getMadridHour()
+    if (madridHour !== '02') {
+      return NextResponse.json({
+        ok: true,
+        skipped: true,
+        reason: 'outside_madrid_2am',
+        madridHour,
+      })
+    }
   }
 
   const admin = createAdminClient()
@@ -81,7 +101,7 @@ async function runAutoResolve(req: NextRequest) {
 
 // Vercel cron calls GET
 export async function GET(req: NextRequest) {
-  return runAutoResolve(req)
+  return runAutoResolve(req, { enforceMadridTwoAm: true })
 }
 
 // Manual admin trigger calls POST
