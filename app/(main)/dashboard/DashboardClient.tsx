@@ -182,7 +182,7 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks,
               return (
                 <div
                   key={ev.id}
-                  className={`rounded-3xl p-4 anim-slide-up ${isStagingThis ? 'gb-card-pick' : 'gb-card'}`}
+                  className={`gb-match rounded-3xl p-4 anim-slide-up ${isStagingThis ? 'gb-card-pick' : 'gb-card'}`}
                 >
                   <div className="flex items-center justify-between gap-2 text-xs text-ink-3 mb-1.5">
                     <span className="truncate">{ev.league}</span>
@@ -269,7 +269,7 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks,
                   return (
                     <div
                       key={ev.id}
-                      className={`rounded-3xl p-4 sm:p-5 anim-slide-up ${cardClass}`}
+                      className={`gb-match rounded-3xl p-4 sm:p-5 anim-slide-up ${cardClass}`}
                       style={{ animationDelay: `${idx * 30}ms` }}
                     >
                       <div className="flex items-start justify-between gap-3 mb-4">

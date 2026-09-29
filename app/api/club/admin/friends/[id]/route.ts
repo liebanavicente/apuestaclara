@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { deleteFriend, updateFriend } from '@/lib/services/club.service'
+import { clearPinFailures, deleteFriend, updateFriend } from '@/lib/services/club.service'
 import { getAdminFriend } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
@@ -29,6 +29,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   try {
     const friend = await updateFriend(id, { name, avatarEmoji, pin: removePin ? null : pin })
     if (!friend) return NextResponse.json({ error: 'Amigo no encontrado' }, { status: 404 })
+    if (removePin || pin?.trim()) await clearPinFailures(id) // new PIN also lifts a brute-force lock
     return NextResponse.json({ id: friend.id, name: friend.name, avatarEmoji: friend.avatarEmoji, hasPin: !!friend.pin })
   } catch (err) {
     return NextResponse.json({ error: err instanceof Error ? err.message : 'Error al actualizar' }, { status: 400 })

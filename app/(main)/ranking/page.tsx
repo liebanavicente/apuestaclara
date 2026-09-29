@@ -70,7 +70,7 @@ export default async function RankingPage() {
 
             return (
               <details key={p.id} className={`group ${isMe ? 'bg-amber-500/[0.06]' : ''}`}>
-                <summary className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3.5 cursor-pointer list-none select-none hover:bg-black/[0.025] transition-colors">
+                <summary className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3.5 cursor-pointer list-none select-none hover:bg-emerald-500/[0.06] transition-colors">
                   <span
                     className={`w-6 text-center text-sm font-semibold tabular-nums shrink-0 ${
                       i === 0 ? 'text-amber-600' : isLast ? 'text-rose-600' : 'text-ink-3'

@@ -219,7 +219,7 @@ export function FriendSelectorModal({ isOpen, onClose, currentFriendId }: Props)
                     <button
                       key={f.id}
                       onClick={() => handleSelectFriend(f)}
-                      className="w-full flex items-center gap-3 px-3.5 py-2.5 text-left hover:bg-black/[0.03] active:bg-black/[0.05] transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-2.5 text-left hover:bg-emerald-500/[0.07] active:bg-emerald-500/[0.12] transition-colors"
                     >
                       <span className="w-10 h-10 rounded-full flex items-center justify-center text-xl bg-black/[0.04] shrink-0">
                         {f.avatarEmoji}

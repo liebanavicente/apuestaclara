@@ -216,6 +216,53 @@ export async function deleteFriend(id: string): Promise<boolean> {
   return true
 }
 
+// --- PIN brute-force protection ---
+
+const PIN_MAX_FAILURES = 5
+const PIN_LOCK_SECONDS = 15 * 60
+const localPinFailures = new Map<string, { count: number; expiresAt: number }>()
+
+function pinKey(friendId: string) {
+  return `gb:pinfail:${friendId}`
+}
+
+// Seconds until the profile unlocks, or 0 if it can be tried.
+export async function getPinLockSeconds(friendId: string): Promise<number> {
+  const redis = getRedisClient()
+  if (redis) {
+    const count = Number((await redis.get(pinKey(friendId))) ?? 0)
+    if (count < PIN_MAX_FAILURES) return 0
+    return Math.max(1, await redis.ttl(pinKey(friendId)))
+  }
+  const entry = localPinFailures.get(friendId)
+  if (!entry || entry.expiresAt < Date.now() || entry.count < PIN_MAX_FAILURES) return 0
+  return Math.ceil((entry.expiresAt - Date.now()) / 1000)
+}
+
+// Records a failed attempt; returns attempts left before the lock kicks in.
+export async function registerPinFailure(friendId: string): Promise<number> {
+  const redis = getRedisClient()
+  let count: number
+  if (redis) {
+    count = await redis.incr(pinKey(friendId))
+    if (count === 1 || count === PIN_MAX_FAILURES) await redis.expire(pinKey(friendId), PIN_LOCK_SECONDS)
+  } else {
+    const now = Date.now()
+    const entry = localPinFailures.get(friendId)
+    const fresh = !entry || entry.expiresAt < now
+    count = fresh ? 1 : entry.count + 1
+    const expiresAt = fresh || count === PIN_MAX_FAILURES ? now + PIN_LOCK_SECONDS * 1000 : entry.expiresAt
+    localPinFailures.set(friendId, { count, expiresAt })
+  }
+  return Math.max(0, PIN_MAX_FAILURES - count)
+}
+
+export async function clearPinFailures(friendId: string): Promise<void> {
+  const redis = getRedisClient()
+  if (redis) await redis.del(pinKey(friendId))
+  else localPinFailures.delete(friendId)
+}
+
 export interface FriendUpdate {
   name?: string
   avatarEmoji?: string

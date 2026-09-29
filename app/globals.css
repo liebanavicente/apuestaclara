@@ -13,8 +13,10 @@
   --gb-fill: rgba(118, 118, 128, 0.12);
   --gb-fill-hover: rgba(118, 118, 128, 0.18);
 
-  --gb-accent: #f59e0b;
+  --gb-accent: #f59e0b;      /* primary: brand amber */
   --gb-accent-ink: #b45309;
+  --gb-win: #10b981;         /* secondary: win green */
+  --gb-win-ink: #047857;
 
   --gb-glass: rgba(255, 255, 255, 0.62);
   --gb-glass-strong: rgba(255, 255, 255, 0.78);
@@ -40,6 +42,8 @@
   --color-ink-2: var(--gb-ink-2);
   --color-ink-3: var(--gb-ink-3);
   --color-canvas: var(--gb-bg);
+  --color-win: var(--gb-win);
+  --color-win-ink: var(--gb-win-ink);
 }
 
 * {
@@ -127,12 +131,39 @@ body {
       border-color 0.25s var(--gb-ease), transform 0.25s var(--gb-ease);
   }
   .gb-card-hover:hover {
-    background: rgba(255, 255, 255, 0.78);
+    background: linear-gradient(180deg, rgba(236, 253, 245, 0.8), rgba(255, 255, 255, 0.72));
+    border-color: rgba(16, 185, 129, 0.3);
     box-shadow:
       0 0 0 0.5px rgba(0, 0, 0, 0.06),
       0 2px 4px rgba(0, 0, 0, 0.04),
-      0 18px 40px -16px rgba(0, 0, 0, 0.16),
+      0 18px 40px -16px rgba(5, 150, 105, 0.28),
       inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  /* Match cards: light up in win-green on hover (secondary colour) */
+  .gb-match {
+    transition: background-color 0.3s var(--gb-ease), box-shadow 0.3s var(--gb-ease),
+      border-color 0.3s var(--gb-ease), transform 0.3s var(--gb-ease);
+  }
+  @media (hover: hover) {
+    .gb-match.gb-card:hover {
+      background: linear-gradient(180deg, rgba(236, 253, 245, 0.82), rgba(255, 255, 255, 0.72));
+      border-color: rgba(16, 185, 129, 0.35);
+      box-shadow:
+        0 0 0 0.5px rgba(16, 185, 129, 0.18),
+        0 2px 6px rgba(0, 0, 0, 0.04),
+        0 18px 40px -16px rgba(5, 150, 105, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transform: translateY(-1px);
+    }
+    .gb-match:not(.gb-card):hover {
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), 0 18px 40px -16px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transform: translateY(-1px);
+    }
+  }
+  .gb-match.gb-card:focus-within {
+    border-color: rgba(16, 185, 129, 0.35);
   }
 
   .gb-glass-strong {
@@ -308,7 +339,7 @@ body {
   }
   .gb-btn-odds:hover:not(:disabled) {
     background: #fff;
-    box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.45), 0 6px 16px -6px rgba(217, 119, 6, 0.35);
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.45), 0 6px 16px -6px rgba(5, 150, 105, 0.35);
   }
   .gb-btn-odds:active:not(:disabled) { transform: scale(0.97); }
   .gb-btn-odds-selected {
@@ -348,6 +379,9 @@ body {
 .anim-fade-in  { animation: fadeIn 0.35s ease both; }
 .anim-scale-in { animation: scaleIn 0.35s var(--gb-ease) both; }
 .anim-float    { animation: float 3.5s ease-in-out infinite; }
+
+/* Match cards: the entry animation must not pin transform, or the hover lift is ignored */
+.gb-match.anim-slide-up { animation-fill-mode: backwards; }
 
 .stagger > *:nth-child(1) { animation-delay: 0ms; }
 .stagger > *:nth-child(2) { animation-delay: 50ms; }
