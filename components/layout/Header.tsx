@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { Menu, X, UserCheck } from 'lucide-react'
+import { Menu, X, UserCheck, ChevronDown, Trophy, Calendar, BookOpen, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Friend } from '@/lib/services/club.service'
 
@@ -15,118 +15,112 @@ interface HeaderProps {
 }
 
 const NAV_LINKS = [
-  { href: '/dashboard', label: 'Partidos', icon: '⚽' },
-  { href: '/ranking', label: 'Ranking', icon: '🏆' },
-  { href: '/sim', label: 'Simulador', icon: '🎲' },
-  { href: '/reglas', label: 'Reglas', icon: '📋' },
-  { href: '/herramientas', label: 'Herramientas', icon: '🔧' },
-]
-
-const TAGLINES = [
-  'quien pierda paga unas birras',
-  'apuestas ficticias, birras reales',
-  'aquí se viene a perder con estilo',
-  'el último paga la ronda',
-  'birras o gloria, no hay más opciones',
+  { href: '/dashboard', label: 'Partidos', icon: Calendar },
+  { href: '/ranking', label: 'Ranking', icon: Trophy },
+  { href: '/reglas', label: 'Reglas', icon: BookOpen },
 ]
 
 export function Header({ friend, onSignOut, onOpenSelector }: HeaderProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
-  const tagline = TAGLINES[Math.floor(Math.abs(Math.sin(Date.now() / 86400000) * TAGLINES.length))]
 
   return (
-    <header className="sticky top-0 z-50 bg-[#07080F]/75 backdrop-blur-xl border-b border-white/[0.07]"
-      style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.05)' }}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 bg-white/75 backdrop-blur-2xl border-b border-slate-200/60 shadow-[0_2px_12px_rgba(15,23,42,0.02)] transition-all">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between gap-4">
 
-          {/* Logo */}
+          {/* Logo — Apple clean typography */}
           <Link href="/dashboard" className="flex items-center gap-2.5 shrink-0 group">
-            <span className="text-2xl group-hover:rotate-12 transition-transform inline-block">🐟</span>
-            <div className="hidden sm:block">
-              <span className="font-black text-white text-[15px] tracking-tight">GañanesBets</span>
-              <span className="block text-[9px] text-white/30 leading-none mt-0.5">{tagline}</span>
+            <div className="w-9 h-9 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-xl shadow-xs group-hover:scale-105 transition-transform">
+              🐟
             </div>
-            <span className="sm:hidden font-black text-white text-[15px]">GañanesBets</span>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-slate-900 text-[15px] tracking-tight">GañanesBets</span>
+                <span className="hidden sm:inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60">
+                  Club
+                </span>
+              </div>
+              <span className="hidden sm:block text-[11px] text-slate-400 font-medium tracking-tight">
+                LaLiga & Champions League
+              </span>
+            </div>
           </Link>
 
-          {/* Desktop nav — glass pill */}
-          <nav className="hidden lg:flex items-center rounded-full px-1.5 py-1.5 gap-0.5"
-            style={{ background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.10)' }}>
-            {NAV_LINKS.map(({ href, label, icon }) => {
+          {/* Desktop nav — Apple segmented frosted pill */}
+          <nav className="hidden md:flex items-center rounded-full p-1 bg-slate-100/80 border border-slate-200/70 shadow-inner">
+            {NAV_LINKS.map(({ href, label, icon: Icon }) => {
               const active = pathname.startsWith(href)
               return (
                 <Link
                   key={href}
                   href={href}
                   className={cn(
-                    'px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all',
+                    'flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
                     active
-                      ? 'text-white'
-                      : 'text-white/40 hover:text-white/75'
+                      ? 'bg-white text-slate-900 shadow-[0_2px_8px_rgba(15,23,42,0.08)] border border-slate-200/80'
+                      : 'text-slate-500 hover:text-slate-900'
                   )}
-                  style={active ? {
-                    background: 'rgba(255,255,255,0.13)',
-                    border: '1px solid rgba(255,255,255,0.16)',
-                  } : {}}
                 >
-                  <span className="mr-1">{icon}</span>{label}
+                  <Icon className={cn('w-3.5 h-3.5', active ? 'text-amber-500' : 'text-slate-400')} />
+                  <span>{label}</span>
                 </Link>
               )
             })}
           </nav>
 
-          {/* Right side */}
+          {/* Right side — Friend Profile or Login */}
           <div className="flex items-center gap-2">
             {friend ? (
               <div className="relative">
                 <button
                   onClick={() => setAccountOpen(!accountOpen)}
-                  className="flex items-center gap-2 transition-all px-3 py-1.5 rounded-2xl hover:bg-white/[0.08]"
-                  style={{
-                    background: 'rgba(234,179,8,0.08)',
-                    border: '1px solid rgba(234,179,8,0.22)',
-                  }}
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 hover:bg-white border border-slate-200/90 shadow-xs hover:shadow-sm transition-all"
                 >
-                  <span className="text-lg">{friend.avatarEmoji}</span>
-                  <span className="font-bold text-sm text-white">{friend.name}</span>
-                  <span className="text-white/25 text-xs">▾</span>
+                  <span className="text-lg leading-none">{friend.avatarEmoji}</span>
+                  <span className="font-bold text-xs text-slate-800">{friend.name}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </button>
 
                 {accountOpen && (
-                  <div className="absolute right-0 top-12 w-52 rounded-2xl py-2 z-50 shadow-2xl"
-                    style={{ background:'rgba(15,23,42,0.98)', border:'1px solid rgba(255,255,255,0.12)', backdropFilter:'blur(20px)' }}>
-                    <div className="px-4 py-2 border-b border-white/[0.08]">
-                      <p className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Conectado como</p>
-                      <p className="text-white font-black text-sm truncate flex items-center gap-1.5 mt-0.5">
+                  <div className="absolute right-0 top-11 w-56 rounded-2xl p-1.5 z-50 bg-white/95 backdrop-blur-2xl border border-slate-200/90 shadow-2xl anim-slide-up">
+                    <div className="px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 mb-1">
+                      <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Perfil activo</p>
+                      <p className="text-slate-900 font-extrabold text-sm truncate flex items-center gap-1.5 mt-0.5">
                         <span>{friend.avatarEmoji}</span> {friend.name}
                       </p>
                     </div>
 
-                    <div className="py-1">
-                      <Link href="/dashboard"
-                        className="block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] transition-colors"
-                        onClick={() => setAccountOpen(false)}>
-                        ⚽ Hacer picks
+                    <div className="space-y-0.5">
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100/70 rounded-xl transition-colors"
+                        onClick={() => setAccountOpen(false)}
+                      >
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" /> Partidos y mis picks
                       </Link>
-                      <Link href="/ranking"
-                        className="block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] transition-colors"
-                        onClick={() => setAccountOpen(false)}>
-                        🏆 Ver Ranking
+                      <Link
+                        href="/ranking"
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100/70 rounded-xl transition-colors"
+                        onClick={() => setAccountOpen(false)}
+                      >
+                        <Trophy className="w-3.5 h-3.5 text-amber-500" /> Ver Ranking
                       </Link>
                       <button
                         onClick={() => { setAccountOpen(false); onOpenSelector?.() }}
-                        className="w-full text-left px-4 py-2 text-sm text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/[0.08] transition-colors flex items-center gap-1.5 font-medium"
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-amber-700 hover:bg-amber-50/80 rounded-xl transition-colors text-left"
                       >
-                        <UserCheck className="w-3.5 h-3.5" /> Cambiar de amigo
+                        <UserCheck className="w-3.5 h-3.5 text-amber-600" /> Cambiar de amigo
                       </button>
                     </div>
 
-                    <div className="my-1 border-t border-white/[0.08]" />
-                    <button onClick={onSignOut} className="w-full text-left px-4 py-2 text-sm text-white/40 hover:text-red-400 hover:bg-white/[0.04] transition-colors">
-                      Cerrar sesión 👋
+                    <div className="my-1 border-t border-slate-100" />
+                    <button
+                      onClick={() => { setAccountOpen(false); onSignOut?.() }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50/70 rounded-xl transition-colors text-left"
+                    >
+                      <LogOut className="w-3.5 h-3.5 text-red-500" /> Cerrar sesión
                     </button>
                   </div>
                 )}
@@ -134,16 +128,17 @@ export function Header({ friend, onSignOut, onOpenSelector }: HeaderProps) {
             ) : (
               <button
                 onClick={onOpenSelector}
-                className="flex items-center gap-2 text-sm font-black px-4 py-2 rounded-full transition-all text-[#07080F]"
-                style={{ background:'linear-gradient(135deg,#EAB308,#F59E0B)', boxShadow:'0 4px 16px rgba(234,179,8,0.30)' }}>
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md shadow-slate-900/10 hover:shadow-lg transition-all active:scale-95"
+              >
                 <span>🐟</span> ¿Quién eres? / Entrar
               </button>
             )}
 
             {/* Mobile burger */}
             <button
-              className="lg:hidden p-1.5 text-white/50 hover:text-white hover:bg-white/[0.07] rounded-lg transition-colors ml-1"
+              className="md:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Abrir menú"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -151,47 +146,29 @@ export function Header({ friend, onSignOut, onOpenSelector }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-white/[0.07]"
-          style={{ background:'rgba(7,8,15,0.95)', backdropFilter:'blur(20px)' }}>
-          <nav className="px-4 py-3 space-y-1">
-            {NAV_LINKS.map(({ href, label, icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className={cn(
-                  'flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors',
-                  pathname.startsWith(href)
-                    ? 'bg-white/[0.10] text-white border border-white/[0.12]'
-                    : 'text-white/50 hover:text-white hover:bg-white/[0.06]'
-                )}
-                onClick={() => setMobileOpen(false)}
-              >
-                <span>{icon}</span>{label}
-              </Link>
-            ))}
-
-            <div className="pt-2 border-t border-white/[0.08]">
-              {friend ? (
-                <button
-                  onClick={() => { setMobileOpen(false); onOpenSelector?.() }}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-yellow-400 bg-yellow-400/10"
+        <div className="md:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl p-4 space-y-2 anim-slide-up">
+          <nav className="space-y-1">
+            {NAV_LINKS.map(({ href, label, icon: Icon }) => {
+              const active = pathname.startsWith(href)
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className={cn(
+                    'flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all',
+                    active
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'text-slate-600 hover:bg-slate-100 text-slate-900'
+                  )}
                 >
-                  <span className="flex items-center gap-2">
-                    <span>{friend.avatarEmoji}</span> {friend.name}
-                  </span>
-                  <span className="text-xs text-white/40">Cambiar</span>
-                </button>
-              ) : (
-                <button
-                  onClick={() => { setMobileOpen(false); onOpenSelector?.() }}
-                  className="w-full py-2.5 rounded-xl text-sm font-black text-slate-950 bg-yellow-500 text-center"
-                >
-                  🐟 ¿Quién eres? / Entrar
-                </button>
-              )}
-            </div>
+                  <Icon className="w-4 h-4" />
+                  <span>{label}</span>
+                </Link>
+              )
+            })}
           </nav>
         </div>
       )}

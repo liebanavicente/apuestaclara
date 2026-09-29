@@ -8,6 +8,7 @@ import { PickConfirmedToast, shouldShowPickWarning } from '@/components/picks/Pi
 import { QuickAI } from '@/components/picks/QuickAI'
 import { FriendSelectorModal } from '@/components/club/FriendSelectorModal'
 import type { Friend } from '@/lib/services/club.service'
+import { Trophy, Calendar, Sparkles, Trash2, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
 
 interface MyPick {
   id: string
@@ -96,43 +97,60 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks,
   }
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-8">
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
       {toast && <PickConfirmedToast odds={toast.odds} onClose={() => { setToast(null); router.refresh() }} />}
 
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8 anim-fade-in">
+      {/* Header — Apple / Google minimalist style */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 anim-fade-in">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight">⚽ Partidos</h1>
-          <p className="text-white/35 text-sm mt-0.5">LaLiga y Champions League · picks activos</p>
-        </div>
-        <div className="flex items-center gap-2.5">
-          <div className="rounded-2xl px-4 py-2 text-right anim-glow-pulse"
-            style={{ background:'rgba(234,179,8,0.10)', border:'1px solid rgba(234,179,8,0.28)' }}>
-            <span className="text-xl font-black text-yellow-400">{totalPoints.toFixed(2)}</span>
-            <span className="text-xs text-yellow-400/50 ml-1.5">pts</span>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Partidos</h1>
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80">
+              LaLiga & UCL
+            </span>
           </div>
-          <Link href="/ranking"
-            className="text-xs text-white/60 hover:text-white font-semibold px-3 py-2 rounded-xl transition-all hover:bg-white/[0.07]"
-            style={{ border:'1px solid rgba(255,255,255,0.10)' }}>
-            🏆 Ranking
+          <p className="text-slate-500 text-sm mt-1">
+            Pronostica gratis con cuotas reales. Los puntos acumulados definen el ranking.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {/* Points Pill */}
+          <div className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-white/80 backdrop-blur-xl border border-slate-200/80 shadow-xs">
+            <div className="text-right">
+              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider block leading-none">Mis Puntos</span>
+              <span className="text-lg font-black text-amber-600">{totalPoints.toFixed(2)}</span>
+            </div>
+            <div className="w-8 h-8 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-sm font-bold text-amber-600">
+              🏆
+            </div>
+          </div>
+
+          <Link
+            href="/ranking"
+            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-white/80 hover:bg-white border border-slate-200/80 text-xs font-bold text-slate-700 hover:text-slate-900 shadow-xs transition-all"
+          >
+            <Trophy className="w-3.5 h-3.5 text-amber-500" />
+            <span>Ranking</span>
           </Link>
         </div>
       </div>
 
       {/* Banner if no active friend */}
       {!activeFriend && (
-        <div className="mb-8 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 anim-slide-up"
-          style={{ background: 'rgba(234,179,8,0.08)', border: '1px solid rgba(234,179,8,0.25)', boxShadow: '0 4px 24px rgba(234,179,8,0.08)' }}>
-          <div className="flex items-center gap-3">
-            <span className="text-3xl sm:text-4xl">🐟</span>
+        <div className="mb-8 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent border border-amber-200/80 backdrop-blur-xl shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 anim-slide-up">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-white/90 border border-amber-200 flex items-center justify-center text-2xl shadow-xs shrink-0">
+              🐟
+            </div>
             <div>
-              <p className="text-white font-black text-base">¿Quién eres tú en el grupo?</p>
-              <p className="text-xs text-white/50 mt-0.5">Elige tu nombre o apúntate con 1 clic para hacer picks y sumar puntos</p>
+              <p className="text-slate-900 font-extrabold text-base">¿Quién eres tú en el grupo?</p>
+              <p className="text-xs text-slate-500 mt-0.5">Elige tu nombre o apúntate con 1 clic para guardar tus picks</p>
             </div>
           </div>
           <button
             onClick={() => setSelectorOpen(true)}
-            className="w-full sm:w-auto shrink-0 px-5 py-2.5 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs transition-all shadow-md shadow-yellow-500/20"
+            className="w-full sm:w-auto shrink-0 px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md shadow-slate-900/10 transition-all active:scale-95"
           >
             Elegir mi perfil →
           </button>
@@ -141,25 +159,26 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks,
 
       {/* In-progress picks */}
       {inProgressPicks.length > 0 && (
-        <div className="mb-7 anim-slide-up">
-          <h2 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.12em] mb-3 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block" />
+        <div className="mb-8 anim-slide-up">
+          <h2 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             En juego ahora
           </h2>
           <div className="space-y-2">
             {inProgressPicks.map(p => (
-              <div key={p.id} className="rounded-2xl px-4 py-3 flex items-center justify-between gap-3"
-                style={{ background:'rgba(34,197,94,0.07)', border:'1px solid rgba(34,197,94,0.20)' }}>
+              <div
+                key={p.id}
+                className="rounded-2xl px-4 py-3 bg-emerald-50/80 border border-emerald-200/80 flex items-center justify-between gap-3 shadow-xs"
+              >
                 <div className="min-w-0">
-                  <p className="text-white font-semibold text-sm truncate">{p.description}</p>
-                  <p className="text-green-400/80 text-xs mt-0.5 font-medium">
-                    → {p.selection === 'Empate' ? 'Empate' : teamShort(p.selection.replace(' gana', ''))} @ {p.odds.toFixed(2)}
+                  <p className="text-slate-900 font-bold text-sm truncate">{p.description}</p>
+                  <p className="text-emerald-700 text-xs mt-0.5 font-medium">
+                    → Pronóstico: <strong>{p.selection === 'Empate' ? 'Empate' : teamShort(p.selection.replace(' gana', ''))}</strong> @ {p.odds.toFixed(2)}
                   </p>
                 </div>
-                <span className="text-xs text-green-400 font-bold shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-                  style={{ background:'rgba(34,197,94,0.12)', border:'1px solid rgba(34,197,94,0.25)' }}>
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block" />
-                  En juego
+                <span className="text-xs text-emerald-800 bg-white/90 font-bold px-3 py-1 rounded-full border border-emerald-200 shadow-xs flex items-center gap-1.5 shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  En directo
                 </span>
               </div>
             ))}
@@ -167,49 +186,66 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks,
         </div>
       )}
 
-      {/* Featured */}
+      {/* Featured next matches */}
       {featured.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.12em] mb-3">🔥 Próximos sin pick</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 stagger">
+        <div className="mb-10">
+          <div className="flex items-center gap-1.5 mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <h2 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Próximos partidos destacados</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 stagger">
             {featured.map(ev => {
               const { home, draw, away } = ev.best_odds
               const isStagingThis = staged?.eventId === ev.id
               return (
-                <div key={ev.id}
-                  className={`rounded-2xl p-4 transition-all anim-slide-up ${isStagingThis ? 'gb-card-pick' : 'gb-card'}`}>
-                  <p className="text-white font-bold text-sm leading-tight truncate">{ev.event_name}</p>
-                  <p className="text-white/35 text-xs mt-1 mb-3">{fmtDate(ev.commence_time)}</p>
+                <div
+                  key={ev.id}
+                  className={`rounded-3xl p-4 transition-all anim-slide-up ${
+                    isStagingThis ? 'gb-card-pick ring-2 ring-amber-400' : 'gb-card'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1.5">
+                    <span className="font-semibold text-slate-500 truncate max-w-[140px]">{ev.league}</span>
+                    <span>{fmtDate(ev.commence_time)}</span>
+                  </div>
+                  <p className="text-slate-900 font-extrabold text-sm leading-tight truncate mb-3">{ev.event_name}</p>
                   <div className="grid grid-cols-3 gap-1.5">
                     {[
                       { short: teamShort(ev.home_team), full: `${ev.home_team} gana`, odds: home },
                       { short: 'X', full: 'Empate', odds: draw },
                       { short: teamShort(ev.away_team), full: `${ev.away_team} gana`, odds: away },
                     ].map(({ short, full, odds }) => odds ? (
-                      <button key={full} onClick={() => stagePick(ev, full, odds)}
-                        className={`rounded-xl py-2.5 text-center transition-all ${
+                      <button
+                        key={full}
+                        onClick={() => stagePick(ev, full, odds)}
+                        className={`rounded-2xl py-2.5 text-center transition-all ${
                           isStagingThis && staged?.selection === full
                             ? 'gb-btn-odds-selected'
                             : 'gb-btn-odds'
-                        }`}>
-                        <div className={`text-[10px] font-bold ${isStagingThis && staged?.selection === full ? 'text-yellow-400' : 'text-white/40'}`}>{short}</div>
-                        <div className={`font-black text-sm mt-0.5 ${isStagingThis && staged?.selection === full ? 'text-yellow-400' : 'text-white'}`}>{odds.toFixed(2)}</div>
+                        }`}
+                      >
+                        <div className="text-[10px] font-bold tracking-tight opacity-75">{short}</div>
+                        <div className="font-black text-sm mt-0.5">{odds.toFixed(2)}</div>
                       </button>
                     ) : null)}
                   </div>
+
                   {isStagingThis && (
-                    <div className="mt-3 space-y-2">
+                    <div className="mt-3 pt-3 border-t border-amber-300/60 space-y-2">
                       <QuickAI event={ev.event_name} league={ev.league} selection={staged!.selection} odds={staged!.odds} />
                       <div className="flex gap-2">
-                        <button onClick={() => setStaged(null)}
-                          className="text-xs text-white/40 hover:text-white/70 px-3 py-1.5 rounded-xl transition-colors"
-                          style={{ border:'1px solid rgba(255,255,255,0.10)' }}>
+                        <button
+                          onClick={() => setStaged(null)}
+                          className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-1.5 rounded-full border border-slate-200 transition-colors"
+                        >
                           Cancelar
                         </button>
-                        <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
-                          className="flex-1 text-xs font-black py-1.5 rounded-xl transition-all disabled:opacity-50 text-[#07080F]"
-                          style={{ background:'linear-gradient(135deg,#EAB308,#F59E0B)', boxShadow:'0 4px 16px rgba(234,179,8,0.30)' }}>
-                          {loading === ev.id ? '…' : 'Confirmar ✓'}
+                        <button
+                          onClick={() => confirmPick(ev)}
+                          disabled={loading === ev.id}
+                          className="flex-1 text-xs font-bold py-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white transition-all disabled:opacity-50 shadow-sm"
+                        >
+                          {loading === ev.id ? 'Guardando...' : 'Confirmar ✓'}
                         </button>
                       </div>
                     </div>
@@ -221,18 +257,25 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks,
         </div>
       )}
 
+      {/* Events grouped by day */}
       {events.length === 0 ? (
-        <div className="text-center py-20 anim-fade-in">
-          <p className="text-5xl mb-4 anim-float inline-block">😴</p>
-          <p className="text-white font-bold text-lg mt-4">Sin partidos disponibles</p>
-          <p className="text-white/35 text-sm mt-1">Vuelve cuando se acerquen los partidos</p>
+        <div className="text-center py-20 bg-white/60 backdrop-blur-xl rounded-3xl border border-slate-200/80 p-8 shadow-xs anim-fade-in">
+          <p className="text-4xl mb-3 anim-float inline-block">😴</p>
+          <p className="text-slate-900 font-extrabold text-base">Sin partidos programados</p>
+          <p className="text-slate-400 text-xs mt-1 max-w-sm mx-auto">
+            No hay partidos inmediatos de LaLiga ni Champions League en The Odds API. Vuelve en unas horas.
+          </p>
         </div>
       ) : (
         <div className="space-y-10">
           {Object.entries(byDay).map(([day, dayEvents]) => (
             <section key={day}>
-              <h2 className="text-[10px] font-bold text-white/25 uppercase tracking-[0.12em] mb-4 capitalize">{day}</h2>
-              <div className="space-y-3 stagger">
+              <div className="flex items-center gap-2 mb-4">
+                <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider capitalize">{day}</h2>
+              </div>
+
+              <div className="space-y-3.5 stagger">
                 {dayEvents.map((ev, idx) => {
                   const myPick = myPickMap.get(ev.event_name)
                   const { home, draw, away } = ev.best_odds
@@ -254,104 +297,122 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks,
                     : 'gb-card'
 
                   return (
-                    <div key={ev.id}
-                      className={`rounded-2xl p-4 anim-slide-up transition-all ${cardClass}`}
-                      style={{ animationDelay: `${idx * 40}ms` }}>
-                      <div className="flex items-start justify-between gap-3 mb-3">
+                    <div
+                      key={ev.id}
+                      className={`rounded-3xl p-5 anim-slide-up transition-all ${cardClass}`}
+                      style={{ animationDelay: `${idx * 30}ms` }}
+                    >
+                      <div className="flex items-start justify-between gap-3 mb-3.5">
                         <div className="min-w-0">
-                          <p className="text-white font-bold text-sm leading-tight">{ev.event_name}</p>
-                          <p className="text-white/35 text-xs mt-1">{ev.league} · {fmtDate(ev.commence_time)}</p>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80">
+                              {ev.league}
+                            </span>
+                            <span className="text-xs text-slate-400 flex items-center gap-1 font-medium">
+                              <Clock className="w-3 h-3 text-slate-400" />
+                              {fmtDate(ev.commence_time)}
+                            </span>
+                          </div>
+                          <p className="text-slate-900 font-extrabold text-base leading-tight truncate">
+                            {ev.event_name}
+                          </p>
                         </div>
+
                         <div className="flex items-center gap-2 shrink-0">
                           {myPick?.status === 'pending' && !matchStarted && (
-                            <button onClick={() => deletePick(myPick.id)}
-                              className="text-white/20 hover:text-red-400 transition-colors p-1 rounded-lg hover:bg-red-500/[0.10]">
-                              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                              </svg>
+                            <button
+                              onClick={() => deletePick(myPick.id)}
+                              title="Eliminar pronóstico"
+                              className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors p-1.5 rounded-xl border border-transparent hover:border-rose-200"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           )}
                           {myPick && (
-                            <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
-                              myPick.status === 'won'
-                                ? 'text-green-400'
-                                : myPick.status === 'lost'
-                                ? 'text-red-400'
-                                : 'text-yellow-400'
-                            }`}
-                            style={{
-                              background: myPick.status === 'won'
-                                ? 'rgba(34,197,94,0.12)'
-                                : myPick.status === 'lost'
-                                ? 'rgba(239,68,68,0.12)'
-                                : 'rgba(234,179,8,0.12)',
-                              border: `1px solid ${myPick.status === 'won' ? 'rgba(34,197,94,0.25)' : myPick.status === 'lost' ? 'rgba(239,68,68,0.25)' : 'rgba(234,179,8,0.25)'}`,
-                            }}>
-                              {myPick.status === 'won'
-                                ? `+${myPick.points.toFixed(2)} pts ✓`
-                                : myPick.status === 'lost'
-                                ? '0 pts ✗'
-                                : `✓ ${myPick.selection === 'Empate' ? 'X' : teamShort(myPick.selection.replace(' gana', ''))} @ ${myPick.odds.toFixed(2)}`}
+                            <span
+                              className={`text-xs px-3 py-1 rounded-full font-bold shadow-xs flex items-center gap-1 ${
+                                myPick.status === 'won'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                  : myPick.status === 'lost'
+                                  ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                                  : 'bg-amber-100 text-amber-900 border border-amber-300'
+                              }`}
+                            >
+                              {myPick.status === 'won' ? (
+                                <>
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                  +{myPick.points.toFixed(2)} pts ✓
+                                </>
+                              ) : myPick.status === 'lost' ? (
+                                '0 pts ✗'
+                              ) : (
+                                `✓ ${myPick.selection === 'Empate' ? 'X' : teamShort(myPick.selection.replace(' gana', ''))} @ ${myPick.odds.toFixed(2)}`
+                              )}
                             </span>
                           )}
                         </div>
                       </div>
 
+                      {/* Odds segmented buttons */}
                       <div className="grid grid-cols-3 gap-2">
                         {outcomes.map(({ short, full, odds }) => {
                           if (!odds) return null
                           const isMyPick = myPick?.selection === full
                           const isStaged = isStagingThis && staged?.selection === full
                           return (
-                            <button key={full}
+                            <button
+                              key={full}
                               onClick={() => !myPick && stagePick(ev, full, odds)}
                               disabled={!!myPick}
-                              className={`rounded-xl py-3 text-center transition-all ${
+                              className={`rounded-2xl py-3 text-center transition-all ${
                                 isMyPick || isStaged
                                   ? 'gb-btn-odds-selected'
                                   : myPick
-                                  ? 'opacity-30 cursor-default gb-btn-odds'
+                                  ? 'opacity-40 cursor-default gb-btn-odds'
                                   : 'gb-btn-odds cursor-pointer'
-                              }`}>
-                              <div className={`text-[10px] font-bold ${isMyPick || isStaged ? 'text-yellow-400' : 'text-white/40'}`}>
-                                {short}
-                              </div>
-                              <div className={`font-black text-[17px] mt-0.5 ${isMyPick || isStaged ? 'text-yellow-400' : 'text-white'}`}>
-                                {odds.toFixed(2)}
-                              </div>
+                              }`}
+                            >
+                              <div className="text-[10px] font-bold opacity-75 tracking-tight">{short}</div>
+                              <div className="font-extrabold text-base mt-0.5">{odds.toFixed(2)}</div>
                             </button>
                           )
                         })}
                       </div>
 
                       {myPick?.status === 'pending' && matchStarted && (
-                        <p className="text-xs text-white/30 mt-3 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-yellow-500/60 inline-block" />
-                          Pendiente de resultado oficial
+                        <p className="text-xs text-amber-700 mt-3 flex items-center gap-1.5 font-medium">
+                          <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
+                          Partido en juego o finalizado · Pendiente de resultado
                         </p>
                       )}
 
+                      {/* Staged confirmation drawer */}
                       {isStagingThis && !myPick && (
-                        <div className="mt-3 pt-3 space-y-3"
-                          style={{ borderTop:'1px solid rgba(234,179,8,0.15)' }}>
-                          <div className="flex items-center justify-between gap-3">
-                            <div className="text-sm text-white/50">
-                              <span className="text-white font-bold">
+                        <div className="mt-4 pt-4 border-t border-amber-300/50 space-y-3 anim-slide-up">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="text-xs text-slate-600">
+                              Selección:{' '}
+                              <strong className="text-slate-900 font-extrabold text-sm">
                                 {staged!.selection === 'Empate' ? 'Empate' : staged!.selection.replace(' gana', '')}
+                              </strong>{' '}
+                              a cuota <strong className="text-amber-700 font-black">@{staged!.odds.toFixed(2)}</strong>
+                              <span className="text-slate-400 ml-2">
+                                (+{staged!.odds.toFixed(2)} puntos si aciertas)
                               </span>
-                              {' '}@ <span className="text-yellow-400 font-black">{staged!.odds.toFixed(2)}</span>
-                              <span className="text-white/25 text-xs ml-2">+{staged!.odds.toFixed(2)} pts si aciertas</span>
                             </div>
                             <div className="flex gap-2 shrink-0">
-                              <button onClick={() => setStaged(null)}
-                                className="text-xs text-white/35 hover:text-white/60 px-3 py-1.5 rounded-xl transition-colors"
-                                style={{ border:'1px solid rgba(255,255,255,0.08)' }}>
+                              <button
+                                onClick={() => setStaged(null)}
+                                className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-4 py-2 rounded-full border border-slate-200 transition-colors"
+                              >
                                 Cancelar
                               </button>
-                              <button onClick={() => confirmPick(ev)} disabled={loading === ev.id}
-                                className="text-xs font-black px-4 py-1.5 rounded-xl transition-all disabled:opacity-50 text-[#07080F]"
-                                style={{ background:'linear-gradient(135deg,#EAB308,#F59E0B)', boxShadow:'0 4px 16px rgba(234,179,8,0.30)' }}>
-                                {loading === ev.id ? '…' : 'Confirmar ✓'}
+                              <button
+                                onClick={() => confirmPick(ev)}
+                                disabled={loading === ev.id}
+                                className="text-xs font-bold px-5 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-white transition-all disabled:opacity-50 shadow-md shadow-slate-900/10 active:scale-95"
+                              >
+                                {loading === ev.id ? 'Guardando...' : 'Confirmar pick ✓'}
                               </button>
                             </div>
                           </div>

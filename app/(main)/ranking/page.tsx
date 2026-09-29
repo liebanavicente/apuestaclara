@@ -1,6 +1,7 @@
 import { getLeaderboard, getPicks, type LeaderboardPlayer } from '@/lib/services/club.service'
 import { getActiveFriend } from '@/lib/session'
 import Link from 'next/link'
+import { Trophy, Flame, Beer, ChevronDown, CheckCircle2, XCircle, Clock } from 'lucide-react'
 
 export const metadata = { title: 'Ranking — GañanesBets 🏆' }
 export const dynamic = 'force-dynamic'
@@ -27,127 +28,125 @@ export default async function RankingPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
 
-        {/* Page title */}
-        <div className="mb-6 anim-fade-in">
-          <h1 className="text-3xl font-black text-white tracking-tight">Ranking Gañanes 🏆</h1>
-          <p className="text-white/35 text-sm mt-1">acierto = cuota en puntos · fallo = 0 pts · el último invita a birras</p>
+        {/* Page title — Apple clean typography */}
+        <div className="mb-8 anim-fade-in">
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Ranking del Club</h1>
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200/80">
+              Temporada activa
+            </span>
+          </div>
+          <p className="text-slate-500 text-sm mt-1">
+            Acierto = cuota en puntos · Fallo = 0 pts · El último clasificado paga la ronda de birras 🍺
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
 
-          {/* LEFT: Leader aside */}
-          <aside className="rounded-[28px] p-6 flex flex-col gap-5 relative overflow-hidden anim-slide-up"
-            style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.09)', backdropFilter:'blur(16px)', boxShadow:'0 24px 60px rgba(0,0,0,0.4)' }}>
-            {/* Yellow top stripe */}
-            <div className="absolute top-0 left-0 right-0 h-[2px]"
-              style={{ background:'linear-gradient(90deg,transparent,rgba(234,179,8,0.7),transparent)' }} />
-            {/* Subtle glow */}
-            <div className="absolute -top-20 -left-20 w-60 h-60 rounded-full pointer-events-none"
-              style={{ background:'rgba(234,179,8,0.05)', filter:'blur(60px)' }} />
+          {/* LEFT: Leader Spotlight Card */}
+          <aside className="rounded-3xl p-6 flex flex-col gap-6 relative overflow-hidden gb-card shadow-xs anim-slide-up">
+            {/* Ambient gold glow */}
+            <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-amber-400/10 filter blur-3xl pointer-events-none" />
 
-            <div className="relative">
-              <span className="text-[9px] font-bold text-white/25 uppercase tracking-[0.14em]">Líder actual</span>
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-3">
+                Líder actual
+              </span>
               {leader ? (
-                <div className="mt-3">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-3"
-                    style={{ background:'rgba(234,179,8,0.10)', border:'1px solid rgba(234,179,8,0.25)' }}>
+                <div>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-50 border border-amber-200/80 flex items-center justify-center text-3xl shadow-xs mb-3">
                     {leader.avatarEmoji || '🐟'}
                   </div>
-                  <p className="text-white font-black text-xl leading-tight">{leader.name}</p>
-                  <p className="text-white/40 text-sm mt-0.5">{leader.totalWon}/{leader.totalResolved} aciertos · {leader.winRate}%</p>
-                  <div className="mt-4 p-4 rounded-2xl" style={{ background:'rgba(234,179,8,0.07)', border:'1px solid rgba(234,179,8,0.15)' }}>
-                    <p className="text-white/35 text-xs mb-1">Puntos acumulados</p>
-                    <p className="text-yellow-400 font-black text-4xl">{leader.totalPoints.toFixed(2)}</p>
-                    <p className="text-white/25 text-xs mt-1">pts</p>
+                  <h2 className="text-slate-900 font-extrabold text-xl leading-tight">{leader.name}</h2>
+                  <p className="text-slate-500 text-xs mt-0.5 font-medium">
+                    {leader.totalWon}/{leader.totalResolved} aciertos · {leader.winRate}% efectividad
+                  </p>
+
+                  <div className="mt-4 p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80">
+                    <p className="text-slate-500 text-xs font-medium mb-1">Puntos acumulados</p>
+                    <p className="text-amber-600 font-black text-4xl">{leader.totalPoints.toFixed(2)}</p>
+                    <p className="text-slate-400 text-[11px] mt-0.5 font-medium">puntos de victoria</p>
                   </div>
                 </div>
               ) : (
-                <p className="text-white/30 text-sm mt-2">Nadie ha resuelto picks todavía</p>
+                <p className="text-slate-400 text-sm mt-2">Aún no hay pronósticos resueltos</p>
               )}
             </div>
 
-            {/* Global stats */}
-            <div className="relative grid grid-cols-3 gap-2 mt-auto">
+            {/* Global club stats */}
+            <div className="grid grid-cols-3 gap-2 mt-auto">
               {[
                 { label: 'Gañanes', value: totalParticipants },
                 { label: 'Resueltos', value: totalResolved },
                 { label: 'Pendientes', value: totalPending },
               ].map(({ label, value }) => (
-                <div key={label} className="rounded-xl p-3 text-center"
-                  style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)' }}>
-                  <p className="text-white font-black text-lg">{value}</p>
-                  <p className="text-white/30 text-[10px] mt-0.5">{label}</p>
+                <div key={label} className="rounded-2xl p-3 text-center bg-slate-50 border border-slate-200/70">
+                  <p className="text-slate-900 font-extrabold text-base">{value}</p>
+                  <p className="text-slate-400 text-[10px] font-medium mt-0.5">{label}</p>
                 </div>
               ))}
             </div>
 
-            <Link href="/dashboard"
-              className="relative block w-full text-center font-black py-3 rounded-2xl text-sm transition-all text-[#07080F]"
-              style={{ background:'linear-gradient(135deg,#EAB308,#F59E0B)', boxShadow:'0 4px 20px rgba(234,179,8,0.30)' }}>
-              ⚽ Hacer picks
+            <Link
+              href="/dashboard"
+              className="block w-full text-center font-bold py-3 rounded-full text-xs text-white bg-slate-900 hover:bg-slate-800 transition-all shadow-md shadow-slate-900/10 active:scale-98"
+            >
+              ⚽ Ir a hacer picks
             </Link>
           </aside>
 
-          {/* RIGHT: Podium + full table */}
-          <div className="space-y-5">
+          {/* RIGHT: Podium + Full Leaderboard */}
+          <div className="space-y-6">
 
-            {/* Podium top 3 */}
+            {/* Top 3 Podium (Apple frosted style) */}
             {players.length >= 3 && (
               <div className="grid grid-cols-3 gap-3 items-end">
-                {/* 2nd */}
-                <div className="rounded-[24px] p-4 text-center mt-6 anim-slide-up"
-                  style={{ background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.10)', backdropFilter:'blur(12px)', animationDelay:'50ms' }}>
-                  <div className="text-2xl mb-2">🥈</div>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl mx-auto mb-2"
-                    style={{ background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.15)' }}>
+                {/* 2nd Place */}
+                <div className="rounded-3xl p-4 text-center mt-6 gb-card shadow-xs anim-slide-up">
+                  <div className="text-xl mb-1">🥈</div>
+                  <div className="w-11 h-11 rounded-2xl bg-slate-100 border border-slate-200/80 flex items-center justify-center text-xl mx-auto mb-2 shadow-xs">
                     {players[1].avatarEmoji}
                   </div>
-                  <p className="text-xs font-bold text-white/60 truncate">{players[1].name}</p>
-                  <p className="font-black text-white text-lg mt-0.5">{players[1].totalPoints.toFixed(2)}</p>
-                  <p className="text-xs text-white/30">{players[1].totalWon}/{players[1].totalResolved} ✓</p>
+                  <p className="text-xs font-bold text-slate-800 truncate">{players[1].name}</p>
+                  <p className="font-extrabold text-slate-900 text-lg mt-0.5">{players[1].totalPoints.toFixed(2)}</p>
+                  <p className="text-[11px] text-slate-400 font-medium">{players[1].totalWon}/{players[1].totalResolved} ✓</p>
                 </div>
 
-                {/* 1st */}
-                <div className="rounded-[24px] p-4 text-center relative overflow-hidden anim-slide-up"
-                  style={{ background:'rgba(255,255,255,0.08)', border:'1px solid rgba(234,179,8,0.30)', backdropFilter:'blur(12px)', boxShadow:'0 8px 40px rgba(234,179,8,0.18), 0 2px 8px rgba(0,0,0,0.4)' }}>
-                  <div className="absolute top-0 left-0 right-0 h-[2px]"
-                    style={{ background:'linear-gradient(90deg,transparent,#EAB308,transparent)' }} />
-                  <div className="text-2xl mb-2">🥇</div>
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center text-2xl mx-auto mb-2"
-                    style={{ background:'rgba(234,179,8,0.12)', border:'1px solid rgba(234,179,8,0.30)' }}>
+                {/* 1st Place */}
+                <div className="rounded-3xl p-5 text-center relative overflow-hidden gb-card border-amber-300/80 bg-amber-50/60 shadow-md shadow-amber-500/5 anim-slide-up">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-500" />
+                  <div className="text-2xl mb-1">🥇</div>
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-amber-200 flex items-center justify-center text-2xl mx-auto mb-2 shadow-xs">
                     {players[0].avatarEmoji}
                   </div>
-                  <p className="text-xs font-bold text-white/70 truncate">{players[0].name}</p>
-                  <p className="font-black text-yellow-400 text-xl mt-0.5">{players[0].totalPoints.toFixed(2)}</p>
-                  <p className="text-xs text-white/30">{players[0].totalWon}/{players[0].totalResolved} ✓</p>
+                  <p className="text-xs font-extrabold text-slate-900 truncate">{players[0].name}</p>
+                  <p className="font-black text-amber-600 text-2xl mt-0.5">{players[0].totalPoints.toFixed(2)}</p>
+                  <p className="text-[11px] text-amber-800/60 font-semibold">{players[0].totalWon}/{players[0].totalResolved} aciertos</p>
                 </div>
 
-                {/* 3rd */}
-                <div className="rounded-[24px] p-4 text-center mt-10 anim-slide-up"
-                  style={{ background:'rgba(245,158,11,0.07)', border:'1px solid rgba(245,158,11,0.20)', backdropFilter:'blur(12px)', animationDelay:'100ms' }}>
-                  <div className="text-2xl mb-2">🥉</div>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl mx-auto mb-2"
-                    style={{ background:'rgba(245,158,11,0.12)', border:'1px solid rgba(245,158,11,0.25)' }}>
+                {/* 3rd Place */}
+                <div className="rounded-3xl p-4 text-center mt-10 gb-card shadow-xs anim-slide-up">
+                  <div className="text-xl mb-1">🥉</div>
+                  <div className="w-11 h-11 rounded-2xl bg-orange-50 border border-orange-200/80 flex items-center justify-center text-xl mx-auto mb-2 shadow-xs">
                     {players[2].avatarEmoji}
                   </div>
-                  <p className="text-xs font-bold text-amber-400/80 truncate">{players[2].name}</p>
-                  <p className="font-black text-amber-400 text-lg mt-0.5">{players[2].totalPoints.toFixed(2)}</p>
-                  <p className="text-xs text-amber-400/40">{players[2].totalWon}/{players[2].totalResolved} ✓</p>
+                  <p className="text-xs font-bold text-slate-800 truncate">{players[2].name}</p>
+                  <p className="font-extrabold text-slate-900 text-lg mt-0.5">{players[2].totalPoints.toFixed(2)}</p>
+                  <p className="text-[11px] text-slate-400 font-medium">{players[2].totalWon}/{players[2].totalResolved} ✓</p>
                 </div>
               </div>
             )}
 
-            {/* Full table */}
-            <div className="space-y-2">
+            {/* Full leaderboard list */}
+            <div className="space-y-2.5">
               {players.length === 0 && (
-                <div className="text-center py-16 text-white/30 rounded-3xl"
-                  style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)' }}>
+                <div className="text-center py-16 gb-card rounded-3xl p-6">
                   <p className="text-4xl mb-3">🐟</p>
-                  <p className="font-bold text-white text-base">Aún no hay amigos en el ranking</p>
-                  <p className="text-sm text-white/40 mt-1">Elige tu nombre en el menú o añade amigos para empezar a jugar</p>
-                  <Link href="/dashboard" className="text-yellow-400 font-black text-sm mt-4 inline-block hover:underline">
+                  <p className="font-extrabold text-slate-900 text-base">Aún no hay amigos en el ranking</p>
+                  <p className="text-xs text-slate-500 mt-1">Elige tu nombre en el menú superior o añade un amigo para empezar</p>
+                  <Link href="/dashboard" className="text-slate-900 font-bold text-xs mt-4 inline-block hover:underline">
                     Ir a Partidos →
                   </Link>
                 </div>
@@ -160,66 +159,63 @@ export default async function RankingPage() {
                 const playerPicks = picksByPlayer.get(p.id) ?? []
 
                 return (
-                  <details key={p.id}
-                    className="group rounded-[20px] overflow-hidden transition-all anim-slide-up"
-                    style={{
-                      animationDelay: `${i * 40}ms`,
-                      background: isMe ? 'rgba(234,179,8,0.07)' : 'rgba(255,255,255,0.05)',
-                      border: isMe
-                        ? '1px solid rgba(234,179,8,0.30)'
-                        : isLast
-                        ? '1px solid rgba(239,68,68,0.30)'
-                        : '1px solid rgba(255,255,255,0.08)',
-                      backdropFilter: 'blur(12px)',
-                    }}>
-                    <summary className="flex items-center gap-3 p-4 cursor-pointer list-none select-none hover:bg-white/[0.03] transition-colors">
-                      {/* Position */}
+                  <details
+                    key={p.id}
+                    className={`group rounded-2xl overflow-hidden transition-all anim-slide-up gb-card ${
+                      isMe ? 'ring-2 ring-amber-400 bg-amber-50/50' : ''
+                    } ${isLast ? 'border-rose-200 bg-rose-50/20' : ''}`}
+                    style={{ animationDelay: `${i * 35}ms` }}
+                  >
+                    <summary className="flex items-center gap-3.5 p-4 cursor-pointer list-none select-none hover:bg-slate-50/60 transition-colors">
+                      {/* Position pill */}
                       <span className={`w-7 text-center font-black text-sm shrink-0 ${
-                        i === 0 ? 'text-yellow-400' :
-                        i === 1 ? 'text-white/70' :
-                        i === 2 ? 'text-amber-400' :
-                        isLast ? 'text-red-400' : 'text-white/25'
+                        i === 0 ? 'text-amber-600' :
+                        i === 1 ? 'text-slate-600' :
+                        i === 2 ? 'text-amber-700' :
+                        isLast ? 'text-rose-600' : 'text-slate-400'
                       }`}>
                         #{i + 1}
                       </span>
 
                       {/* Avatar */}
-                      <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl shrink-0"
-                        style={{
-                          background: isMe ? 'rgba(234,179,8,0.12)' : 'rgba(255,255,255,0.08)',
-                          border: isMe ? '1px solid rgba(234,179,8,0.25)' : '1px solid rgba(255,255,255,0.10)',
-                        }}>
+                      <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl shrink-0 bg-white border border-slate-200/80 shadow-xs">
                         {p.avatarEmoji || '🐟'}
                       </div>
 
                       {/* Name & stats */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className={`font-bold text-sm truncate ${isMe ? 'text-yellow-400' : 'text-white'}`}>
+                          <p className="font-extrabold text-sm truncate text-slate-900">
                             {p.name}
                           </p>
                           {isMe && (
-                            <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-yellow-400/20 text-yellow-400 shrink-0">
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">
                               TÚ
                             </span>
                           )}
                           {isLast && (
-                            <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 shrink-0 flex items-center gap-1">
-                              🍺 Paga birras
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200 shrink-0 flex items-center gap-1">
+                              <Beer className="w-3 h-3 text-rose-600" /> Paga las birras
                             </span>
                           )}
                         </div>
 
                         {/* Progress bar */}
                         <div className="flex items-center gap-2 mt-1.5">
-                          <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-white/10">
-                            <div className="h-full rounded-full transition-all duration-500"
+                          <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-slate-100">
+                            <div
+                              className="h-full rounded-full transition-all duration-500"
                               style={{
                                 width: `${barPct}%`,
-                                background: i === 0 ? 'linear-gradient(90deg,#EAB308,#F59E0B)' : isLast ? '#EF4444' : 'rgba(255,255,255,0.4)',
-                              }} />
+                                background: i === 0
+                                  ? 'linear-gradient(90deg, #F59E0B, #D97706)'
+                                  : isLast
+                                  ? '#F43F5E'
+                                  : '#64748B',
+                              }}
+                            />
                           </div>
-                          <span className="text-[11px] text-white/35 shrink-0">
+                          <span className="text-[11px] text-slate-400 font-medium shrink-0">
                             {p.totalWon}/{p.totalResolved} · {p.winRate}%
                           </span>
                         </div>
@@ -227,34 +223,37 @@ export default async function RankingPage() {
 
                       {/* Points */}
                       <div className="text-right shrink-0">
-                        <p className={`font-black text-lg ${i === 0 ? 'text-yellow-400' : 'text-white'}`}>
+                        <p className={`font-black text-lg ${i === 0 ? 'text-amber-600' : 'text-slate-900'}`}>
                           {p.totalPoints.toFixed(2)}
                         </p>
-                        <p className="text-[10px] text-white/30">pts</p>
+                        <p className="text-[10px] text-slate-400 font-medium">pts</p>
                       </div>
 
-                      {/* Arrow */}
-                      <span className="text-white/20 text-xs ml-1 group-open:rotate-180 transition-transform">▾</span>
+                      {/* Arrow indicator */}
+                      <ChevronDown className="w-4 h-4 text-slate-400 ml-1 group-open:rotate-180 transition-transform shrink-0" />
                     </summary>
 
                     {/* Expandable picks history */}
-                    <div className="px-5 pb-4 pt-2 border-t border-white/[0.06] text-xs text-white/60 space-y-2">
-                      <p className="font-bold text-[10px] text-white/30 uppercase tracking-widest">Últimos picks</p>
+                    <div className="px-5 pb-4 pt-2 border-t border-slate-100 text-xs text-slate-600 space-y-2 bg-slate-50/50">
+                      <p className="font-bold text-[10px] text-slate-400 uppercase tracking-wider">Últimos picks registrados</p>
                       {playerPicks.length === 0 ? (
-                        <p className="text-white/30 text-xs">Sin pronósticos aún</p>
+                        <p className="text-slate-400 text-xs py-1">Sin pronósticos aún</p>
                       ) : (
-                        <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                        <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
                           {playerPicks.slice(0, 10).map(pk => (
-                            <div key={pk.id} className="flex items-center justify-between text-xs py-1 px-2.5 rounded-lg bg-white/[0.03]">
-                              <span className="text-white truncate max-w-[200px]">{pk.description}</span>
+                            <div
+                              key={pk.id}
+                              className="flex items-center justify-between text-xs py-1.5 px-3 rounded-xl bg-white border border-slate-200/60 shadow-xs"
+                            >
+                              <span className="text-slate-800 font-semibold truncate max-w-[220px]">{pk.description}</span>
                               <div className="flex items-center gap-2 shrink-0">
-                                <span className="text-white/40">{pk.selection}</span>
+                                <span className="text-slate-500">{pk.selection}</span>
                                 <span className={`font-bold ${
-                                  pk.status === 'won' ? 'text-green-400' :
-                                  pk.status === 'lost' ? 'text-red-400' : 'text-yellow-400'
+                                  pk.status === 'won' ? 'text-emerald-700' :
+                                  pk.status === 'lost' ? 'text-rose-700' : 'text-amber-700'
                                 }`}>
-                                  {pk.status === 'won' ? `+${pk.points.toFixed(2)} pts` :
-                                   pk.status === 'lost' ? '0 pts' : `@${pk.odds.toFixed(2)}`}
+                                  {pk.status === 'won' ? `+${pk.points.toFixed(2)} pts ✓` :
+                                   pk.status === 'lost' ? '0 pts ✗' : `@${pk.odds.toFixed(2)}`}
                                 </span>
                               </div>
                             </div>
