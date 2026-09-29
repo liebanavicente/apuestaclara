@@ -3,6 +3,9 @@ import { getFriends, createFriend } from '@/lib/services/club.service'
 import { cookies } from 'next/headers'
 import { COOKIE_FRIEND_ID } from '@/lib/session'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET() {
   const friends = await getFriends()
   // Mask PINs in public list

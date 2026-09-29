@@ -79,7 +79,7 @@ export function FriendSelectorModal({ isOpen, onClose, currentFriendId }: Props)
         return
       }
       onClose()
-      router.refresh()
+      window.location.reload()
     } catch {
       setPinError('Error de conexión')
     }
@@ -112,9 +112,9 @@ export function FriendSelectorModal({ isOpen, onClose, currentFriendId }: Props)
       }
 
       onClose()
-      router.refresh()
+      window.location.reload()
     } catch {
-      setAddError('Error de red')
+      setAddError('Error de red al crear el perfil')
       setSubmitting(false)
     }
   }

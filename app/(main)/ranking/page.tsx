@@ -3,6 +3,7 @@ import { getActiveFriend } from '@/lib/session'
 import Link from 'next/link'
 
 export const metadata = { title: 'Ranking — GañanesBets 🏆' }
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function RankingPage() {

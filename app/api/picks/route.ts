@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getActiveFriend } from '@/lib/session'
 import { createPick } from '@/lib/services/club.service'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(req: NextRequest) {
   const friend = await getActiveFriend()
   if (!friend) {

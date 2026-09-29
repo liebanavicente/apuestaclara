@@ -3,6 +3,8 @@ import { getFriend } from '@/lib/services/club.service'
 import { cookies } from 'next/headers'
 import { COOKIE_FRIEND_ID } from '@/lib/session'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(req: NextRequest) {
   try {
     const { friendId, pin } = await req.json()

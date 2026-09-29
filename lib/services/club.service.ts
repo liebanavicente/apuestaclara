@@ -42,18 +42,44 @@ export interface LeaderboardPlayer {
 const KEY_FRIENDS = 'gb:friends'
 const KEY_PICKS = 'gb:picks'
 
-// Redis client initialization
+// Redis client initialization (singleton)
+let cachedRedis: Redis | null | undefined
+
 function getRedisClient(): Redis | null {
+  if (cachedRedis !== undefined) {
+    return cachedRedis
+  }
+
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
+
   if (url && token) {
     try {
-      return new Redis({ url, token })
+      cachedRedis = new Redis({ url, token })
+      console.log('[ClubService] Initialized Upstash Redis / Vercel KV client')
+      return cachedRedis
     } catch (err) {
-      console.error('Failed to create Redis client:', err)
+      console.error('[ClubService] Failed to create Redis client:', err)
+      cachedRedis = null
+      return null
     }
   }
+
+  console.warn('[ClubService] KV_REST_API_URL / KV_REST_API_TOKEN not found. Using local fallback.')
+  cachedRedis = null
   return null
+}
+
+function parseJsonSafe<T>(val: any): T | null {
+  if (!val) return null
+  if (typeof val === 'string') {
+    try {
+      return JSON.parse(val) as T
+    } catch {
+      return null
+    }
+  }
+  return val as T
 }
 
 // Local fallback storage for dev / testing if Vercel KV not yet linked
@@ -92,13 +118,20 @@ export async function getFriends(): Promise<Friend[]> {
   const redis = getRedisClient()
   if (redis) {
     try {
-      const data = await redis.hgetall<Record<string, Friend>>(KEY_FRIENDS)
-      if (data) {
-        return Object.values(data).sort((a, b) => a.name.localeCompare(b.name, 'es'))
+      const data = await redis.hgetall<Record<string, any>>(KEY_FRIENDS)
+      if (data && typeof data === 'object') {
+        const list: Friend[] = []
+        for (const val of Object.values(data)) {
+          const item = parseJsonSafe<Friend>(val)
+          if (item && item.id && item.name) {
+            list.push(item)
+          }
+        }
+        return list.sort((a, b) => a.name.localeCompare(b.name, 'es'))
       }
       return []
     } catch (err) {
-      console.error('Error fetching friends from Redis:', err)
+      console.error('[ClubService] Error fetching friends from Redis:', err)
     }
   }
 
@@ -110,9 +143,11 @@ export async function getFriend(id: string): Promise<Friend | null> {
   const redis = getRedisClient()
   if (redis) {
     try {
-      return await redis.hget<Friend>(KEY_FRIENDS, id)
+      const raw = await redis.hget<any>(KEY_FRIENDS, id)
+      const friend = parseJsonSafe<Friend>(raw)
+      if (friend) return friend
     } catch (err) {
-      console.error('Error getting friend from Redis:', err)
+      console.error('[ClubService] Error getting friend from Redis:', err)
     }
   }
   const local = readLocalStore()
@@ -137,15 +172,18 @@ export async function createFriend(name: string, avatarEmoji?: string, pin?: str
   if (redis) {
     try {
       await redis.hset(KEY_FRIENDS, { [id]: friend })
+      console.log(`[ClubService] Created friend ${id} (${cleanName}) in Redis KV`)
       return friend
     } catch (err) {
-      console.error('Error saving friend to Redis:', err)
+      console.error('[ClubService] Error saving friend to Redis:', err)
+      throw new Error('No se pudo guardar el amigo en la base de datos')
     }
   }
 
   const local = readLocalStore()
   local.friends[id] = friend
   writeLocalStore(local)
+  console.log(`[ClubService] Created friend ${id} (${cleanName}) in local store`)
   return friend
 }
 
@@ -156,12 +194,19 @@ export async function getPicks(friendId?: string): Promise<FriendPick[]> {
   let picks: FriendPick[] = []
   if (redis) {
     try {
-      const data = await redis.hgetall<Record<string, FriendPick>>(KEY_PICKS)
-      if (data) {
-        picks = Object.values(data)
+      const data = await redis.hgetall<Record<string, any>>(KEY_PICKS)
+      if (data && typeof data === 'object') {
+        const list: FriendPick[] = []
+        for (const val of Object.values(data)) {
+          const item = parseJsonSafe<FriendPick>(val)
+          if (item && item.id && item.friendId) {
+            list.push(item)
+          }
+        }
+        picks = list
       }
     } catch (err) {
-      console.error('Error fetching picks from Redis:', err)
+      console.error('[ClubService] Error fetching picks from Redis:', err)
     }
   } else {
     const local = readLocalStore()
@@ -228,7 +273,7 @@ export async function createPick(friendId: string, input: CreatePickInput): Prom
       await redis.hset(KEY_PICKS, { [id]: pick })
       return { pick }
     } catch (err) {
-      console.error('Error creating pick in Redis:', err)
+      console.error('[ClubService] Error creating pick in Redis:', err)
     }
   }
 
@@ -242,14 +287,15 @@ export async function deletePick(id: string, friendId: string): Promise<boolean>
   const redis = getRedisClient()
   if (redis) {
     try {
-      const pick = await redis.hget<FriendPick>(KEY_PICKS, id)
+      const raw = await redis.hget<any>(KEY_PICKS, id)
+      const pick = parseJsonSafe<FriendPick>(raw)
       if (pick && pick.friendId === friendId && pick.status === 'pending') {
         await redis.hdel(KEY_PICKS, id)
         return true
       }
       return false
     } catch (err) {
-      console.error('Error deleting pick in Redis:', err)
+      console.error('[ClubService] Error deleting pick in Redis:', err)
       return false
     }
   }
@@ -269,7 +315,8 @@ export async function resolvePick(id: string, status: 'won' | 'lost'): Promise<b
   let pick: FriendPick | null = null
 
   if (redis) {
-    pick = await redis.hget<FriendPick>(KEY_PICKS, id)
+    const raw = await redis.hget<any>(KEY_PICKS, id)
+    pick = parseJsonSafe<FriendPick>(raw)
   } else {
     const local = readLocalStore()
     pick = local.picks[id] ?? null

@@ -4,6 +4,7 @@ import { getPicks } from '@/lib/services/club.service'
 import { DashboardClient } from './DashboardClient'
 
 export const metadata = { title: 'GañanesBets 🐟 · Partidos' }
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function DashboardPage() {

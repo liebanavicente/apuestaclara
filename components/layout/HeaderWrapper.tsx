@@ -21,7 +21,7 @@ export function HeaderWrapper({ friend }: HeaderWrapperProps) {
     } catch {
       // ignore
     }
-    router.refresh()
+    window.location.reload()
   }
 
   return (

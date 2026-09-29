@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getActiveFriend } from '@/lib/session'
 import { deletePick } from '@/lib/services/club.service'
 
+export const dynamic = 'force-dynamic'
+
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const friend = await getActiveFriend()
   if (!friend) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
