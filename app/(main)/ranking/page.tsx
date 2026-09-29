@@ -1,41 +1,28 @@
-import { createAdminClient } from '@/lib/supabase/admin'
-import { createClient } from '@/lib/supabase/server'
+import { getLeaderboard, getPicks, type LeaderboardPlayer } from '@/lib/services/club.service'
+import { getActiveFriend } from '@/lib/session'
 import Link from 'next/link'
 
-export const metadata = { title: 'Ranking — GañanesBets' }
-export const revalidate = 60
-
-function currentWinStreak(picks: { status: string }[]): number {
-  let streak = 0
-  for (const pick of picks) {
-    if (pick.status === 'won') streak++
-    else if (pick.status === 'lost') break
-  }
-  return streak
-}
+export const metadata = { title: 'Ranking — GañanesBets 🏆' }
+export const revalidate = 0
 
 export default async function RankingPage() {
-  const admin = createAdminClient()
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  const [{ data: rows }, { data: resolvedPicks }] = await Promise.all([
-    admin.from('leaderboard').select('*').order('total_points', { ascending: false }),
-    admin.from('picks').select('user_id, status').in('status', ['won', 'lost']).order('created_at', { ascending: false }),
+  const [players, allPicks, activeFriend] = await Promise.all([
+    getLeaderboard(),
+    getPicks(),
+    getActiveFriend(),
   ])
 
-  const players = rows ?? []
-  const picksByUser = new Map<string, { status: string }[]>()
-  for (const pick of resolvedPicks ?? []) {
-    if (!picksByUser.has(pick.user_id)) picksByUser.set(pick.user_id, [])
-    picksByUser.get(pick.user_id)!.push(pick)
+  const picksByPlayer = new Map<string, typeof allPicks>()
+  for (const pick of allPicks) {
+    if (!picksByPlayer.has(pick.friendId)) picksByPlayer.set(pick.friendId, [])
+    picksByPlayer.get(pick.friendId)!.push(pick)
   }
 
   const leader = players[0]
-  const leaderPoints = leader ? (+leader.total_points || 0) : 1
+  const leaderPoints = leader ? leader.totalPoints || 1 : 1
   const totalParticipants = players.length
-  const totalResolved = players.reduce((s: number, p: any) => s + (p.total_resolved ?? 0), 0)
-  const totalPending = players.reduce((s: number, p: any) => s + (p.total_pending ?? 0), 0)
+  const totalResolved = players.reduce((s, p) => s + p.totalResolved, 0)
+  const totalPending = players.reduce((s, p) => s + p.totalPending, 0)
 
   return (
     <div className="min-h-screen">
@@ -44,7 +31,7 @@ export default async function RankingPage() {
         {/* Page title */}
         <div className="mb-6 anim-fade-in">
           <h1 className="text-3xl font-black text-white tracking-tight">Ranking Gañanes 🏆</h1>
-          <p className="text-white/35 text-sm mt-1">acierto = cuota en puntos · fallo = 0 pts · el último invita</p>
+          <p className="text-white/35 text-sm mt-1">acierto = cuota en puntos · fallo = 0 pts · el último invita a birras</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
@@ -63,15 +50,15 @@ export default async function RankingPage() {
               <span className="text-[9px] font-bold text-white/25 uppercase tracking-[0.14em]">Líder actual</span>
               {leader ? (
                 <div className="mt-3">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-black text-yellow-400 mb-3"
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-3"
                     style={{ background:'rgba(234,179,8,0.10)', border:'1px solid rgba(234,179,8,0.25)' }}>
-                    {leader.username?.charAt(0).toUpperCase() ?? '?'}
+                    {leader.avatarEmoji || '🐟'}
                   </div>
-                  <p className="text-white font-black text-xl leading-tight">{leader.username ?? 'Anónimo'}</p>
-                  <p className="text-white/40 text-sm mt-0.5">{leader.total_won ?? 0}/{leader.total_resolved ?? 0} aciertos · {leader.win_rate ?? 0}%</p>
+                  <p className="text-white font-black text-xl leading-tight">{leader.name}</p>
+                  <p className="text-white/40 text-sm mt-0.5">{leader.totalWon}/{leader.totalResolved} aciertos · {leader.winRate}%</p>
                   <div className="mt-4 p-4 rounded-2xl" style={{ background:'rgba(234,179,8,0.07)', border:'1px solid rgba(234,179,8,0.15)' }}>
                     <p className="text-white/35 text-xs mb-1">Puntos acumulados</p>
-                    <p className="text-yellow-400 font-black text-4xl">{(+leader.total_points || 0).toFixed(2)}</p>
+                    <p className="text-yellow-400 font-black text-4xl">{leader.totalPoints.toFixed(2)}</p>
                     <p className="text-white/25 text-xs mt-1">pts</p>
                   </div>
                 </div>
@@ -83,7 +70,7 @@ export default async function RankingPage() {
             {/* Global stats */}
             <div className="relative grid grid-cols-3 gap-2 mt-auto">
               {[
-                { label: 'Participantes', value: totalParticipants },
+                { label: 'Gañanes', value: totalParticipants },
                 { label: 'Resueltos', value: totalResolved },
                 { label: 'Pendientes', value: totalPending },
               ].map(({ label, value }) => (
@@ -112,13 +99,13 @@ export default async function RankingPage() {
                 <div className="rounded-[24px] p-4 text-center mt-6 anim-slide-up"
                   style={{ background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.10)', backdropFilter:'blur(12px)', animationDelay:'50ms' }}>
                   <div className="text-2xl mb-2">🥈</div>
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-black text-white/70 mx-auto mb-2"
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl mx-auto mb-2"
                     style={{ background:'rgba(255,255,255,0.10)', border:'1px solid rgba(255,255,255,0.15)' }}>
-                    {players[1].username?.charAt(0).toUpperCase() ?? '?'}
+                    {players[1].avatarEmoji}
                   </div>
-                  <p className="text-xs font-bold text-white/60 truncate">{players[1].username ?? 'Anónimo'}</p>
-                  <p className="font-black text-white text-lg mt-0.5">{(+players[1].total_points || 0).toFixed(2)}</p>
-                  <p className="text-xs text-white/30">{players[1].total_won ?? 0}/{players[1].total_resolved ?? 0} ✓</p>
+                  <p className="text-xs font-bold text-white/60 truncate">{players[1].name}</p>
+                  <p className="font-black text-white text-lg mt-0.5">{players[1].totalPoints.toFixed(2)}</p>
+                  <p className="text-xs text-white/30">{players[1].totalWon}/{players[1].totalResolved} ✓</p>
                 </div>
 
                 {/* 1st */}
@@ -127,173 +114,152 @@ export default async function RankingPage() {
                   <div className="absolute top-0 left-0 right-0 h-[2px]"
                     style={{ background:'linear-gradient(90deg,transparent,#EAB308,transparent)' }} />
                   <div className="text-2xl mb-2">🥇</div>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-black text-yellow-400 mx-auto mb-2"
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center text-2xl mx-auto mb-2"
                     style={{ background:'rgba(234,179,8,0.12)', border:'1px solid rgba(234,179,8,0.30)' }}>
-                    {players[0].username?.charAt(0).toUpperCase() ?? '?'}
+                    {players[0].avatarEmoji}
                   </div>
-                  <p className="text-xs font-bold text-white/70 truncate">{players[0].username ?? 'Anónimo'}</p>
-                  <p className="font-black text-yellow-400 text-xl mt-0.5">{(+players[0].total_points || 0).toFixed(2)}</p>
-                  <p className="text-xs text-white/30">{players[0].total_won ?? 0}/{players[0].total_resolved ?? 0} ✓</p>
+                  <p className="text-xs font-bold text-white/70 truncate">{players[0].name}</p>
+                  <p className="font-black text-yellow-400 text-xl mt-0.5">{players[0].totalPoints.toFixed(2)}</p>
+                  <p className="text-xs text-white/30">{players[0].totalWon}/{players[0].totalResolved} ✓</p>
                 </div>
 
                 {/* 3rd */}
                 <div className="rounded-[24px] p-4 text-center mt-10 anim-slide-up"
                   style={{ background:'rgba(245,158,11,0.07)', border:'1px solid rgba(245,158,11,0.20)', backdropFilter:'blur(12px)', animationDelay:'100ms' }}>
                   <div className="text-2xl mb-2">🥉</div>
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-black text-amber-400 mx-auto mb-2"
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl mx-auto mb-2"
                     style={{ background:'rgba(245,158,11,0.12)', border:'1px solid rgba(245,158,11,0.25)' }}>
-                    {players[2].username?.charAt(0).toUpperCase() ?? '?'}
+                    {players[2].avatarEmoji}
                   </div>
-                  <p className="text-xs font-bold text-amber-400/80 truncate">{players[2].username ?? 'Anónimo'}</p>
-                  <p className="font-black text-amber-400 text-lg mt-0.5">{(+players[2].total_points || 0).toFixed(2)}</p>
-                  <p className="text-xs text-amber-400/40">{players[2].total_won ?? 0}/{players[2].total_resolved ?? 0} ✓</p>
+                  <p className="text-xs font-bold text-amber-400/80 truncate">{players[2].name}</p>
+                  <p className="font-black text-amber-400 text-lg mt-0.5">{players[2].totalPoints.toFixed(2)}</p>
+                  <p className="text-xs text-amber-400/40">{players[2].totalWon}/{players[2].totalResolved} ✓</p>
                 </div>
               </div>
             )}
 
-            {/* Full table — expandable */}
+            {/* Full table */}
             <div className="space-y-2">
               {players.length === 0 && (
-                <div className="text-center py-16 text-white/30">
+                <div className="text-center py-16 text-white/30 rounded-3xl"
+                  style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)' }}>
                   <p className="text-4xl mb-3">🐟</p>
-                  <p className="font-medium text-white/60">Nadie ha resuelto picks todavía</p>
-                  <Link href="/dashboard" className="text-yellow-400 font-bold text-sm mt-2 block">Hacer picks →</Link>
+                  <p className="font-bold text-white text-base">Aún no hay amigos en el ranking</p>
+                  <p className="text-sm text-white/40 mt-1">Elige tu nombre en el menú o añade amigos para empezar a jugar</p>
+                  <Link href="/dashboard" className="text-yellow-400 font-black text-sm mt-4 inline-block hover:underline">
+                    Ir a Partidos →
+                  </Link>
                 </div>
               )}
 
-              {players.map((p: any, i: number) => {
-                const isMe = user && p.user_id === user.id
-                const pts = +p.total_points || 0
-                const winRate = +(p.win_rate ?? 0)
-                const streak = currentWinStreak(picksByUser.get(p.user_id) ?? [])
-                const barPct = leaderPoints > 0 ? Math.round((pts / leaderPoints) * 100) : 0
-                const won = p.total_won ?? 0
-                const lost = (p.total_resolved ?? 0) - won
-                const pending = p.total_pending ?? 0
-                const total = won + lost + pending || 1
+              {players.map((p, i) => {
+                const isMe = activeFriend && p.id === activeFriend.id
+                const isLast = players.length > 1 && i === players.length - 1
+                const barPct = leaderPoints > 0 ? Math.round((p.totalPoints / leaderPoints) * 100) : 0
+                const playerPicks = picksByPlayer.get(p.id) ?? []
 
                 return (
-                  <details key={p.user_id}
+                  <details key={p.id}
                     className="group rounded-[20px] overflow-hidden transition-all anim-slide-up"
                     style={{
                       animationDelay: `${i * 40}ms`,
                       background: isMe ? 'rgba(234,179,8,0.07)' : 'rgba(255,255,255,0.05)',
-                      border: isMe ? '1px solid rgba(234,179,8,0.25)' : '1px solid rgba(255,255,255,0.09)',
-                      backdropFilter: 'blur(10px)',
+                      border: isMe
+                        ? '1px solid rgba(234,179,8,0.30)'
+                        : isLast
+                        ? '1px solid rgba(239,68,68,0.30)'
+                        : '1px solid rgba(255,255,255,0.08)',
+                      backdropFilter: 'blur(12px)',
                     }}>
-                    <summary className="flex items-center gap-3 px-4 py-3.5 cursor-pointer select-none list-none hover:bg-white/[0.03] transition-colors">
-                      {/* Rank */}
-                      <span className={`text-sm font-black w-7 text-center shrink-0 ${
-                        i === 0 ? 'text-yellow-400' : i === 1 ? 'text-white/50' : i === 2 ? 'text-amber-400' : 'text-white/20'
-                      }`}>{i + 1}</span>
+                    <summary className="flex items-center gap-3 p-4 cursor-pointer list-none select-none hover:bg-white/[0.03] transition-colors">
+                      {/* Position */}
+                      <span className={`w-7 text-center font-black text-sm shrink-0 ${
+                        i === 0 ? 'text-yellow-400' :
+                        i === 1 ? 'text-white/70' :
+                        i === 2 ? 'text-amber-400' :
+                        isLast ? 'text-red-400' : 'text-white/25'
+                      }`}>
+                        #{i + 1}
+                      </span>
 
                       {/* Avatar */}
-                      <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-black shrink-0"
-                        style={isMe
-                          ? { background:'rgba(234,179,8,0.12)', border:'1px solid rgba(234,179,8,0.30)', color:'#EAB308' }
-                          : { background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.10)', color:'rgba(255,255,255,0.60)' }}>
-                        {p.username?.charAt(0).toUpperCase() ?? '?'}
+                      <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl shrink-0"
+                        style={{
+                          background: isMe ? 'rgba(234,179,8,0.12)' : 'rgba(255,255,255,0.08)',
+                          border: isMe ? '1px solid rgba(234,179,8,0.25)' : '1px solid rgba(255,255,255,0.10)',
+                        }}>
+                        {p.avatarEmoji || '🐟'}
                       </div>
 
-                      {/* Name + bar */}
-                      <div className="flex-1 min-w-0 overflow-hidden">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="font-bold text-sm text-white truncate">
-                            {p.username ?? 'Anónimo'}
-                          </span>
-                          {isMe && <span className="text-xs text-white/30 shrink-0">(tú)</span>}
-                        </div>
-                        <div className="flex items-center gap-2 mt-1.5">
-                          <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background:'rgba(255,255,255,0.07)' }}>
-                            <div className="h-full rounded-full transition-all"
-                              style={{ width:`${barPct}%`, background: isMe ? '#EAB308' : 'rgba(255,255,255,0.30)' }} />
-                          </div>
-                          {streak >= 2 && (
-                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full shrink-0"
-                              style={{ background:'rgba(34,197,94,0.12)', color:'#4ade80', border:'1px solid rgba(34,197,94,0.20)' }}>
-                              🔥{streak}
+                      {/* Name & stats */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className={`font-bold text-sm truncate ${isMe ? 'text-yellow-400' : 'text-white'}`}>
+                            {p.name}
+                          </p>
+                          {isMe && (
+                            <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-yellow-400/20 text-yellow-400 shrink-0">
+                              TÚ
                             </span>
                           )}
+                          {isLast && (
+                            <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 shrink-0 flex items-center gap-1">
+                              🍺 Paga birras
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Progress bar */}
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-white/10">
+                            <div className="h-full rounded-full transition-all duration-500"
+                              style={{
+                                width: `${barPct}%`,
+                                background: i === 0 ? 'linear-gradient(90deg,#EAB308,#F59E0B)' : isLast ? '#EF4444' : 'rgba(255,255,255,0.4)',
+                              }} />
+                          </div>
+                          <span className="text-[11px] text-white/35 shrink-0">
+                            {p.totalWon}/{p.totalResolved} · {p.winRate}%
+                          </span>
                         </div>
                       </div>
 
                       {/* Points */}
                       <div className="text-right shrink-0">
-                        <div className={`font-black ${isMe ? 'text-yellow-400' : 'text-white'}`}>{pts.toFixed(2)}</div>
-                        <div className="text-[10px] text-white/30">{winRate}% acierto</div>
+                        <p className={`font-black text-lg ${i === 0 ? 'text-yellow-400' : 'text-white'}`}>
+                          {p.totalPoints.toFixed(2)}
+                        </p>
+                        <p className="text-[10px] text-white/30">pts</p>
                       </div>
 
-                      {/* Expand badge */}
-                      <span className="text-[10px] font-bold px-2 py-1 rounded-full transition-colors shrink-0"
-                        style={{ background:'rgba(255,255,255,0.07)', color:'rgba(255,255,255,0.35)', border:'1px solid rgba(255,255,255,0.09)' }}>
-                        Stats
-                      </span>
+                      {/* Arrow */}
+                      <span className="text-white/20 text-xs ml-1 group-open:rotate-180 transition-transform">▾</span>
                     </summary>
 
-                    {/* Expanded content */}
-                    <div className="px-4 py-5" style={{ borderTop:'1px solid rgba(255,255,255,0.07)' }}>
-                      <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-5">
-
-                        {/* Left: donut + forma */}
-                        <div className="rounded-2xl p-5 flex flex-col items-center gap-3"
-                          style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)' }}>
-                          <div className="relative w-24 h-24">
-                            <div className="w-24 h-24 rounded-full" style={{
-                              background: `conic-gradient(#22c55e ${winRate * 3.6}deg, rgba(255,255,255,0.06) 0deg)`
-                            }} />
-                            <div className="absolute inset-3 rounded-full flex items-center justify-center"
-                              style={{ background:'#0d0e18' }}>
-                              <span className="text-white font-black text-sm">{winRate}%</span>
-                            </div>
-                          </div>
-                          <p className="text-white/30 text-xs">% acierto</p>
-
-                          <div className="flex gap-1 mt-1">
-                            {(picksByUser.get(p.user_id) ?? []).slice(0, 6).reverse().map((pick, idx) => (
-                              <span key={idx} className={`w-5 h-5 rounded flex items-center justify-center text-[9px] font-black ${
-                                pick.status === 'won' ? 'bg-emerald-500 text-white' : 'bg-red-500/80 text-white'
-                              }`}>
-                                {pick.status === 'won' ? 'W' : 'L'}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Right: KPIs + distribution */}
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                            {[
-                              { label: 'Puntos', value: pts.toFixed(2), color: '#EAB308' },
-                              { label: 'Racha', value: streak >= 2 ? `🔥 ${streak}` : '—', color: '#4ade80' },
-                              { label: 'Ganados', value: won, color: '#4ade80' },
-                              { label: 'Fallados', value: lost, color: '#f87171' },
-                            ].map(({ label, value, color }) => (
-                              <div key={label} className="rounded-xl p-3"
-                                style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.07)' }}>
-                                <div className="flex items-center gap-1.5 mb-1">
-                                  <div className="w-2 h-2 rounded-full" style={{ background: color }} />
-                                  <span className="text-[10px] text-white/30 font-medium">{label}</span>
-                                </div>
-                                <p className="font-black text-white text-lg leading-none">{value}</p>
+                    {/* Expandable picks history */}
+                    <div className="px-5 pb-4 pt-2 border-t border-white/[0.06] text-xs text-white/60 space-y-2">
+                      <p className="font-bold text-[10px] text-white/30 uppercase tracking-widest">Últimos picks</p>
+                      {playerPicks.length === 0 ? (
+                        <p className="text-white/30 text-xs">Sin pronósticos aún</p>
+                      ) : (
+                        <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                          {playerPicks.slice(0, 10).map(pk => (
+                            <div key={pk.id} className="flex items-center justify-between text-xs py-1 px-2.5 rounded-lg bg-white/[0.03]">
+                              <span className="text-white truncate max-w-[200px]">{pk.description}</span>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <span className="text-white/40">{pk.selection}</span>
+                                <span className={`font-bold ${
+                                  pk.status === 'won' ? 'text-green-400' :
+                                  pk.status === 'lost' ? 'text-red-400' : 'text-yellow-400'
+                                }`}>
+                                  {pk.status === 'won' ? `+${pk.points.toFixed(2)} pts` :
+                                   pk.status === 'lost' ? '0 pts' : `@${pk.odds.toFixed(2)}`}
+                                </span>
                               </div>
-                            ))}
-                          </div>
-
-                          <div>
-                            <p className="text-xs text-white/25 mb-2 font-medium">Distribución de picks</p>
-                            <div className="flex h-1.5 rounded-full overflow-hidden gap-0.5">
-                              {won > 0 && <div className="bg-emerald-500 rounded-full" style={{ width: `${(won / total) * 100}%` }} />}
-                              {lost > 0 && <div className="bg-red-400/80 rounded-full" style={{ width: `${(lost / total) * 100}%` }} />}
-                              {pending > 0 && <div className="bg-amber-400/80 rounded-full" style={{ width: `${(pending / total) * 100}%` }} />}
                             </div>
-                            <div className="flex gap-4 mt-2">
-                              <span className="flex items-center gap-1 text-[10px] text-white/30"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />{won} ganados</span>
-                              <span className="flex items-center gap-1 text-[10px] text-white/30"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" />{lost} fallados</span>
-                              <span className="flex items-center gap-1 text-[10px] text-white/30"><span className="w-2 h-2 rounded-full bg-amber-400 inline-block" />{pending} pendientes</span>
-                            </div>
-                          </div>
+                          ))}
                         </div>
-                      </div>
+                      )}
                     </div>
                   </details>
                 )

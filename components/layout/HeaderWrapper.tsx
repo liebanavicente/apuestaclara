@@ -1,24 +1,41 @@
 'use client'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Header } from './Header'
-import { createClient } from '@/lib/supabase/client'
-import type { Profile } from '@/types/database'
-import type { UserAccess } from '@/lib/access'
+import { FriendSelectorModal } from '@/components/club/FriendSelectorModal'
+import type { Friend } from '@/lib/services/club.service'
 
 interface HeaderWrapperProps {
-  profile?: Profile | null
-  access?: UserAccess | null
+  friend?: Friend | null
+  profile?: any
+  access?: any
 }
 
-export function HeaderWrapper({ profile, access }: HeaderWrapperProps) {
+export function HeaderWrapper({ friend }: HeaderWrapperProps) {
   const router = useRouter()
+  const [selectorOpen, setSelectorOpen] = useState(false)
 
   async function handleSignOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/')
+    try {
+      await fetch('/api/club/logout', { method: 'POST' })
+    } catch {
+      // ignore
+    }
     router.refresh()
   }
 
-  return <Header profile={profile} access={access} onSignOut={handleSignOut} />
+  return (
+    <>
+      <Header
+        friend={friend}
+        onSignOut={handleSignOut}
+        onOpenSelector={() => setSelectorOpen(true)}
+      />
+      <FriendSelectorModal
+        isOpen={selectorOpen}
+        onClose={() => setSelectorOpen(false)}
+        currentFriendId={friend?.id}
+      />
+    </>
+  )
 }

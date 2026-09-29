@@ -2,15 +2,16 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, UserCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { Profile } from '@/types/database'
-import type { UserAccess } from '@/lib/access'
+import type { Friend } from '@/lib/services/club.service'
 
 interface HeaderProps {
-  profile?: Profile | null
-  access?: UserAccess | null
+  friend?: Friend | null
+  profile?: any
+  access?: any
   onSignOut?: () => void
+  onOpenSelector?: () => void
 }
 
 const NAV_LINKS = [
@@ -29,7 +30,7 @@ const TAGLINES = [
   'birras o gloria, no hay más opciones',
 ]
 
-export function Header({ profile, access, onSignOut }: HeaderProps) {
+export function Header({ friend, onSignOut, onOpenSelector }: HeaderProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
@@ -42,7 +43,7 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
         <div className="flex h-16 items-center justify-between gap-4">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+          <Link href="/dashboard" className="flex items-center gap-2.5 shrink-0 group">
             <span className="text-2xl group-hover:rotate-12 transition-transform inline-block">🐟</span>
             <div className="hidden sm:block">
               <span className="font-black text-white text-[15px] tracking-tight">GañanesBets</span>
@@ -79,64 +80,69 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-            {profile ? (
+            {friend ? (
               <div className="relative">
                 <button
                   onClick={() => setAccountOpen(!accountOpen)}
-                  className="flex items-center gap-2 transition-all px-2 py-1 rounded-xl hover:bg-white/[0.06]"
+                  className="flex items-center gap-2 transition-all px-3 py-1.5 rounded-2xl hover:bg-white/[0.08]"
+                  style={{
+                    background: 'rgba(234,179,8,0.08)',
+                    border: '1px solid rgba(234,179,8,0.22)',
+                  }}
                 >
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-yellow-400"
-                    style={{ background:'rgba(234,179,8,0.12)', border:'1px solid rgba(234,179,8,0.25)' }}>
-                    {(profile.username ?? profile.email).charAt(0).toUpperCase()}
-                  </div>
-                  <span className="hidden sm:block font-semibold text-sm text-white/80">{profile.username ?? profile.email.split('@')[0]}</span>
-                  <span className="hidden sm:block text-white/25 text-xs">▾</span>
+                  <span className="text-lg">{friend.avatarEmoji}</span>
+                  <span className="font-bold text-sm text-white">{friend.name}</span>
+                  <span className="text-white/25 text-xs">▾</span>
                 </button>
 
                 {accountOpen && (
-                  <div className="absolute right-0 top-11 w-48 rounded-2xl py-2 z-50"
-                    style={{ background:'rgba(10,11,20,0.95)', border:'1px solid rgba(255,255,255,0.10)', backdropFilter:'blur(20px)', boxShadow:'0 20px 60px rgba(0,0,0,0.6)' }}>
-                    {[
-                      { href:'/dashboard', label:'⚽ Partidos' },
-                      { href:'/ranking', label:'🏆 Ranking' },
-                      { href:'/account', label:'Mi cuenta' },
-                    ].map(({ href, label }) => (
-                      <Link key={href} href={href}
-                        className="block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] rounded-lg mx-1 transition-colors"
-                        onClick={() => setAccountOpen(false)}>{label}</Link>
-                    ))}
-                    {access?.isAdmin && (
-                      <>
-                        <div className="my-1 mx-3 border-t border-white/[0.07]" />
-                        <Link href="/admin/resolver"
-                          className="block px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/[0.08] rounded-lg mx-1 transition-colors"
-                          onClick={() => setAccountOpen(false)}>⚙️ Resolver picks</Link>
-                      </>
-                    )}
-                    <div className="my-1 mx-3 border-t border-white/[0.07]" />
-                    <button onClick={onSignOut} className="w-full text-left px-4 py-2 text-sm text-white/35 hover:text-white/60 hover:bg-white/[0.04] rounded-lg mx-1 transition-colors">
-                      Salir 👋
+                  <div className="absolute right-0 top-12 w-52 rounded-2xl py-2 z-50 shadow-2xl"
+                    style={{ background:'rgba(15,23,42,0.98)', border:'1px solid rgba(255,255,255,0.12)', backdropFilter:'blur(20px)' }}>
+                    <div className="px-4 py-2 border-b border-white/[0.08]">
+                      <p className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Conectado como</p>
+                      <p className="text-white font-black text-sm truncate flex items-center gap-1.5 mt-0.5">
+                        <span>{friend.avatarEmoji}</span> {friend.name}
+                      </p>
+                    </div>
+
+                    <div className="py-1">
+                      <Link href="/dashboard"
+                        className="block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] transition-colors"
+                        onClick={() => setAccountOpen(false)}>
+                        ⚽ Hacer picks
+                      </Link>
+                      <Link href="/ranking"
+                        className="block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] transition-colors"
+                        onClick={() => setAccountOpen(false)}>
+                        🏆 Ver Ranking
+                      </Link>
+                      <button
+                        onClick={() => { setAccountOpen(false); onOpenSelector?.() }}
+                        className="w-full text-left px-4 py-2 text-sm text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/[0.08] transition-colors flex items-center gap-1.5 font-medium"
+                      >
+                        <UserCheck className="w-3.5 h-3.5" /> Cambiar de amigo
+                      </button>
+                    </div>
+
+                    <div className="my-1 border-t border-white/[0.08]" />
+                    <button onClick={onSignOut} className="w-full text-left px-4 py-2 text-sm text-white/40 hover:text-red-400 hover:bg-white/[0.04] transition-colors">
+                      Cerrar sesión 👋
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <Link href="/login?redirect=/dashboard"
-                  className="text-sm text-white/50 hover:text-white/80 transition-colors px-3 py-1.5 font-medium">
-                  Entrar
-                </Link>
-                <Link href="/register?redirect=/dashboard"
-                  className="text-sm font-black px-4 py-2 rounded-full transition-all text-[#07080F]"
-                  style={{ background:'linear-gradient(135deg,#EAB308,#F59E0B)', boxShadow:'0 4px 16px rgba(234,179,8,0.30)' }}>
-                  Únete 🐟
-                </Link>
-              </div>
+              <button
+                onClick={onOpenSelector}
+                className="flex items-center gap-2 text-sm font-black px-4 py-2 rounded-full transition-all text-[#07080F]"
+                style={{ background:'linear-gradient(135deg,#EAB308,#F59E0B)', boxShadow:'0 4px 16px rgba(234,179,8,0.30)' }}>
+                <span>🐟</span> ¿Quién eres? / Entrar
+              </button>
             )}
 
             {/* Mobile burger */}
             <button
-              className="lg:hidden p-1.5 text-white/50 hover:text-white hover:bg-white/[0.07] rounded-lg transition-colors"
+              className="lg:hidden p-1.5 text-white/50 hover:text-white hover:bg-white/[0.07] rounded-lg transition-colors ml-1"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -165,13 +171,27 @@ export function Header({ profile, access, onSignOut }: HeaderProps) {
                 <span>{icon}</span>{label}
               </Link>
             ))}
-            {access?.isAdmin && (
-              <Link href="/admin/resolver"
-                className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/[0.08] transition-colors"
-                onClick={() => setMobileOpen(false)}>
-                ⚙️ Resolver picks
-              </Link>
-            )}
+
+            <div className="pt-2 border-t border-white/[0.08]">
+              {friend ? (
+                <button
+                  onClick={() => { setMobileOpen(false); onOpenSelector?.() }}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-yellow-400 bg-yellow-400/10"
+                >
+                  <span className="flex items-center gap-2">
+                    <span>{friend.avatarEmoji}</span> {friend.name}
+                  </span>
+                  <span className="text-xs text-white/40">Cambiar</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => { setMobileOpen(false); onOpenSelector?.() }}
+                  className="w-full py-2.5 rounded-xl text-sm font-black text-slate-950 bg-yellow-500 text-center"
+                >
+                  🐟 ¿Quién eres? / Entrar
+                </button>
+              )}
+            </div>
           </nav>
         </div>
       )}

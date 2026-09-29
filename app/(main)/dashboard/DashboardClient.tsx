@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { teamShort } from '@/lib/teamShort'
 import { PickConfirmedToast, shouldShowPickWarning } from '@/components/picks/PickConfirmedToast'
 import { QuickAI } from '@/components/picks/QuickAI'
+import { FriendSelectorModal } from '@/components/club/FriendSelectorModal'
+import type { Friend } from '@/lib/services/club.service'
 
 interface MyPick {
   id: string
@@ -21,6 +23,7 @@ interface Props {
   totalPoints: number
   myPicks: MyPick[]
   inProgressPicks: MyPick[]
+  activeFriend?: Friend | null
 }
 
 interface StagedPick {
@@ -36,11 +39,12 @@ function fmtDate(iso: string) {
   })
 }
 
-export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks }: Props) {
+export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks, activeFriend }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
   const [staged, setStaged] = useState<StagedPick | null>(null)
   const [toast, setToast] = useState<{ odds: number } | null>(null)
+  const [selectorOpen, setSelectorOpen] = useState(false)
 
   const myPickMap = new Map(myPicks.map(p => [p.description, p]))
 
@@ -56,6 +60,10 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks 
   }, {})
 
   function stagePick(ev: NormalizedEvent, selection: string, odds: number) {
+    if (!activeFriend) {
+      setSelectorOpen(true)
+      return
+    }
     if (staged?.eventId === ev.id && staged.selection === selection) { setStaged(null); return }
     setStaged({ eventId: ev.id, selection, odds })
   }
@@ -110,6 +118,26 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks 
           </Link>
         </div>
       </div>
+
+      {/* Banner if no active friend */}
+      {!activeFriend && (
+        <div className="mb-8 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 anim-slide-up"
+          style={{ background: 'rgba(234,179,8,0.08)', border: '1px solid rgba(234,179,8,0.25)', boxShadow: '0 4px 24px rgba(234,179,8,0.08)' }}>
+          <div className="flex items-center gap-3">
+            <span className="text-3xl sm:text-4xl">🐟</span>
+            <div>
+              <p className="text-white font-black text-base">¿Quién eres tú en el grupo?</p>
+              <p className="text-xs text-white/50 mt-0.5">Elige tu nombre o apúntate con 1 clic para hacer picks y sumar puntos</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setSelectorOpen(true)}
+            className="w-full sm:w-auto shrink-0 px-5 py-2.5 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs transition-all shadow-md shadow-yellow-500/20"
+          >
+            Elegir mi perfil →
+          </button>
+        </div>
+      )}
 
       {/* In-progress picks */}
       {inProgressPicks.length > 0 && (
@@ -338,6 +366,12 @@ export function DashboardClient({ events, totalPoints, myPicks, inProgressPicks 
           ))}
         </div>
       )}
+
+      <FriendSelectorModal
+        isOpen={selectorOpen}
+        onClose={() => setSelectorOpen(false)}
+        currentFriendId={activeFriend?.id}
+      />
     </main>
   )
 }

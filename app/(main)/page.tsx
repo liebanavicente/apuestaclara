@@ -21,13 +21,13 @@ export default function HomePage() {
           <p className="text-slate-600 text-sm mb-10">Sin dinero real. Solo el orgullo.</p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link href="/register?redirect=/dashboard"
+            <Link href="/dashboard"
               className="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-8 py-3.5 rounded-xl text-base transition-colors w-full sm:w-auto">
-              Unirme a la competición 🐟
+              Ver partidos y apostar 🐟
             </Link>
-            <Link href="/login?redirect=/dashboard"
+            <Link href="/ranking"
               className="border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white font-semibold px-8 py-3.5 rounded-xl text-base transition-colors w-full sm:w-auto">
-              Ya tengo cuenta
+              🏆 Ver Ranking
             </Link>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function HomePage() {
       <section className="py-16 text-center px-4 border-t border-slate-800/50">
         <p className="text-3xl font-black text-white mb-2">¿Te apuntas?</p>
         <p className="text-slate-400 mb-8">Regístrate gratis y empieza a hacer picks</p>
-        <Link href="/register?redirect=/dashboard"
+        <Link href="/dashboard"
           className="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black px-8 py-3.5 rounded-xl text-base transition-colors inline-block">
           Entrar a GañanesBets 🐟
         </Link>
