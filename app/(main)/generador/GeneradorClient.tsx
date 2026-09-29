@@ -26,6 +26,7 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
   const [riskLevel, setRiskLevel] = useState<RiskLevel>('medio')
   const [targetOdds, setTargetOdds] = useState('5.00')
   const [numPicks, setNumPicks] = useState(Math.min(3, maxPicks))
+  const [timeWindow, setTimeWindow] = useState<number>(72) // hours
   const [selectedSports, setSelectedSports] = useState<string[]>(['soccer_fifa_world_cup', 'soccer_uefa_champs_league'])
   const [events, setEvents] = useState<NormalizedEvent[]>([])
   const [picks, setPicks] = useState<PickSelection[]>([])
@@ -55,8 +56,12 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
     if (eventsToUse.length === 0) return
 
     const target = parseFloat(targetOdds) || 5
-    const count = Math.min(numPicks, maxPicks, eventsToUse.length)
-    const shuffled = [...eventsToUse].sort(() => Math.random() - 0.5)
+    // Filter by time window
+    const cutoff = timeWindow > 0 ? new Date(Date.now() + timeWindow * 3600_000) : null
+    const inWindow = cutoff ? eventsToUse.filter(e => new Date(e.commence_time) <= cutoff) : eventsToUse
+    const pool = inWindow.length > 0 ? inWindow : eventsToUse
+    const count = Math.min(numPicks, maxPicks, pool.length)
+    const shuffled = [...pool].sort(() => Math.random() - 0.5)
 
     // Pick events with odds that roughly reach target when combined
     const selected: PickSelection[] = []
@@ -203,6 +208,21 @@ export function GeneradorClient({ isLoggedIn, maxPicks, isPremium }: GeneradorCl
                   }`}
                 >
                   {r}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Ventana temporal */}
+          <div>
+            <p className="text-xs text-slate-500 mb-2">Partidos en las próximas…</p>
+            <div className="grid grid-cols-4 gap-1">
+              {[24, 48, 72, 0].map(h => (
+                <button key={h} onClick={() => { setTimeWindow(h); setEvents([]); setGenerated(false); setPicks([]) }}
+                  className={`py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    timeWindow === h ? 'bg-teal-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+                  }`}>
+                  {h === 0 ? 'Todos' : `${h}h`}
                 </button>
               ))}
             </div>

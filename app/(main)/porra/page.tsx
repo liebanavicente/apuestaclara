@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
- 
-export default function MundialPage() {
+
+export default function PorraPage() {
   redirect('/dashboard')
 }

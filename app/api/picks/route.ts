@@ -15,6 +15,13 @@ export async function POST(req: NextRequest) {
   }
   if (odds <= 1) return NextResponse.json({ error: 'Cuota debe ser mayor de 1' }, { status: 400 })
 
+  // Only allow picks for LaLiga and Champions League
+  const allowed = ['la liga', 'laliga', 'champions league', 'soccer_spain_la_liga', 'soccer_uefa_champs_league']
+  const compLower = (competition || '').toLowerCase()
+  if (competition && !allowed.some(c => compLower.includes(c))) {
+    return NextResponse.json({ error: 'Solo se permiten picks de LaLiga y Champions League' }, { status: 400 })
+  }
+
   const admin = createAdminClient()
 
   // Check: only one pick per user per match

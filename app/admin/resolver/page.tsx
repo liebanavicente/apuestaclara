@@ -30,12 +30,24 @@ export default function AdminResolverPage() {
     if (rRes.ok) setResolved(await rRes.json())
   }
 
+  const [fixLoading, setFixLoading] = useState(false)
+  const [fixResult, setFixResult] = useState<any>(null)
+
   async function runAuto() {
     setAutoLoading(true)
     setAutoResult(null)
     const res = await fetch('/api/admin/auto-resolve', { method: 'POST' })
     setAutoResult(await res.json())
     setAutoLoading(false)
+    loadAll()
+  }
+
+  async function fixOdds() {
+    setFixLoading(true)
+    setFixResult(null)
+    const res = await fetch('/api/admin/fix-odds', { method: 'POST' })
+    setFixResult(await res.json())
+    setFixLoading(false)
     loadAll()
   }
 
@@ -66,15 +78,28 @@ export default function AdminResolverPage() {
       <h1 className="text-2xl font-black text-white mb-1">Resolver picks</h1>
       <p className="text-slate-500 text-sm mb-6">Resolución automática y manual. Puedes corregir picks ya resueltos.</p>
 
-      <button onClick={runAuto} disabled={autoLoading}
-        className="bg-yellow-500 hover:bg-yellow-400 disabled:opacity-50 text-slate-950 font-black px-5 py-2.5 rounded-xl transition-colors mb-2">
-        {autoLoading ? 'Resolviendo…' : '▶ Auto-resolver'}
-      </button>
+      <div className="flex gap-2 mb-2 flex-wrap">
+        <button onClick={runAuto} disabled={autoLoading}
+          className="bg-yellow-500 hover:bg-yellow-400 disabled:opacity-50 text-slate-950 font-black px-5 py-2.5 rounded-xl transition-colors">
+          {autoLoading ? 'Resolviendo…' : '▶ Auto-resolver'}
+        </button>
+        <button onClick={fixOdds} disabled={fixLoading}
+          className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-black px-5 py-2.5 rounded-xl transition-colors">
+          {fixLoading ? 'Rectificando…' : '🔧 Rectificar cuotas'}
+        </button>
+      </div>
 
       {autoResult && (
-        <div className="mb-6 rounded-xl border border-slate-700 bg-slate-900 p-3 text-sm">
+        <div className="mb-4 rounded-xl border border-slate-700 bg-slate-900 p-3 text-sm">
           <span className="text-green-400 font-bold">{autoResult.totalResolved} resueltos</span>
           {autoResult.log?.map((l: string, i: number) => <p key={i} className="text-slate-500 text-xs mt-0.5 font-mono">{l}</p>)}
+        </div>
+      )}
+
+      {fixResult && (
+        <div className="mb-6 rounded-xl border border-blue-500/30 bg-blue-500/10 p-3 text-sm">
+          <span className="text-blue-400 font-bold">✓ {fixResult.updated} picks actualizados</span>
+          <span className="text-slate-500 ml-2">({fixResult.skipped} sin cambios, {fixResult.total} total)</span>
         </div>
       )}
 

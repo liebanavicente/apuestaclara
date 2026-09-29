@@ -4,7 +4,7 @@ const BASE_URL = 'https://api.the-odds-api.com/v4'
 const API_KEY = process.env.THE_ODDS_API_KEY
 
 export const FEATURED_SPORTS: { key: string; label: string; emoji: string; featured?: boolean }[] = [
-  { key: 'soccer_fifa_world_cup', label: 'Mundial 2026', emoji: '🌍', featured: true },
+  { key: 'soccer_spain_la_liga', label: 'La Liga', emoji: '🇪🇸', featured: true },
   { key: 'soccer_uefa_champs_league', label: 'Champions League', emoji: '⭐', featured: true },
 ]
 
@@ -112,7 +112,7 @@ function normalizeEvent(event: OddsEvent): NormalizedEvent {
     if (away) allAwayOdds.push(away.price)
   }
 
-  const best = (arr: number[]) => arr.length ? Math.max(...arr) : null
+  const best = (arr: number[]) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null
   const avg = (arr: number[]) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null
   const impl = (odds: number | null) => odds ? Math.round((1 / odds) * 100) : null
 

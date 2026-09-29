@@ -15,7 +15,7 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="text-slate-400 text-lg sm:text-xl mb-3">
-            Elige el resultado de los partidos del Mundial y la Champions.<br />
+            Elige el resultado de los partidos de LaLiga y la Champions.<br />
             Cada acierto suma la cuota en puntos. El último paga la ronda.
           </p>
           <p className="text-slate-600 text-sm mb-10">Sin dinero real. Solo el orgullo.</p>
@@ -39,8 +39,8 @@ export default function HomePage() {
           <h2 className="text-2xl font-black text-white text-center mb-10">Cómo funciona</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { emoji: '⚽', title: 'Elige el resultado', desc: 'Ves los partidos del Mundial y Champions con cuotas reales. Haces click en 1, X o 2 antes de que empiece.' },
-              { emoji: '🎯', title: 'Anticípate', desc: 'Puedes apostar semanas antes. Las cuotas cambian — si apuestas pronto a veces ganas más.' },
+              { emoji: '⚽', title: 'Elige el resultado', desc: 'Ves todos los partidos de LaLiga y Champions con cuotas reales. Haces click en 1, X o 2 antes de que empiece.' },
+              { emoji: '🎯', title: 'Anticípate', desc: 'Puedes apostar con antelación. Las cuotas cambian — si apuestas pronto a veces ganas más.' },
               { emoji: '🏆', title: 'Acumula puntos', desc: 'Cada acierto suma la cuota en puntos. El ranking decide quién paga las birras.' },
             ].map(({ emoji, title, desc }) => (
               <div key={title} className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 text-center">
@@ -75,7 +75,7 @@ export default function HomePage() {
             <div className="flex items-center gap-4">
               <span className="text-2xl">🍺</span>
               <div>
-                <p className="text-white font-semibold">Final del Mundial (19 jul 2026)</p>
+                <p className="text-white font-semibold">Temporada completa</p>
                 <p className="text-slate-400 text-sm">El último del ranking paga la ronda. El primero elige el bar.</p>
               </div>
             </div>

@@ -1,58 +1,99 @@
+export interface Team {
+  code: string
+  name: string
+  apiNames: string[]  // All English name variants as returned by The Odds API
+}
+
 export interface Group {
   id: string
-  teams: { code: string; name: string }[]
-  apiNames: string[]  // English names as returned by The Odds API
+  teams: Team[]
 }
 
 export const WC_GROUPS: Group[] = [
-  { id: 'A',
-    teams: [{ code: 'MEX', name: 'México' }, { code: 'RSA', name: 'Sudáfrica' }, { code: 'KOR', name: 'Corea del Sur' }, { code: 'CZE', name: 'Chequia' }],
-    apiNames: ['Mexico', 'South Africa', 'South Korea', 'Korea Republic', 'Czech Republic', 'Czechia'] },
-  { id: 'B',
-    teams: [{ code: 'CAN', name: 'Canadá' }, { code: 'BIH', name: 'Bosnia y Herzegovina' }, { code: 'QAT', name: 'Qatar' }, { code: 'SUI', name: 'Suiza' }],
-    apiNames: ['Canada', 'Bosnia and Herzegovina', 'Bosnia & Herzegovina', 'Qatar', 'Switzerland'] },
-  { id: 'C',
-    teams: [{ code: 'BRA', name: 'Brasil' }, { code: 'MAR', name: 'Marruecos' }, { code: 'HAI', name: 'Haití' }, { code: 'SCO', name: 'Escocia' }],
-    apiNames: ['Brazil', 'Morocco', 'Haiti', 'Scotland'] },
-  { id: 'D',
-    teams: [{ code: 'EUA', name: 'Estados Unidos' }, { code: 'PAR', name: 'Paraguay' }, { code: 'AUS', name: 'Australia' }, { code: 'TUR', name: 'Turquía' }],
-    apiNames: ['USA', 'United States', 'Paraguay', 'Australia', 'Turkey', 'Türkiye'] },
-  { id: 'E',
-    teams: [{ code: 'ALE', name: 'Alemania' }, { code: 'CUR', name: 'Curacao' }, { code: 'CIV', name: 'Costa de Marfil' }, { code: 'ECU', name: 'Ecuador' }],
-    apiNames: ['Germany', 'Curacao', 'Curaçao', 'Ivory Coast', "Côte d'Ivoire", 'Ecuador'] },
-  { id: 'F',
-    teams: [{ code: 'NED', name: 'Países Bajos' }, { code: 'JPN', name: 'Japón' }, { code: 'SUE', name: 'Suecia' }, { code: 'TUN', name: 'Túnez' }],
-    apiNames: ['Netherlands', 'Japan', 'Sweden', 'Tunisia'] },
-  { id: 'G',
-    teams: [{ code: 'BEL', name: 'Bélgica' }, { code: 'EGI', name: 'Egipto' }, { code: 'IRN', name: 'Irán' }, { code: 'NZL', name: 'Nueva Zelanda' }],
-    apiNames: ['Belgium', 'Egypt', 'IR Iran', 'Iran', 'New Zealand'] },
-  { id: 'H',
-    teams: [{ code: 'ESP', name: 'España' }, { code: 'CAV', name: 'Cabo Verde' }, { code: 'SAU', name: 'Arabia Saudita' }, { code: 'URU', name: 'Uruguay' }],
-    apiNames: ['Spain', 'Cape Verde', 'Saudi Arabia', 'Uruguay'] },
-  { id: 'I',
-    teams: [{ code: 'FRA', name: 'Francia' }, { code: 'SEN', name: 'Senegal' }, { code: 'IRK', name: 'Irak' }, { code: 'NOR', name: 'Noruega' }],
-    apiNames: ['France', 'Senegal', 'Iraq', 'Norway'] },
-  { id: 'J',
-    teams: [{ code: 'ARG', name: 'Argentina' }, { code: 'ALG', name: 'Argelia' }, { code: 'AUT', name: 'Austria' }, { code: 'JOR', name: 'Jordania' }],
-    apiNames: ['Argentina', 'Algeria', 'Austria', 'Jordan'] },
-  { id: 'K',
-    teams: [{ code: 'POR', name: 'Portugal' }, { code: 'RDC', name: 'Rep. D. del Congo' }, { code: 'UZB', name: 'Uzbekistán' }, { code: 'COL', name: 'Colombia' }],
-    apiNames: ['Portugal', 'DR Congo', 'Democratic Republic of Congo', 'Democratic Republic of the Congo', 'Congo DR', 'Uzbekistan', 'Colombia'] },
-  { id: 'L',
-    teams: [{ code: 'ENG', name: 'Inglaterra' }, { code: 'CRO', name: 'Croacia' }, { code: 'GHA', name: 'Ghana' }, { code: 'PAN', name: 'Panamá' }],
-    apiNames: ['England', 'Croatia', 'Ghana', 'Panama'] },
+  { id: 'A', teams: [
+    { code: 'MEX', name: 'México',          apiNames: ['Mexico'] },
+    { code: 'RSA', name: 'Sudáfrica',        apiNames: ['South Africa'] },
+    { code: 'KOR', name: 'Corea del Sur',   apiNames: ['South Korea', 'Korea Republic'] },
+    { code: 'CZE', name: 'Chequia',         apiNames: ['Czech Republic', 'Czechia'] },
+  ]},
+  { id: 'B', teams: [
+    { code: 'CAN', name: 'Canadá',                  apiNames: ['Canada'] },
+    { code: 'BIH', name: 'Bosnia y Herzegovina',    apiNames: ['Bosnia and Herzegovina', 'Bosnia & Herzegovina', 'Bosnia-Herzegovina'] },
+    { code: 'QAT', name: 'Qatar',                   apiNames: ['Qatar'] },
+    { code: 'SUI', name: 'Suiza',                   apiNames: ['Switzerland'] },
+  ]},
+  { id: 'C', teams: [
+    { code: 'BRA', name: 'Brasil',     apiNames: ['Brazil'] },
+    { code: 'MAR', name: 'Marruecos', apiNames: ['Morocco'] },
+    { code: 'HAI', name: 'Haití',     apiNames: ['Haiti'] },
+    { code: 'SCO', name: 'Escocia',   apiNames: ['Scotland'] },
+  ]},
+  { id: 'D', teams: [
+    { code: 'EUA', name: 'Estados Unidos', apiNames: ['USA', 'United States'] },
+    { code: 'PAR', name: 'Paraguay',       apiNames: ['Paraguay'] },
+    { code: 'AUS', name: 'Australia',      apiNames: ['Australia'] },
+    { code: 'TUR', name: 'Turquía',        apiNames: ['Turkey', 'Türkiye'] },
+  ]},
+  { id: 'E', teams: [
+    { code: 'ALE', name: 'Alemania',         apiNames: ['Germany'] },
+    { code: 'CUR', name: 'Curacao',          apiNames: ['Curacao', 'Curaçao'] },
+    { code: 'CIV', name: 'Costa de Marfil', apiNames: ['Ivory Coast', "Côte d'Ivoire", 'Cote d\'Ivoire'] },
+    { code: 'ECU', name: 'Ecuador',          apiNames: ['Ecuador'] },
+  ]},
+  { id: 'F', teams: [
+    { code: 'NED', name: 'Países Bajos', apiNames: ['Netherlands'] },
+    { code: 'JPN', name: 'Japón',        apiNames: ['Japan'] },
+    { code: 'SUE', name: 'Suecia',       apiNames: ['Sweden'] },
+    { code: 'TUN', name: 'Túnez',        apiNames: ['Tunisia'] },
+  ]},
+  { id: 'G', teams: [
+    { code: 'BEL', name: 'Bélgica',        apiNames: ['Belgium'] },
+    { code: 'EGI', name: 'Egipto',         apiNames: ['Egypt'] },
+    { code: 'IRN', name: 'Irán',           apiNames: ['IR Iran', 'Iran'] },
+    { code: 'NZL', name: 'Nueva Zelanda', apiNames: ['New Zealand'] },
+  ]},
+  { id: 'H', teams: [
+    { code: 'ESP', name: 'España',         apiNames: ['Spain'] },
+    { code: 'CAV', name: 'Cabo Verde',     apiNames: ['Cape Verde'] },
+    { code: 'SAU', name: 'Arabia Saudita', apiNames: ['Saudi Arabia'] },
+    { code: 'URU', name: 'Uruguay',        apiNames: ['Uruguay'] },
+  ]},
+  { id: 'I', teams: [
+    { code: 'FRA', name: 'Francia',  apiNames: ['France'] },
+    { code: 'SEN', name: 'Senegal', apiNames: ['Senegal'] },
+    { code: 'IRK', name: 'Irak',    apiNames: ['Iraq'] },
+    { code: 'NOR', name: 'Noruega', apiNames: ['Norway'] },
+  ]},
+  { id: 'J', teams: [
+    { code: 'ARG', name: 'Argentina', apiNames: ['Argentina'] },
+    { code: 'ALG', name: 'Argelia',   apiNames: ['Algeria'] },
+    { code: 'AUT', name: 'Austria',   apiNames: ['Austria'] },
+    { code: 'JOR', name: 'Jordania',  apiNames: ['Jordan'] },
+  ]},
+  { id: 'K', teams: [
+    { code: 'POR', name: 'Portugal',          apiNames: ['Portugal'] },
+    { code: 'RDC', name: 'Rep. D. del Congo', apiNames: ['DR Congo', 'Democratic Republic of Congo', 'Democratic Republic of the Congo', 'Congo DR'] },
+    { code: 'UZB', name: 'Uzbekistán',        apiNames: ['Uzbekistan'] },
+    { code: 'COL', name: 'Colombia',          apiNames: ['Colombia'] },
+  ]},
+  { id: 'L', teams: [
+    { code: 'ENG', name: 'Inglaterra', apiNames: ['England'] },
+    { code: 'CRO', name: 'Croacia',    apiNames: ['Croatia'] },
+    { code: 'GHA', name: 'Ghana',      apiNames: ['Ghana'] },
+    { code: 'PAN', name: 'Panamá',     apiNames: ['Panama'] },
+  ]},
 ]
 
 export const TEAM_TO_GROUP = new Map<string, string>()
 export const TEAM_TO_CODE = new Map<string, string>()  // api name (lower) → FIFA code
 
 for (const group of WC_GROUPS) {
-  for (let i = 0; i < group.apiNames.length; i++) {
-    const lower = group.apiNames[i].toLowerCase()
-    TEAM_TO_GROUP.set(lower, group.id)
-    // First apiName per team maps to its code (same order as teams array)
-    const teamIdx = Math.min(i, group.teams.length - 1)
-    TEAM_TO_CODE.set(lower, group.teams[teamIdx].code)
+  for (const team of group.teams) {
+    for (const apiName of team.apiNames) {
+      const lower = apiName.toLowerCase()
+      TEAM_TO_GROUP.set(lower, group.id)
+      TEAM_TO_CODE.set(lower, team.code)
+    }
   }
 }
 

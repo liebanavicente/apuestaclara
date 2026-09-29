@@ -18,12 +18,15 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-white">
-      <HeaderWrapper profile={profile} access={isAdmin ? { isAdmin: true, isPremium: true } as any : null} />
-      <main className="flex-1">
-        {children}
-      </main>
-      <Footer />
+    <div className="min-h-screen flex flex-col bg-[#07080F] text-white relative">
+      <div className="gb-mesh" aria-hidden="true" />
+      <div className="relative z-10 flex flex-col flex-1">
+        <HeaderWrapper profile={profile} access={isAdmin ? { isAdmin: true, isPremium: true } as any : null} />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
+      </div>
     </div>
   )
 }
