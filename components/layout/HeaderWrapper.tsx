@@ -7,11 +7,10 @@ import type { Friend } from '@/lib/services/club.service'
 
 interface HeaderWrapperProps {
   friend?: Friend | null
-  profile?: any
-  access?: any
+  isAdmin?: boolean
 }
 
-export function HeaderWrapper({ friend }: HeaderWrapperProps) {
+export function HeaderWrapper({ friend, isAdmin }: HeaderWrapperProps) {
   const router = useRouter()
   const [selectorOpen, setSelectorOpen] = useState(false)
 
@@ -28,6 +27,7 @@ export function HeaderWrapper({ friend }: HeaderWrapperProps) {
     <>
       <Header
         friend={friend}
+        isAdmin={isAdmin}
         onSignOut={handleSignOut}
         onOpenSelector={() => setSelectorOpen(true)}
       />

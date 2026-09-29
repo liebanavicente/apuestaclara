@@ -216,6 +216,63 @@ export async function deleteFriend(id: string): Promise<boolean> {
   return true
 }
 
+export interface FriendUpdate {
+  name?: string
+  avatarEmoji?: string
+  pin?: string | null // null removes the PIN
+}
+
+export async function updateFriend(id: string, update: FriendUpdate): Promise<Friend | null> {
+  const current = await getFriend(id)
+  if (!current) return null
+
+  const next: Friend = { ...current }
+  if (update.name !== undefined) {
+    const clean = update.name.trim()
+    if (!clean) throw new Error('El nombre no puede estar vacío')
+    next.name = clean
+  }
+  if (update.avatarEmoji !== undefined && update.avatarEmoji.trim()) next.avatarEmoji = update.avatarEmoji.trim()
+  if (update.pin === null) delete next.pin
+  else if (update.pin !== undefined && update.pin.trim()) next.pin = update.pin.trim()
+
+  const redis = getRedisClient()
+  if (redis) {
+    await redis.hset(KEY_FRIENDS, { [id]: next })
+  } else {
+    const local = readLocalStore()
+    local.friends[id] = next
+    writeLocalStore(local)
+  }
+
+  // Keep the denormalised name on picks in sync
+  if (next.name !== current.name) {
+    const picks = await getPicks(id)
+    if (redis) {
+      for (const p of picks) await redis.hset(KEY_PICKS, { [p.id]: { ...p, friendName: next.name } })
+    } else {
+      const local = readLocalStore()
+      for (const p of picks) if (local.picks[p.id]) local.picks[p.id].friendName = next.name
+      writeLocalStore(local)
+    }
+  }
+
+  return next
+}
+
+// Admin: remove any pick regardless of owner or status
+export async function adminDeletePick(id: string): Promise<boolean> {
+  const redis = getRedisClient()
+  if (redis) {
+    return (await redis.hdel(KEY_PICKS, id)) > 0
+  }
+  const local = readLocalStore()
+  if (!local.picks[id]) return false
+  delete local.picks[id]
+  writeLocalStore(local)
+  return true
+}
+
 // --- Pick Operations ---
 
 export async function getPicks(friendId?: string): Promise<FriendPick[]> {
@@ -339,7 +396,7 @@ export async function deletePick(id: string, friendId: string): Promise<boolean>
   return false
 }
 
-export async function resolvePick(id: string, status: 'won' | 'lost'): Promise<boolean> {
+export async function resolvePick(id: string, status: 'won' | 'lost' | 'pending'): Promise<boolean> {
   const redis = getRedisClient()
   let pick: FriendPick | null = null
 
@@ -358,7 +415,7 @@ export async function resolvePick(id: string, status: 'won' | 'lost'): Promise<b
     ...pick,
     status,
     points: Math.round(points * 100) / 100,
-    resolvedAt: new Date().toISOString(),
+    resolvedAt: status === 'pending' ? undefined : new Date().toISOString(),
   }
 
   if (redis) {

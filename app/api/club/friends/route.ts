@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getFriends, createFriend, deleteFriend } from '@/lib/services/club.service'
 import { cookies } from 'next/headers'
-import { COOKIE_FRIEND_ID } from '@/lib/session'
+import { COOKIE_FRIEND_ID, setSessionCookie, getAdminFriend } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -29,14 +29,7 @@ export async function POST(req: NextRequest) {
 
     const friend = await createFriend(name, avatarEmoji, pin)
 
-    // Set active session cookie
-    const cookieStore = await cookies()
-    cookieStore.set(COOKIE_FRIEND_ID, friend.id, {
-      path: '/',
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 365, // 1 year
-      sameSite: 'lax',
-    })
+    await setSessionCookie(friend.id)
 
     return NextResponse.json({
       id: friend.id,
@@ -51,17 +44,25 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    const admin = await getAdminFriend()
+    if (!admin) {
+      return NextResponse.json({ error: 'Solo el admin puede eliminar perfiles' }, { status: 403 })
+    }
+
     const { searchParams } = new URL(req.url)
     const id = searchParams.get('id')
     if (!id) {
       return NextResponse.json({ error: 'Falta id de amigo' }, { status: 400 })
+    }
+    if (id === admin.id) {
+      return NextResponse.json({ error: 'No puedes eliminar tu propio perfil de admin' }, { status: 400 })
     }
 
     await deleteFriend(id)
 
     // If currently logged in as this friend, clear cookie
     const cookieStore = await cookies()
-    if (cookieStore.get(COOKIE_FRIEND_ID)?.value === id) {
+    if (cookieStore.get(COOKIE_FRIEND_ID)?.value?.split('.')[0] === id) {
       cookieStore.delete(COOKIE_FRIEND_ID)
     }
 

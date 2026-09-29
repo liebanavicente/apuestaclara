@@ -2,14 +2,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { Menu, X, UserCheck, ChevronDown, Trophy, Calendar, BookOpen, LogOut } from 'lucide-react'
+import { Menu, X, UserCheck, ChevronDown, Trophy, Calendar, BookOpen, LogOut, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Friend } from '@/lib/services/club.service'
 
 interface HeaderProps {
   friend?: Friend | null
-  profile?: any
-  access?: any
+  isAdmin?: boolean
   onSignOut?: () => void
   onOpenSelector?: () => void
 }
@@ -20,7 +19,7 @@ const NAV_LINKS = [
   { href: '/reglas', label: 'Reglas', icon: BookOpen },
 ]
 
-export function Header({ friend, onSignOut, onOpenSelector }: HeaderProps) {
+export function Header({ friend, isAdmin, onSignOut, onOpenSelector }: HeaderProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
@@ -109,6 +108,11 @@ export function Header({ friend, onSignOut, onOpenSelector }: HeaderProps) {
                     <MenuLink href="/ranking" onClick={() => setAccountOpen(false)} icon={<Trophy className="w-4 h-4" />}>
                       Ranking
                     </MenuLink>
+                    {isAdmin && (
+                      <MenuLink href="/admin" onClick={() => setAccountOpen(false)} icon={<ShieldCheck className="w-4 h-4 !text-amber-500" />}>
+                        Panel admin
+                      </MenuLink>
+                    )}
                     <button
                       role="menuitem"
                       onClick={() => { setAccountOpen(false); onOpenSelector?.() }}

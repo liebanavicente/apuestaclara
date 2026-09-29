@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getFriend } from '@/lib/services/club.service'
-import { cookies } from 'next/headers'
-import { COOKIE_FRIEND_ID } from '@/lib/session'
+import { setSessionCookie } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,13 +20,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'PIN incorrecto' }, { status: 401 })
     }
 
-    const cookieStore = await cookies()
-    cookieStore.set(COOKIE_FRIEND_ID, friend.id, {
-      path: '/',
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: 'lax',
-    })
+    await setSessionCookie(friend.id)
 
     return NextResponse.json({
       id: friend.id,
