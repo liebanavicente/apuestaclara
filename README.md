@@ -1,84 +1,47 @@
-# Apuesta Clara
+# GañanesBets 🐟
 
-Plataforma SaaS de análisis responsable de combinadas deportivas.
+Club de pronósticos entre amigos. Haces picks 1 / X / 2 en partidos de LaLiga y Champions con cuotas reales: si aciertas, sumas la cuota en puntos. Sin dinero real — el último del ranking paga las birras.
 
-**Analiza. Compara. Decide mejor.**
+Producción: https://gananesbets.vercel.app (push a `main` → deploy automático en Vercel).
 
 ## Stack
 
-- Next.js 15 (App Router) + TypeScript
-- Tailwind CSS
-- Supabase (auth + DB + RLS)
-- Stripe (suscripción Premium)
-- The Odds API (cuotas deportivas reales)
-- OpenAI (análisis IA)
-- Vercel (deploy)
+- Next.js 16 (App Router, Turbopack) + TypeScript + Tailwind CSS v4
+- Vercel KV / Upstash Redis para amigos y picks (`lib/services/club.service.ts`)
+  - Sin credenciales KV usa un almacén local en `.data/club.json` (ignorado por git)
+- The Odds API para cuotas y resultados (`lib/services/odds.service.ts`)
+- Groq (llama-3.3-70b) u OpenAI para el análisis rápido de un pick (`/api/ai/quick`)
 
-## Instalación
+## Desarrollo
 
 ```bash
 npm install
-cp .env.local.example .env.local
-# Rellenar variables en .env.local
+cp .env.local.example .env.local   # rellenar lo que necesites
 npm run dev
 ```
 
-## Migraciones Supabase
+Para probar sin tocar datos reales, deja vacías las variables `KV_*`: se usará el almacén local.
 
-Ejecutar en orden en SQL Editor de Supabase:
-1. `supabase/migrations/001_profiles.sql`
-2. `supabase/migrations/002_subscribers.sql`
-3. `supabase/migrations/003_promos.sql`
-4. `supabase/migrations/004_referrals.sql`
-5. `supabase/migrations/005_simulator.sql`
-6. `supabase/migrations/006_community.sql`
-7. `supabase/migrations/007_rls.sql`
+## Rutas
 
-## Variables de entorno
+| Ruta | Qué es |
+|------|--------|
+| `/` | Landing (con vídeo de bienvenida una vez por sesión) |
+| `/dashboard` | Partidos y picks |
+| `/ranking` | Clasificación |
+| `/reglas` | Reglas del club |
+| `/admin` | Panel del admin: amigos, picks, resolución manual |
 
-| Variable | Descripción |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | URL de tu proyecto Supabase |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Clave anon pública |
-| `SUPABASE_SERVICE_ROLE_KEY` | Clave service_role (solo servidor) |
-| `THE_ODDS_API_KEY` | API key de The Odds API |
-| `OPENAI_API_KEY` | API key de OpenAI |
-| `STRIPE_SECRET_KEY` | Clave secreta Stripe |
-| `STRIPE_WEBHOOK_SECRET` | Secret webhooks Stripe |
-| `STRIPE_PREMIUM_PRICE_ID` | Price ID del plan 4,99 €/mes |
-| `NEXT_PUBLIC_SITE_URL` | URL pública (ej: https://apuestaclara.com) |
+## Sesión y admin
 
-## Configuración Supabase
+- Cada amigo elige su perfil (PIN opcional). La sesión es la cookie `gb_friend_id` firmada con HMAC.
+- 5 PIN fallidos bloquean el perfil 15 min.
+- Admin: ids en `CLUB_ADMIN_IDS` (por defecto Mike, `mike_i3bc`). El admin necesita PIN.
+- El cron diario (`vercel.json`) llama a `/api/admin/auto-resolve` con `CRON_SECRET`.
 
-1. Crear proyecto en supabase.com
-2. Ejecutar migraciones SQL en orden
-3. Authentication → Providers → Google → activar
-4. Authentication → URL Configuration:
-   - Site URL: tu dominio
-   - Redirect URL: `https://tu-dominio.com/api/auth/callback`
+## Diseño
 
-## Configuración Stripe
+Estilo claro, minimalista, cristal tipo Apple. Tokens y componentes (`gb-card`, `gb-btn`, `gb-chip`, `gb-segmented`…) en `app/globals.css`.
 
-1. Crear producto "Apuesta Clara Premium" — 4,99 €/mes
-2. Copiar Price ID a `STRIPE_PREMIUM_PRICE_ID`
-3. Webhook → `https://tu-dominio.com/api/stripe/webhooks`
-4. Eventos: `checkout.session.completed`, `customer.subscription.*`
-
-## Cuenta admin
-
-El email `mlieban3@gmail.com` recibe automáticamente role admin + premium_forever.  
-Si falla: ir a `/admin/debug-auth` → "Reparar mi perfil".
-
-## Fases
-
-- **Fase 1** ✅ Estructura, auth, perfiles, admin, landing, navegación
-- **Fase 2** The Odds API, buscador de eventos, generador básico
-- **Fase 3** IA de análisis y combinadas mixtas
-- **Fase 4** Simulador sin dinero
-- **Fase 5** Comunidad de picks
-- **Fase 6** Stripe Premium completo
-- **Fase 7** Promos, referidos y pulido final
-
-## Aviso legal
-
-Solo mayores de 18 años. Las predicciones son orientativas. Apostar implica riesgo.
+- **Color principal: ámbar** (identidad de marca). **Secundario: verde victoria** (hovers, aciertos).
+- Tono cachondo y entre amigos; el pez 🐟 es la mascota. Emojis bienvenidos.
