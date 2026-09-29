@@ -187,6 +187,35 @@ export async function createFriend(name: string, avatarEmoji?: string, pin?: str
   return friend
 }
 
+export async function deleteFriend(id: string): Promise<boolean> {
+  const redis = getRedisClient()
+  if (redis) {
+    try {
+      await redis.hdel(KEY_FRIENDS, id)
+      // Delete any associated picks
+      const allPicks = await getPicks(id)
+      for (const p of allPicks) {
+        await redis.hdel(KEY_PICKS, p.id)
+      }
+      console.log(`[ClubService] Deleted friend ${id} and their picks from Redis KV`)
+      return true
+    } catch (err) {
+      console.error('[ClubService] Error deleting friend from Redis:', err)
+      return false
+    }
+  }
+
+  const local = readLocalStore()
+  delete local.friends[id]
+  for (const pickId of Object.keys(local.picks)) {
+    if (local.picks[pickId]?.friendId === id) {
+      delete local.picks[pickId]
+    }
+  }
+  writeLocalStore(local)
+  return true
+}
+
 // --- Pick Operations ---
 
 export async function getPicks(friendId?: string): Promise<FriendPick[]> {

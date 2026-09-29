@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getFriends, createFriend } from '@/lib/services/club.service'
+import { getFriends, createFriend, deleteFriend } from '@/lib/services/club.service'
 import { cookies } from 'next/headers'
 import { COOKIE_FRIEND_ID } from '@/lib/session'
 
@@ -46,5 +46,27 @@ export async function POST(req: NextRequest) {
     })
   } catch (err: any) {
     return NextResponse.json({ error: err.message || 'Error al crear amigo' }, { status: 500 })
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const id = searchParams.get('id')
+    if (!id) {
+      return NextResponse.json({ error: 'Falta id de amigo' }, { status: 400 })
+    }
+
+    await deleteFriend(id)
+
+    // If currently logged in as this friend, clear cookie
+    const cookieStore = await cookies()
+    if (cookieStore.get(COOKIE_FRIEND_ID)?.value === id) {
+      cookieStore.delete(COOKIE_FRIEND_ID)
+    }
+
+    return NextResponse.json({ ok: true })
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || 'Error al eliminar amigo' }, { status: 500 })
   }
 }
