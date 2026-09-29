@@ -91,14 +91,14 @@ export function PorraClient({ picks, myUserId, matchId }: Props) {
         {/* Y-axis label */}
         <div className="flex items-center gap-4 mb-3">
           <div className="w-8 shrink-0" />
-          <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold">Argentina (visitante) →</p>
+          <p className="text-ink/30 text-[10px] uppercase tracking-widest font-bold">Argentina (visitante) →</p>
         </div>
 
         {/* Column headers */}
         <div className="flex gap-1.5 mb-1.5">
           <div className="w-8 shrink-0" />
           {goals.map(a => (
-            <div key={a} className="w-11 text-center text-[10px] font-bold text-white/25">{a}</div>
+            <div key={a} className="w-11 text-center text-[10px] font-bold text-ink/25">{a}</div>
           ))}
         </div>
 
@@ -106,7 +106,7 @@ export function PorraClient({ picks, myUserId, matchId }: Props) {
         <div className="space-y-1.5">
           {goals.map(h => (
             <div key={h} className="flex items-center gap-1.5">
-              <div className="w-8 text-center text-[10px] font-bold text-white/25 shrink-0">{h}</div>
+              <div className="w-8 text-center text-[10px] font-bold text-ink/25 shrink-0">{h}</div>
               {goals.map(a => {
                 const key = `${h}-${a}`
                 const pick = pickMap.get(key)
@@ -144,13 +144,13 @@ export function PorraClient({ picks, myUserId, matchId }: Props) {
                       </>
                     ) : isTaken ? (
                       <>
-                        <span className="text-[9px] text-white/50 leading-none">{h}–{a}</span>
-                        <span className="text-[7px] text-white/30 leading-none mt-0.5 max-w-[40px] truncate px-0.5">
+                        <span className="text-[9px] text-ink/50 leading-none">{h}–{a}</span>
+                        <span className="text-[7px] text-ink/30 leading-none mt-0.5 max-w-[40px] truncate px-0.5">
                           {username?.substring(0, 5) ?? '?'}
                         </span>
                       </>
                     ) : (
-                      <span className="text-white/20 text-[9px] group-hover:text-white/60 transition-colors">{h}–{a}</span>
+                      <span className="text-ink/20 text-[9px] group-hover:text-ink/60 transition-colors">{h}–{a}</span>
                     )}
                   </button>
                 )
@@ -162,12 +162,12 @@ export function PorraClient({ picks, myUserId, matchId }: Props) {
         {/* Row label */}
         <div className="flex items-center gap-4 mt-3">
           <div className="w-8 shrink-0" />
-          <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold rotate-0">↑ España (local)</p>
+          <p className="text-ink/30 text-[10px] uppercase tracking-widest font-bold rotate-0">↑ España (local)</p>
         </div>
       </div>
 
       {error && (
-        <p className="text-red-400 text-sm text-center"
+        <p className="text-red-600 text-sm text-center"
           style={{ background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.20)', borderRadius: 12, padding: '10px 16px' }}>
           {error}
         </p>
@@ -176,7 +176,7 @@ export function PorraClient({ picks, myUserId, matchId }: Props) {
       {/* Who has what */}
       {optimisticPicks.length > 0 && (
         <div>
-          <p className="text-white/25 text-[10px] uppercase tracking-widest font-bold mb-3">Resultados elegidos</p>
+          <p className="text-ink/25 text-[10px] uppercase tracking-widest font-bold mb-3">Resultados elegidos</p>
           <div className="space-y-2">
             {[...optimisticPicks]
               .sort((a, b) => (a.home_goals !== b.home_goals ? b.home_goals - a.home_goals : b.away_goals - a.away_goals))
@@ -196,10 +196,10 @@ export function PorraClient({ picks, myUserId, matchId }: Props) {
                       }>
                       {uname.charAt(0).toUpperCase()}
                     </div>
-                    <span className={`text-sm font-semibold flex-1 ${isMe ? 'text-yellow-400' : 'text-white/60'}`}>
+                    <span className={`text-sm font-semibold flex-1 ${isMe ? 'text-amber-600' : 'text-ink/60'}`}>
                       {isMe ? 'Tú' : uname}
                     </span>
-                    <span className={`text-lg font-black ${isMe ? 'text-white' : 'text-white/70'}`}>
+                    <span className={`text-lg font-black ${isMe ? 'text-ink' : 'text-ink/70'}`}>
                       🇪🇸 {p.home_goals} – {p.away_goals} 🇦🇷
                     </span>
                   </div>
@@ -210,8 +210,8 @@ export function PorraClient({ picks, myUserId, matchId }: Props) {
       )}
 
       {!myUserId && (
-        <p className="text-center text-white/40 text-sm">
-          <a href="/login?redirect=/porra" className="text-yellow-400 font-bold underline underline-offset-2">Inicia sesión</a> para participar
+        <p className="text-center text-ink/40 text-sm">
+          <a href="/login?redirect=/porra" className="text-amber-600 font-bold underline underline-offset-2">Inicia sesión</a> para participar
         </p>
       )}
     </div>

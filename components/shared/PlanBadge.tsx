@@ -11,9 +11,9 @@ export function PlanBadge({ plan, className }: PlanBadgeProps) {
     <span
       className={cn(
         'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-        plan === 'admin' && 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
-        plan === 'premium' && 'bg-teal-500/20 text-teal-300 border border-teal-500/30',
-        plan === 'free' && 'bg-slate-500/20 text-slate-400 border border-slate-500/30',
+        plan === 'admin' && 'bg-purple-500/20 text-purple-700 border border-purple-500/30',
+        plan === 'premium' && 'bg-ink/20 text-amber-700 border border-amber-500/30',
+        plan === 'free' && 'bg-slate-500/20 text-ink-2 border border-black/[0.18]',
         className
       )}
     >

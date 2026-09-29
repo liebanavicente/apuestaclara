@@ -1,7 +1,7 @@
 import { getLeaderboard, getPicks, type LeaderboardPlayer } from '@/lib/services/club.service'
 import { getActiveFriend } from '@/lib/session'
 import Link from 'next/link'
-import { Trophy, Flame, Beer, ChevronDown, CheckCircle2, XCircle, Clock } from 'lucide-react'
+import { Beer, ChevronDown, ArrowRight } from 'lucide-react'
 
 export const metadata = { title: 'Ranking — GañanesBets 🏆' }
 export const dynamic = 'force-dynamic'
@@ -22,252 +22,182 @@ export default async function RankingPage() {
 
   const leader = players[0]
   const leaderPoints = leader ? leader.totalPoints || 1 : 1
-  const totalParticipants = players.length
   const totalResolved = players.reduce((s, p) => s + p.totalResolved, 0)
   const totalPending = players.reduce((s, p) => s + p.totalPending, 0)
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-
-        {/* Page title — Apple clean typography */}
-        <div className="mb-8 anim-fade-in">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Ranking del Club</h1>
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200/80">
-              Temporada activa
-            </span>
-          </div>
-          <p className="text-slate-500 text-sm mt-1">
-            Acierto = cuota en puntos · Fallo = 0 pts · El último clasificado paga la ronda de birras 🍺
-          </p>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-16">
+      {/* Title */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 anim-fade-in">
+        <div>
+          <p className="gb-eyebrow mb-1.5">Temporada en curso</p>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-[-0.04em] text-ink">Ranking</h1>
+          <p className="text-ink-2 text-[15px] mt-2">El último de la tabla paga la ronda 🍺</p>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
-
-          {/* LEFT: Leader Spotlight Card */}
-          <aside className="rounded-3xl p-6 flex flex-col gap-6 relative overflow-hidden gb-card shadow-xs anim-slide-up">
-            {/* Ambient gold glow */}
-            <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-amber-400/10 filter blur-3xl pointer-events-none" />
-
-            <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-3">
-                Líder actual
-              </span>
-              {leader ? (
-                <div>
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-50 border border-amber-200/80 flex items-center justify-center text-3xl shadow-xs mb-3">
-                    {leader.avatarEmoji || '🐟'}
-                  </div>
-                  <h2 className="text-slate-900 font-extrabold text-xl leading-tight">{leader.name}</h2>
-                  <p className="text-slate-500 text-xs mt-0.5 font-medium">
-                    {leader.totalWon}/{leader.totalResolved} aciertos · {leader.winRate}% efectividad
-                  </p>
-
-                  <div className="mt-4 p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80">
-                    <p className="text-slate-500 text-xs font-medium mb-1">Puntos acumulados</p>
-                    <p className="text-amber-600 font-black text-4xl">{leader.totalPoints.toFixed(2)}</p>
-                    <p className="text-slate-400 text-[11px] mt-0.5 font-medium">puntos de victoria</p>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-slate-400 text-sm mt-2">Aún no hay pronósticos resueltos</p>
-              )}
-            </div>
-
-            {/* Global club stats */}
-            <div className="grid grid-cols-3 gap-2 mt-auto">
-              {[
-                { label: 'Gañanes', value: totalParticipants },
-                { label: 'Resueltos', value: totalResolved },
-                { label: 'Pendientes', value: totalPending },
-              ].map(({ label, value }) => (
-                <div key={label} className="rounded-2xl p-3 text-center bg-slate-50 border border-slate-200/70">
-                  <p className="text-slate-900 font-extrabold text-base">{value}</p>
-                  <p className="text-slate-400 text-[10px] font-medium mt-0.5">{label}</p>
-                </div>
-              ))}
-            </div>
-
-            <Link
-              href="/dashboard"
-              className="block w-full text-center font-bold py-3 rounded-full text-xs text-white bg-slate-900 hover:bg-slate-800 transition-all shadow-md shadow-slate-900/10 active:scale-98"
-            >
-              ⚽ Ir a hacer picks
-            </Link>
-          </aside>
-
-          {/* RIGHT: Podium + Full Leaderboard */}
-          <div className="space-y-6">
-
-            {/* Top 3 Podium (Apple frosted style) */}
-            {players.length >= 3 && (
-              <div className="grid grid-cols-3 gap-3 items-end">
-                {/* 2nd Place */}
-                <div className="rounded-3xl p-4 text-center mt-6 gb-card shadow-xs anim-slide-up">
-                  <div className="text-xl mb-1">🥈</div>
-                  <div className="w-11 h-11 rounded-2xl bg-slate-100 border border-slate-200/80 flex items-center justify-center text-xl mx-auto mb-2 shadow-xs">
-                    {players[1].avatarEmoji}
-                  </div>
-                  <p className="text-xs font-bold text-slate-800 truncate">{players[1].name}</p>
-                  <p className="font-extrabold text-slate-900 text-lg mt-0.5">{players[1].totalPoints.toFixed(2)}</p>
-                  <p className="text-[11px] text-slate-400 font-medium">{players[1].totalWon}/{players[1].totalResolved} ✓</p>
-                </div>
-
-                {/* 1st Place */}
-                <div className="rounded-3xl p-5 text-center relative overflow-hidden gb-card border-amber-300/80 bg-amber-50/60 shadow-md shadow-amber-500/5 anim-slide-up">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-500" />
-                  <div className="text-2xl mb-1">🥇</div>
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-amber-200 flex items-center justify-center text-2xl mx-auto mb-2 shadow-xs">
-                    {players[0].avatarEmoji}
-                  </div>
-                  <p className="text-xs font-extrabold text-slate-900 truncate">{players[0].name}</p>
-                  <p className="font-black text-amber-600 text-2xl mt-0.5">{players[0].totalPoints.toFixed(2)}</p>
-                  <p className="text-[11px] text-amber-800/60 font-semibold">{players[0].totalWon}/{players[0].totalResolved} aciertos</p>
-                </div>
-
-                {/* 3rd Place */}
-                <div className="rounded-3xl p-4 text-center mt-10 gb-card shadow-xs anim-slide-up">
-                  <div className="text-xl mb-1">🥉</div>
-                  <div className="w-11 h-11 rounded-2xl bg-orange-50 border border-orange-200/80 flex items-center justify-center text-xl mx-auto mb-2 shadow-xs">
-                    {players[2].avatarEmoji}
-                  </div>
-                  <p className="text-xs font-bold text-slate-800 truncate">{players[2].name}</p>
-                  <p className="font-extrabold text-slate-900 text-lg mt-0.5">{players[2].totalPoints.toFixed(2)}</p>
-                  <p className="text-[11px] text-slate-400 font-medium">{players[2].totalWon}/{players[2].totalResolved} ✓</p>
-                </div>
-              </div>
-            )}
-
-            {/* Full leaderboard list */}
-            <div className="space-y-2.5">
-              {players.length === 0 && (
-                <div className="text-center py-16 gb-card rounded-3xl p-6">
-                  <p className="text-4xl mb-3">🐟</p>
-                  <p className="font-extrabold text-slate-900 text-base">Aún no hay amigos en el ranking</p>
-                  <p className="text-xs text-slate-500 mt-1">Elige tu nombre en el menú superior o añade un amigo para empezar</p>
-                  <Link href="/dashboard" className="text-slate-900 font-bold text-xs mt-4 inline-block hover:underline">
-                    Ir a Partidos →
-                  </Link>
-                </div>
-              )}
-
-              {players.map((p, i) => {
-                const isMe = activeFriend && p.id === activeFriend.id
-                const isLast = players.length > 1 && i === players.length - 1
-                const barPct = leaderPoints > 0 ? Math.round((p.totalPoints / leaderPoints) * 100) : 0
-                const playerPicks = picksByPlayer.get(p.id) ?? []
-
-                return (
-                  <details
-                    key={p.id}
-                    className={`group rounded-2xl overflow-hidden transition-all anim-slide-up gb-card ${
-                      isMe ? 'ring-2 ring-amber-400 bg-amber-50/50' : ''
-                    } ${isLast ? 'border-rose-200 bg-rose-50/20' : ''}`}
-                    style={{ animationDelay: `${i * 35}ms` }}
-                  >
-                    <summary className="flex items-center gap-3.5 p-4 cursor-pointer list-none select-none hover:bg-slate-50/60 transition-colors">
-                      {/* Position pill */}
-                      <span className={`w-7 text-center font-black text-sm shrink-0 ${
-                        i === 0 ? 'text-amber-600' :
-                        i === 1 ? 'text-slate-600' :
-                        i === 2 ? 'text-amber-700' :
-                        isLast ? 'text-rose-600' : 'text-slate-400'
-                      }`}>
-                        #{i + 1}
-                      </span>
-
-                      {/* Avatar */}
-                      <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl shrink-0 bg-white border border-slate-200/80 shadow-xs">
-                        {p.avatarEmoji || '🐟'}
-                      </div>
-
-                      {/* Name & stats */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="font-extrabold text-sm truncate text-slate-900">
-                            {p.name}
-                          </p>
-                          {isMe && (
-                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">
-                              TÚ
-                            </span>
-                          )}
-                          {isLast && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200 shrink-0 flex items-center gap-1">
-                              <Beer className="w-3 h-3 text-rose-600" /> Paga las birras
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Progress bar */}
-                        <div className="flex items-center gap-2 mt-1.5">
-                          <div className="flex-1 h-1.5 rounded-full overflow-hidden bg-slate-100">
-                            <div
-                              className="h-full rounded-full transition-all duration-500"
-                              style={{
-                                width: `${barPct}%`,
-                                background: i === 0
-                                  ? 'linear-gradient(90deg, #F59E0B, #D97706)'
-                                  : isLast
-                                  ? '#F43F5E'
-                                  : '#64748B',
-                              }}
-                            />
-                          </div>
-                          <span className="text-[11px] text-slate-400 font-medium shrink-0">
-                            {p.totalWon}/{p.totalResolved} · {p.winRate}%
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Points */}
-                      <div className="text-right shrink-0">
-                        <p className={`font-black text-lg ${i === 0 ? 'text-amber-600' : 'text-slate-900'}`}>
-                          {p.totalPoints.toFixed(2)}
-                        </p>
-                        <p className="text-[10px] text-slate-400 font-medium">pts</p>
-                      </div>
-
-                      {/* Arrow indicator */}
-                      <ChevronDown className="w-4 h-4 text-slate-400 ml-1 group-open:rotate-180 transition-transform shrink-0" />
-                    </summary>
-
-                    {/* Expandable picks history */}
-                    <div className="px-5 pb-4 pt-2 border-t border-slate-100 text-xs text-slate-600 space-y-2 bg-slate-50/50">
-                      <p className="font-bold text-[10px] text-slate-400 uppercase tracking-wider">Últimos picks registrados</p>
-                      {playerPicks.length === 0 ? (
-                        <p className="text-slate-400 text-xs py-1">Sin pronósticos aún</p>
-                      ) : (
-                        <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-                          {playerPicks.slice(0, 10).map(pk => (
-                            <div
-                              key={pk.id}
-                              className="flex items-center justify-between text-xs py-1.5 px-3 rounded-xl bg-white border border-slate-200/60 shadow-xs"
-                            >
-                              <span className="text-slate-800 font-semibold truncate max-w-[220px]">{pk.description}</span>
-                              <div className="flex items-center gap-2 shrink-0">
-                                <span className="text-slate-500">{pk.selection}</span>
-                                <span className={`font-bold ${
-                                  pk.status === 'won' ? 'text-emerald-700' :
-                                  pk.status === 'lost' ? 'text-rose-700' : 'text-amber-700'
-                                }`}>
-                                  {pk.status === 'won' ? `+${pk.points.toFixed(2)} pts ✓` :
-                                   pk.status === 'lost' ? '0 pts ✗' : `@${pk.odds.toFixed(2)}`}
-                                </span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </details>
-                )
-              })}
-            </div>
-          </div>
+        <div className="flex gap-2">
+          <Stat label="Gañanes" value={players.length} />
+          <Stat label="Resueltos" value={totalResolved} />
+          <Stat label="Pendientes" value={totalPending} />
         </div>
       </div>
+
+      {/* Podium */}
+      {players.length >= 3 && (
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-4 items-end mb-10 max-w-2xl mx-auto">
+          <PodiumCard player={players[1]} place={2} />
+          <PodiumCard player={players[0]} place={1} />
+          <PodiumCard player={players[2]} place={3} />
+        </div>
+      )}
+
+      {/* Leaderboard */}
+      {players.length === 0 ? (
+        <div className="text-center py-16 px-6 gb-card rounded-3xl">
+          <p className="text-5xl mb-4">🐟</p>
+          <p className="font-semibold text-ink text-lg tracking-[-0.02em]">Aún no hay nadie en el ranking</p>
+          <p className="text-sm text-ink-2 mt-1.5">Elige tu nombre arriba y haz tu primer pick.</p>
+          <Link href="/dashboard" className="gb-btn gb-btn-primary mt-6">
+            Ir a Partidos <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      ) : (
+        <div className="gb-card rounded-3xl overflow-hidden divide-y divide-black/[0.06] anim-slide-up">
+          {players.map((p, i) => {
+            const isMe = !!activeFriend && p.id === activeFriend.id
+            const isLast = players.length > 1 && i === players.length - 1
+            const barPct = leaderPoints > 0 ? Math.max(2, Math.round((p.totalPoints / leaderPoints) * 100)) : 0
+            const playerPicks = picksByPlayer.get(p.id) ?? []
+
+            return (
+              <details key={p.id} className={`group ${isMe ? 'bg-amber-500/[0.06]' : ''}`}>
+                <summary className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3.5 cursor-pointer list-none select-none hover:bg-black/[0.025] transition-colors">
+                  <span
+                    className={`w-6 text-center text-sm font-semibold tabular-nums shrink-0 ${
+                      i === 0 ? 'text-amber-600' : isLast ? 'text-rose-600' : 'text-ink-3'
+                    }`}
+                  >
+                    {i + 1}
+                  </span>
+
+                  <span className="w-10 h-10 rounded-full flex items-center justify-center text-xl shrink-0 bg-black/[0.04]">
+                    {p.avatarEmoji || '🐟'}
+                  </span>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <p className="font-semibold text-[15px] tracking-[-0.01em] truncate text-ink">{p.name}</p>
+                      {isMe && <span className="gb-chip gb-chip-amber shrink-0">Tú</span>}
+                      {isLast && (
+                        <span className="gb-chip gb-chip-red shrink-0">
+                          <Beer className="w-3 h-3" /> <span className="hidden sm:inline">Paga las birras</span>
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2.5 mt-1.5">
+                      <div className="flex-1 max-w-56 h-1 rounded-full overflow-hidden bg-black/[0.06]">
+                        <div
+                          className={`h-full rounded-full ${
+                            i === 0 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : isLast ? 'bg-rose-400' : 'bg-ink-3/60'
+                          }`}
+                          style={{ width: `${barPct}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-ink-3 tabular-nums shrink-0">
+                        {p.totalWon}/{p.totalResolved} · {p.winRate}%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="text-right shrink-0">
+                    <p className={`font-semibold text-lg tabular-nums tracking-[-0.02em] ${i === 0 ? 'text-amber-600' : 'text-ink'}`}>
+                      {p.totalPoints.toFixed(2)}
+                    </p>
+                    <p className="text-[11px] text-ink-3 -mt-0.5">pts</p>
+                  </div>
+
+                  <ChevronDown className="w-4 h-4 text-ink-3 group-open:rotate-180 transition-transform duration-300 shrink-0" />
+                </summary>
+
+                <div className="px-4 sm:px-5 pb-4 pt-1 sm:pl-[5.25rem]">
+                  <p className="gb-eyebrow mb-2">Últimos picks</p>
+                  {playerPicks.length === 0 ? (
+                    <p className="text-ink-3 text-sm">Sin pronósticos aún</p>
+                  ) : (
+                    <div className="rounded-2xl bg-white/60 divide-y divide-black/[0.05] max-h-64 overflow-y-auto">
+                      {playerPicks.slice(0, 10).map(pk => (
+                        <div key={pk.id} className="flex items-center justify-between gap-3 text-sm px-3.5 py-2.5">
+                          <span className="text-ink truncate">{pk.description}</span>
+                          <div className="flex items-center gap-2.5 shrink-0">
+                            <span className="text-ink-3 hidden sm:inline">{pk.selection}</span>
+                            <span
+                              className={`font-semibold tabular-nums ${
+                                pk.status === 'won' ? 'text-emerald-600' : pk.status === 'lost' ? 'text-rose-600' : 'text-amber-600'
+                              }`}
+                            >
+                              {pk.status === 'won' ? `+${pk.points.toFixed(2)}` : pk.status === 'lost' ? '0' : `@${pk.odds.toFixed(2)}`}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </details>
+            )
+          })}
+        </div>
+      )}
+
+      {players.length > 0 && (
+        <div className="mt-8 text-center">
+          <Link href="/dashboard" className="gb-btn gb-btn-primary">
+            Hacer picks <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="gb-card rounded-2xl px-4 py-2.5 min-w-[5.5rem]">
+      <p className="text-xl font-semibold tabular-nums tracking-[-0.02em] text-ink">{value}</p>
+      <p className="text-[11px] text-ink-3">{label}</p>
+    </div>
+  )
+}
+
+const MEDAL = { 1: '🥇', 2: '🥈', 3: '🥉' } as const
+
+function PodiumCard({ player, place }: { player: LeaderboardPlayer; place: 1 | 2 | 3 }) {
+  const first = place === 1
+  return (
+    <div
+      className={`relative rounded-3xl text-center anim-slide-up ${
+        first ? 'gb-card-pick px-3 pt-6 pb-5 sm:pb-7' : 'gb-card px-3 pt-5 pb-4'
+      }`}
+      style={{ animationDelay: `${place * 60}ms` }}
+    >
+      <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-2xl drop-shadow-sm">{MEDAL[place]}</span>
+      <span
+        className={`mx-auto mb-2.5 rounded-full flex items-center justify-center bg-white/80 shadow-[0_0_0_0.5px_rgba(0,0,0,0.06),0_4px_12px_-4px_rgba(0,0,0,0.15)] ${
+          first ? 'w-16 h-16 text-3xl' : 'w-12 h-12 text-2xl'
+        }`}
+      >
+        {player.avatarEmoji || '🐟'}
+      </span>
+      <p className="text-sm font-semibold text-ink truncate tracking-[-0.01em]">{player.name}</p>
+      <p
+        className={`font-semibold tabular-nums tracking-[-0.03em] mt-0.5 ${
+          first ? 'text-3xl text-amber-600' : 'text-xl text-ink'
+        }`}
+      >
+        {player.totalPoints.toFixed(2)}
+      </p>
+      <p className="text-[11px] text-ink-3 tabular-nums">
+        {player.totalWon}/{player.totalResolved} aciertos
+      </p>
     </div>
   )
 }

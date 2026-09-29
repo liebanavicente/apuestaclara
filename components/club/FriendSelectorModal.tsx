@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { X, UserPlus, Lock, Check, ArrowLeft } from 'lucide-react'
+import { X, UserPlus, Lock, Check, ChevronRight, ArrowLeft } from 'lucide-react'
 
 export interface FriendSummary {
   id: string
@@ -19,7 +18,6 @@ interface Props {
 const EMOJI_OPTIONS = ['🐟', '🍺', '👑', '⚽', '🎯', '🔥', '🚀', '🥊', '🏆', '🎩', '🦁', '🦊']
 
 export function FriendSelectorModal({ isOpen, onClose, currentFriendId }: Props) {
-  const router = useRouter()
   const [friends, setFriends] = useState<FriendSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedFriend, setSelectedFriend] = useState<FriendSummary | null>(null)
@@ -39,6 +37,15 @@ export function FriendSelectorModal({ isOpen, onClose, currentFriendId }: Props)
       loadFriends()
     }
   }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [isOpen, onClose])
 
   async function loadFriends() {
     setLoading(true)
@@ -121,217 +128,192 @@ export function FriendSelectorModal({ isOpen, onClose, currentFriendId }: Props)
 
   if (!isOpen) return null
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/35 backdrop-blur-md anim-fade-in">
-      <div
-        className="relative w-full max-w-md rounded-3xl p-6 overflow-hidden bg-white/95 backdrop-blur-2xl border border-white/80 shadow-[0_24px_64px_rgba(15,23,42,0.18)]"
-      >
-        {/* Subtle accent bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600" />
+  const title = selectedFriend ? selectedFriend.name : showAdd ? 'Únete al club' : '¿Quién eres?'
+  const subtitle = selectedFriend
+    ? 'Introduce tu PIN'
+    : showAdd
+    ? 'Crea tu perfil en 10 segundos'
+    : 'Elige tu nombre para hacer picks'
 
-        <div className="flex items-center justify-between mb-5 pt-1">
-          <div className="flex items-center gap-2.5">
-            <span className="text-2xl w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center">
-              🐟
-            </span>
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center sm:p-4 bg-black/25 backdrop-blur-sm anim-fade-in"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="friend-selector-title"
+        onClick={e => e.stopPropagation()}
+        className="relative w-full sm:max-w-md rounded-t-[28px] sm:rounded-[28px] p-5 sm:p-6 gb-glass-strong border border-white/70 shadow-[var(--gb-shadow-lg)] anim-scale-in max-h-[92vh] overflow-y-auto"
+      >
+        <div className="sm:hidden mx-auto -mt-1 mb-4 w-9 h-1 rounded-full bg-black/15" />
+
+        <div className="flex items-start justify-between gap-3 mb-5">
+          <div className="flex items-center gap-3">
+            {(selectedFriend || showAdd) && (
+              <button
+                onClick={() => (selectedFriend ? setSelectedFriend(null) : setShowAdd(false))}
+                aria-label="Volver"
+                className="w-8 h-8 -ml-1 rounded-full flex items-center justify-center text-ink-2 hover:bg-black/[0.05] transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+            )}
             <div>
-              <h2 className="text-base font-extrabold text-slate-900">Club Gañanes</h2>
-              <p className="text-xs text-slate-500 font-medium">Elige quién eres para apostar y sumar puntos</p>
+              <h2 id="friend-selector-title" className="text-xl font-semibold tracking-[-0.025em] text-ink">{title}</h2>
+              <p className="text-sm text-ink-2">{subtitle}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            aria-label="Cerrar"
+            className="w-8 h-8 rounded-full flex items-center justify-center bg-black/[0.05] text-ink-2 hover:bg-black/[0.08] transition-colors shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* PIN Prompt View */}
+        {/* PIN prompt */}
         {selectedFriend && (
-          <div className="space-y-4 py-2 anim-slide-up">
-            <div className="text-center">
-              <span className="text-4xl inline-block mb-2 w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto border border-slate-200">
-                {selectedFriend.avatarEmoji}
-              </span>
-              <h3 className="text-slate-900 font-extrabold text-base">{selectedFriend.name}</h3>
-              <p className="text-xs text-slate-500 mt-0.5">Introduce tu PIN de seguridad</p>
+          <form
+            onSubmit={e => { e.preventDefault(); doLogin(selectedFriend.id, pinInput) }}
+            className="space-y-4 anim-fade-in"
+          >
+            <span className="mx-auto w-16 h-16 rounded-full bg-black/[0.04] flex items-center justify-center text-3xl">
+              {selectedFriend.avatarEmoji}
+            </span>
+            <input
+              type="password"
+              inputMode="numeric"
+              maxLength={8}
+              autoFocus
+              placeholder="••••"
+              aria-label="PIN"
+              value={pinInput}
+              onChange={e => setPinInput(e.target.value)}
+              className="gb-input !h-14 text-center text-2xl tracking-[0.5em] font-mono"
+            />
+            {pinError && <p className="text-sm text-rose-600 text-center">{pinError}</p>}
+            <button type="submit" className="gb-btn gb-btn-primary gb-btn-lg w-full">
+              Entrar
+            </button>
+          </form>
+        )}
+
+        {/* Friend list */}
+        {!selectedFriend && !showAdd && (
+          <div className="space-y-4">
+            <div className="rounded-2xl bg-white/60 shadow-[0_0_0_0.5px_rgba(0,0,0,0.06)] divide-y divide-black/[0.06] max-h-72 overflow-y-auto">
+              {loading ? (
+                <div className="py-10 text-center text-ink-3 text-sm">Cargando…</div>
+              ) : friends.length === 0 ? (
+                <div className="py-10 text-center">
+                  <p className="text-ink font-medium">Aún no hay nadie</p>
+                  <p className="text-sm text-ink-3 mt-0.5">¡Sé el primero en apuntarte!</p>
+                </div>
+              ) : (
+                friends.map(f => {
+                  const isCurrent = f.id === currentFriendId
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => handleSelectFriend(f)}
+                      className="w-full flex items-center gap-3 px-3.5 py-2.5 text-left hover:bg-black/[0.03] active:bg-black/[0.05] transition-colors"
+                    >
+                      <span className="w-10 h-10 rounded-full flex items-center justify-center text-xl bg-black/[0.04] shrink-0">
+                        {f.avatarEmoji}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[15px] font-medium text-ink truncate">{f.name}</p>
+                        {f.hasPin && (
+                          <p className="flex items-center gap-1 text-xs text-ink-3">
+                            <Lock className="w-3 h-3" /> Con PIN
+                          </p>
+                        )}
+                      </div>
+                      {isCurrent ? (
+                        <span className="gb-chip gb-chip-green shrink-0">
+                          <Check className="w-3 h-3" /> Activo
+                        </span>
+                      ) : (
+                        <ChevronRight className="w-4 h-4 text-ink-3 shrink-0" />
+                      )}
+                    </button>
+                  )
+                })
+              )}
             </div>
 
-            <form onSubmit={e => { e.preventDefault(); doLogin(selectedFriend.id, pinInput) }} className="space-y-3">
-              <input
-                type="password"
-                maxLength={8}
-                autoFocus
-                placeholder="PIN de 4 dígitos"
-                value={pinInput}
-                onChange={e => setPinInput(e.target.value)}
-                className="w-full text-center text-xl tracking-widest px-4 py-3 rounded-2xl bg-slate-100 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-500 focus:bg-white transition-all font-mono"
-              />
-
-              {pinError && (
-                <p className="text-xs text-rose-600 text-center font-semibold">{pinError}</p>
-              )}
-
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setSelectedFriend(null)}
-                  className="flex-1 py-2.5 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-semibold transition-colors"
-                >
-                  Volver
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-colors"
-                >
-                  Entrar ✓
-                </button>
-              </div>
-            </form>
+            <button onClick={() => setShowAdd(true)} className="gb-btn gb-btn-primary gb-btn-lg w-full">
+              <UserPlus className="w-4 h-4" />
+              Añadirme al grupo
+            </button>
           </div>
         )}
 
-        {/* Friend List or Add Form */}
-        {!selectedFriend && (
-          <>
-            {!showAdd ? (
-              <div className="space-y-3">
-                <div className="max-h-64 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                  {loading ? (
-                    <div className="py-10 text-center text-slate-400 text-xs font-medium">Cargando amigos...</div>
-                  ) : friends.length === 0 ? (
-                    <div className="py-8 text-center text-slate-500 text-sm">
-                      <p className="font-semibold text-slate-700 mb-1">Aún no hay amigos registrados</p>
-                      <p className="text-xs text-slate-400">¡Sé el primero en apuntarte al club!</p>
-                    </div>
-                  ) : (
-                    friends.map(f => {
-                      const isCurrent = f.id === currentFriendId
-                      return (
-                        <button
-                          key={f.id}
-                          onClick={() => handleSelectFriend(f)}
-                          className={`w-full flex items-center justify-between p-3 rounded-2xl transition-all text-left ${
-                            isCurrent
-                              ? 'bg-amber-50/90 border border-amber-300 text-amber-950 shadow-xs'
-                              : 'bg-slate-50 hover:bg-slate-100/90 border border-slate-200/70 text-slate-700 hover:text-slate-900'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <span className="text-2xl w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-xs border border-slate-200/60 shrink-0">
-                              {f.avatarEmoji}
-                            </span>
-                            <div className="truncate">
-                              <p className="font-extrabold text-sm text-slate-900 truncate">{f.name}</p>
-                              {f.hasPin && (
-                                <span className="flex items-center gap-1 text-[11px] text-slate-400 font-medium">
-                                  <Lock className="w-2.5 h-2.5" /> Con PIN
-                                </span>
-                              )}
-                            </div>
-                          </div>
+        {/* Add friend form */}
+        {!selectedFriend && showAdd && (
+          <form onSubmit={handleCreateFriend} className="space-y-5 anim-fade-in">
+            <div>
+              <label htmlFor="new-friend-name" className="block text-sm font-medium text-ink mb-1.5">
+                Nombre o apodo
+              </label>
+              <input
+                id="new-friend-name"
+                type="text"
+                required
+                autoFocus
+                placeholder="Miguel, Carlos, Guaje…"
+                value={newName}
+                onChange={e => setNewName(e.target.value)}
+                className="gb-input"
+              />
+            </div>
 
-                          <div className="shrink-0 flex items-center gap-1.5 text-xs font-bold">
-                            {isCurrent ? (
-                              <span className="flex items-center gap-1 text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-full text-[11px] font-bold">
-                                <Check className="w-3 h-3" /> Activo
-                              </span>
-                            ) : (
-                              <span className="text-slate-500 group-hover:text-slate-900">Entrar →</span>
-                            )}
-                          </div>
-                        </button>
-                      )
-                    })
-                  )}
-                </div>
-
-                <div className="pt-2 border-t border-slate-100">
+            <div>
+              <p className="block text-sm font-medium text-ink mb-1.5">Tu emoji</p>
+              <div className="grid grid-cols-6 gap-1.5">
+                {EMOJI_OPTIONS.map(em => (
                   <button
-                    onClick={() => setShowAdd(true)}
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all shadow-md shadow-slate-900/10 active:scale-98"
-                  >
-                    <UserPlus className="w-4 h-4" />
-                    + Añadirme al grupo
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleCreateFriend} className="space-y-4 anim-slide-up">
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
-                    Tu nombre o apodo
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Ej. Miguel, Carlos, Guaje..."
-                    value={newName}
-                    onChange={e => setNewName(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-2xl bg-slate-100 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-slate-500 focus:bg-white transition-all"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
-                    Elige tu emoji
-                  </label>
-                  <div className="grid grid-cols-6 gap-2">
-                    {EMOJI_OPTIONS.map(em => (
-                      <button
-                        key={em}
-                        type="button"
-                        onClick={() => setNewEmoji(em)}
-                        className={`text-xl p-2 rounded-2xl transition-all ${
-                          newEmoji === em
-                            ? 'bg-amber-100 border-2 border-amber-500 scale-105 shadow-xs'
-                            : 'bg-slate-100 border border-slate-200/60 hover:bg-slate-200'
-                        }`}
-                      >
-                        {em}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
-                    PIN opcional <span className="text-slate-400 font-normal lowercase">(para proteger tu perfil)</span>
-                  </label>
-                  <input
-                    type="password"
-                    maxLength={6}
-                    placeholder="4 dígitos (opcional)"
-                    value={newPin}
-                    onChange={e => setNewPin(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-2xl bg-slate-100 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-slate-500 focus:bg-white transition-all font-mono"
-                  />
-                </div>
-
-                {addError && (
-                  <p className="text-xs text-rose-600 text-center font-semibold">{addError}</p>
-                )}
-
-                <div className="flex gap-2 pt-1">
-                  <button
+                    key={em}
                     type="button"
-                    onClick={() => setShowAdd(false)}
-                    className="flex-1 py-2.5 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-semibold transition-colors flex items-center justify-center gap-1"
+                    onClick={() => setNewEmoji(em)}
+                    aria-pressed={newEmoji === em}
+                    className={`aspect-square text-xl rounded-2xl flex items-center justify-center transition-all duration-200 ${
+                      newEmoji === em
+                        ? 'bg-white shadow-[0_0_0_2px_rgba(245,158,11,0.9),0_4px_12px_-4px_rgba(217,119,6,0.5)] scale-105'
+                        : 'bg-black/[0.04] hover:bg-black/[0.07]'
+                    }`}
                   >
-                    <ArrowLeft className="w-3.5 h-3.5" /> Atrás
+                    {em}
                   </button>
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="flex-1 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs transition-all shadow-md active:scale-98"
-                  >
-                    {submitting ? 'Creando...' : 'Crear perfil ✓'}
-                  </button>
-                </div>
-              </form>
-            )}
-          </>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="new-friend-pin" className="block text-sm font-medium text-ink mb-1.5">
+                PIN <span className="text-ink-3 font-normal">· opcional</span>
+              </label>
+              <input
+                id="new-friend-pin"
+                type="password"
+                inputMode="numeric"
+                maxLength={6}
+                placeholder="4 dígitos para proteger tu perfil"
+                value={newPin}
+                onChange={e => setNewPin(e.target.value)}
+                className="gb-input font-mono"
+              />
+            </div>
+
+            {addError && <p className="text-sm text-rose-600 text-center">{addError}</p>}
+
+            <button type="submit" disabled={submitting} className="gb-btn gb-btn-primary gb-btn-lg w-full">
+              {submitting ? 'Creando…' : 'Crear perfil'}
+            </button>
+          </form>
         )}
       </div>
     </div>

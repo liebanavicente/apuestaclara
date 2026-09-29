@@ -1,139 +1,153 @@
 import Link from 'next/link'
-import { Calendar, Trophy, Beer, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react'
+import { Calendar, Trophy, Beer, ArrowRight, Check, Minus } from 'lucide-react'
+
+const FEATURES = [
+  {
+    icon: Calendar,
+    title: 'LaLiga y Champions',
+    desc: 'Cuotas reales de cada jornada. Eliges local, empate o visitante y listo.',
+  },
+  {
+    icon: Trophy,
+    title: 'Aciertas, sumas la cuota',
+    desc: 'Un acierto a 2.50 son +2.50 puntos. Fallar no resta nunca.',
+  },
+  {
+    icon: Beer,
+    title: 'La ronda está en juego',
+    desc: 'El último de la tabla paga las birras. El primero elige el bar.',
+  },
+]
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
-      {/* Hero — Apple clean typography with subtle frosted glow */}
-      <section className="relative py-20 sm:py-28 text-center px-4 overflow-hidden">
-        <div className="relative max-w-3xl mx-auto anim-fade-in">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-slate-200/80 shadow-xs text-xs font-bold text-slate-700 mb-6 backdrop-blur-xl">
-            <span>🐟</span>
-            <span>Club de pronósticos entre amigos</span>
-            <span className="w-1 h-1 rounded-full bg-slate-300" />
-            <span className="text-amber-700">LaLiga & Champions</span>
-          </div>
+    <div>
+      {/* Hero */}
+      <section className="px-4 pt-16 sm:pt-24 pb-10 text-center overflow-x-clip">
+        <div className="max-w-3xl mx-auto anim-slide-up">
+          <span className="inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full gb-card text-[13px] font-medium text-ink-2 mb-7">
+            🐟 Club de pronósticos entre amigos
+          </span>
 
-          <h1 className="text-4xl sm:text-6xl font-black text-slate-900 leading-[1.08] tracking-tight mb-5">
-            Quien pierda{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500">
-              paga la ronda de birras.
+          <h1 className="text-[2.6rem] leading-[1.04] sm:text-7xl font-bold tracking-[-0.045em] text-ink">
+            Quien pierda
+            <br />
+            <span className="bg-gradient-to-b from-amber-400 to-orange-600 bg-clip-text text-transparent">
+              paga las birras.
             </span>
           </h1>
 
-          <p className="text-slate-500 text-base sm:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-            Pronostica gratis sobre todos los partidos oficiales de LaLiga y Champions League con cuotas reales. Gana el que más acierte.
+          <p className="text-ink-2 text-lg sm:text-xl mt-6 max-w-xl mx-auto leading-relaxed tracking-[-0.01em]">
+            Pronostica LaLiga y la Champions con cuotas reales. Sin dinero, solo orgullo y una ronda.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
-            <Link
-              href="/dashboard"
-              className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-8 py-3.5 rounded-full text-sm transition-all shadow-md shadow-slate-900/10 active:scale-95 w-full sm:w-auto"
-            >
-              <span>Ver partidos y jugar</span>
-              <ArrowRight className="w-4 h-4" />
+          <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link href="/dashboard" className="gb-btn gb-btn-primary gb-btn-lg w-full sm:w-auto">
+              Ver partidos <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link
-              href="/ranking"
-              className="flex items-center justify-center gap-2 bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 font-bold px-8 py-3.5 rounded-full text-sm shadow-xs transition-all w-full sm:w-auto"
-            >
-              <Trophy className="w-4 h-4 text-amber-500" />
-              <span>Ver clasificación</span>
+            <Link href="/ranking" className="gb-btn gb-btn-secondary gb-btn-lg w-full sm:w-auto">
+              <Trophy className="w-4 h-4 text-amber-500" /> Clasificación
             </Link>
+          </div>
+        </div>
+
+        {/* Product preview — a floating glass match card */}
+        <div className="relative max-w-md mx-auto mt-16 anim-scale-in" style={{ animationDelay: '150ms' }} aria-hidden="true">
+          <div className="absolute -inset-10 bg-gradient-to-tr from-amber-300/40 via-orange-200/30 to-indigo-200/40 blur-3xl rounded-full" />
+          <div className="relative gb-card rounded-[28px] p-5 text-left">
+            <div className="flex items-center justify-between mb-3">
+              <span className="gb-chip">LaLiga</span>
+              <span className="text-xs text-ink-3">Sáb 21:00</span>
+            </div>
+            <p className="text-lg font-semibold tracking-[-0.02em] text-ink mb-4">Real Madrid vs Atlético</p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { k: 'RMA', v: '1.85', on: true },
+                { k: 'X', v: '3.60', on: false },
+                { k: 'ATM', v: '4.20', on: false },
+              ].map(o => (
+                <div
+                  key={o.k}
+                  className={`rounded-2xl py-3 text-center ${o.on ? 'gb-btn-odds-selected' : 'gb-btn-odds'}`}
+                >
+                  <div className="text-[11px] font-medium opacity-60">{o.k}</div>
+                  <div className="gb-odds-value text-lg font-semibold tabular-nums mt-0.5">{o.v}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex items-center justify-between rounded-2xl bg-emerald-500/10 px-3.5 py-2.5">
+              <span className="text-sm text-emerald-800 font-medium">Si aciertas</span>
+              <span className="text-sm font-semibold text-emerald-700 tabular-nums">+1.85 pts</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Feature Cards — Apple Frosted Glass */}
-      <section className="py-12 px-4 max-w-5xl mx-auto">
+      {/* Features */}
+      <section className="px-4 py-16 max-w-5xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 stagger">
-          {[
-            {
-              icon: Calendar,
-              title: 'LaLiga & Champions League',
-              desc: 'Cuotas oficiales en tiempo real de cada jornada. Elige victoria local, empate o visitante.',
-              badge: 'Oficial',
-            },
-            {
-              icon: Trophy,
-              title: 'Acierto = Cuota en puntos',
-              desc: 'Si aciertas a cuota 2.50, sumas +2.50 puntos en el ranking. Si fallas, no restas nada.',
-              badge: 'Puntuación',
-            },
-            {
-              icon: Beer,
-              title: 'La ronda en juego',
-              desc: 'El último clasificado al final paga las cervezas. El primero tiene el honor de elegir el bar.',
-              badge: 'Premio',
-            },
-          ].map(({ icon: Icon, title, desc, badge }) => (
-            <div
-              key={title}
-              className="rounded-3xl p-6 gb-card shadow-xs anim-slide-up hover:shadow-md transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-2xl bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-700 shadow-2xs">
-                    <Icon className="w-5 h-5 text-slate-800" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200/60 uppercase tracking-wider">
-                    {badge}
-                  </span>
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-base mb-1.5">{title}</h3>
-                <p className="text-slate-500 text-xs leading-relaxed">{desc}</p>
-              </div>
+          {FEATURES.map(({ icon: Icon, title, desc }) => (
+            <div key={title} className="gb-card rounded-3xl p-6 anim-slide-up">
+              <span className="w-10 h-10 rounded-2xl bg-amber-500/12 text-amber-600 flex items-center justify-center mb-5">
+                <Icon className="w-5 h-5" />
+              </span>
+              <h3 className="font-semibold text-ink text-[17px] tracking-[-0.02em] mb-1.5">{title}</h3>
+              <p className="text-ink-2 text-sm leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Simple Scoring Card */}
-      <section className="py-12 px-4 max-w-2xl mx-auto">
-        <div className="rounded-3xl p-6 sm:p-8 gb-card shadow-xs">
-          <div className="text-center mb-6">
-            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">Reglas directas y sencillas</h2>
-            <p className="text-xs text-slate-400 mt-1">Sin letra pequeña ni depósitos de dinero</p>
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/70">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              <div className="text-xs text-slate-700">
-                <strong className="text-slate-900">Aciertas tu pick:</strong> Sumas la cuota entera en puntos en el ranking (ej. cuota 3.20 = +3.20 pts).
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
-              <ShieldCheck className="w-5 h-5 text-slate-500 shrink-0" />
-              <div className="text-xs text-slate-700">
-                <strong className="text-slate-900">Fallas tu pick:</strong> Te quedas con 0 puntos ese partido. No se restan puntos jamás.
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/70">
-              <Beer className="w-5 h-5 text-amber-600 shrink-0" />
-              <div className="text-xs text-slate-700">
-                <strong className="text-slate-900">Al terminar la temporada:</strong> El último del ranking invita a la ronda a los miembros del club.
-              </div>
-            </div>
-          </div>
+      {/* Scoring */}
+      <section className="px-4 py-8 max-w-2xl mx-auto">
+        <div className="text-center mb-8">
+          <p className="gb-eyebrow mb-2">Puntuación</p>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.035em] text-ink">Simple. Sin letra pequeña.</h2>
+        </div>
+        <div className="gb-card rounded-3xl divide-y divide-black/[0.06] overflow-hidden">
+          <Row
+            icon={<Check className="w-4 h-4" />}
+            tone="bg-emerald-500/12 text-emerald-600"
+            title="Aciertas"
+            desc="Sumas la cuota entera. Cuota 3.20 → +3.20 pts."
+          />
+          <Row
+            icon={<Minus className="w-4 h-4" />}
+            tone="bg-black/[0.05] text-ink-3"
+            title="Fallas"
+            desc="0 puntos ese partido. Nunca se resta."
+          />
+          <Row
+            icon={<Beer className="w-4 h-4" />}
+            tone="bg-amber-500/12 text-amber-600"
+            title="Fin de temporada"
+            desc="El último del ranking invita a la ronda."
+          />
         </div>
       </section>
 
-      {/* CTA Final */}
-      <section className="py-16 text-center px-4">
-        <div className="max-w-md mx-auto">
-          <p className="text-2xl font-black text-slate-900 mb-2">¿Listo para demostrar quién sabe de fútbol?</p>
-          <p className="text-slate-500 text-xs mb-6">Únete en 10 segundos, no necesitas contraseña.</p>
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-8 py-3.5 rounded-full text-xs shadow-md shadow-slate-900/10 transition-all active:scale-95"
-          >
-            <span>Entrar a GañanesBets 🐟</span>
-          </Link>
-        </div>
+      {/* CTA */}
+      <section className="px-4 py-20 text-center">
+        <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.035em] text-ink max-w-lg mx-auto">
+          ¿Quién sabe de fútbol aquí?
+        </h2>
+        <p className="text-ink-2 mt-3">Entras en 10 segundos. Sin contraseña.</p>
+        <Link href="/dashboard" className="gb-btn gb-btn-accent gb-btn-lg mt-8">
+          Entrar al club 🐟
+        </Link>
       </section>
+    </div>
+  )
+}
+
+function Row({ icon, tone, title, desc }: { icon: React.ReactNode; tone: string; title: string; desc: string }) {
+  return (
+    <div className="flex items-center gap-4 px-5 py-4">
+      <span className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${tone}`}>{icon}</span>
+      <div>
+        <p className="text-[15px] font-semibold text-ink tracking-[-0.01em]">{title}</p>
+        <p className="text-sm text-ink-2">{desc}</p>
+      </div>
     </div>
   )
 }

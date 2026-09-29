@@ -1,19 +1,17 @@
 import Link from 'next/link'
-import { TrendingUp } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-      <div className="text-center">
-        <p className="text-7xl font-black text-teal-500/30 mb-4">404</p>
-        <h1 className="text-2xl font-bold text-white mb-2">Página no encontrada</h1>
-        <p className="text-slate-400 mb-8">Esta página no existe o ha sido movida.</p>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-500 text-white font-medium px-5 py-2.5 rounded-lg transition-colors"
-        >
-          <TrendingUp className="h-4 w-4" />
-          Volver al inicio
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="gb-card rounded-[32px] px-8 py-12 text-center max-w-sm w-full anim-scale-in">
+        <p className="text-5xl mb-4 anim-float inline-block">🐟</p>
+        <p className="text-6xl font-bold tracking-[-0.05em] text-ink/15 tabular-nums">404</p>
+        <h1 className="text-xl font-semibold tracking-[-0.02em] text-ink mt-2">Aquí no hay nada</h1>
+        <p className="text-ink-2 text-[15px] mt-1.5">Esta página no existe o se ha movido.</p>
+        <Link href="/dashboard" className="gb-btn gb-btn-primary mt-7">
+          <ArrowLeft className="w-4 h-4" />
+          Volver a Partidos
         </Link>
       </div>
     </div>

@@ -57,8 +57,8 @@ export default function HerramientasPage() {
   return (
     <main className="max-w-2xl mx-auto px-4 py-12">
       <div className="mb-10 anim-fade-in">
-        <h1 className="text-2xl font-black text-white tracking-tight mb-2">🔧 Herramientas</h1>
-        <p className="text-white/35 text-sm leading-relaxed">
+        <h1 className="text-2xl font-black text-ink tracking-tight mb-2">🔧 Herramientas</h1>
+        <p className="text-ink/35 text-sm leading-relaxed">
           Independientes de la competición. Analiza combinadas, simula resultados y consulta cuotas — sin afectar tu ranking.
         </p>
       </div>
@@ -80,8 +80,8 @@ export default function HerramientasPage() {
               {tool.emoji}
             </span>
             <div className="flex-1 min-w-0">
-              <h2 className="text-white font-bold mb-1">{tool.title}</h2>
-              <p className="text-white/45 text-sm leading-relaxed mb-3">{tool.desc}</p>
+              <h2 className="text-ink font-bold mb-1">{tool.title}</h2>
+              <p className="text-ink/45 text-sm leading-relaxed mb-3">{tool.desc}</p>
               <Link href={tool.href}
                 className="inline-flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl transition-all font-black text-[#07080F]"
                 style={{ background: 'linear-gradient(135deg,#EAB308,#F59E0B)', boxShadow: '0 4px 14px rgba(234,179,8,0.28)' }}>
@@ -92,7 +92,7 @@ export default function HerramientasPage() {
         ))}
       </div>
 
-      <p className="text-white/20 text-xs text-center mt-10">
+      <p className="text-ink/20 text-xs text-center mt-10">
         Las predicciones son orientativas y pueden fallar. Apostar implica riesgo económico real.
       </p>
     </main>

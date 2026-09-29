@@ -59,24 +59,24 @@ export function OddsCard({ event, selectedPicks, onAddPick, onRemovePick }: Odds
 
   return (
     <div className={cn(
-      'rounded-xl border bg-slate-900/50 p-4 transition-colors',
-      isSelected ? 'border-teal-500/50 bg-teal-950/20' : 'border-slate-800 hover:border-slate-700'
+      'rounded-xl border bg-white/70 p-4 transition-colors',
+      isSelected ? 'border-amber-500/50 bg-amber-500/10' : 'border-black/[0.06] hover:border-black/[0.08]'
     )}>
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="text-xs text-teal-400 font-medium">{event.league}</span>
+            <span className="text-xs text-amber-600 font-medium">{event.league}</span>
             <RealDataBadge />
-            {started && <span className="text-xs text-orange-400 font-medium">En curso</span>}
+            {started && <span className="text-xs text-orange-600 font-medium">En curso</span>}
           </div>
-          <p className="text-slate-200 font-medium text-sm leading-snug">{event.event_name}</p>
-          <div className="flex items-center gap-1.5 mt-1 text-xs text-slate-500">
+          <p className="text-ink font-medium text-sm leading-snug">{event.event_name}</p>
+          <div className="flex items-center gap-1.5 mt-1 text-xs text-ink-3">
             <Clock className="h-3 w-3" />
             <span>{formatDate(event.commence_time)}</span>
-            {!started && <span className="text-teal-500">({timeUntil(event.commence_time)})</span>}
+            {!started && <span className="text-amber-600">({timeUntil(event.commence_time)})</span>}
           </div>
         </div>
-        <span className="text-xs text-slate-600 shrink-0">{event.bookmakers_count} casas</span>
+        <span className="text-xs text-ink-3 shrink-0">{event.bookmakers_count} casas</span>
       </div>
 
       {/* Odds buttons */}
@@ -97,17 +97,17 @@ export function OddsCard({ event, selectedPicks, onAddPick, onRemovePick }: Odds
                 className={cn(
                   'flex flex-col items-center rounded-lg border px-2 py-2.5 transition-all text-center disabled:opacity-40 disabled:cursor-not-allowed',
                   isPickSelected
-                    ? 'border-teal-500 bg-teal-500/20 text-teal-300'
-                    : 'border-slate-700 hover:border-teal-500/50 hover:bg-teal-500/5 text-slate-300'
+                    ? 'border-amber-500 bg-ink/20 text-amber-700'
+                    : 'border-black/[0.08] hover:border-amber-500/50 hover:bg-[#333336]/5 text-ink-2'
                 )}
               >
-                <span className="text-xs text-slate-500 mb-0.5">{OUTCOME_LABELS[outcome]}</span>
-                <span className="font-bold text-white text-base">{formatOdds(odds)}</span>
-                <span className="text-xs text-slate-500 truncate w-full">{prob}%</span>
-                <span className="text-xs text-slate-600 truncate w-full mt-0.5" title={teamName}>
+                <span className="text-xs text-ink-3 mb-0.5">{OUTCOME_LABELS[outcome]}</span>
+                <span className="font-bold text-ink text-base">{formatOdds(odds)}</span>
+                <span className="text-xs text-ink-3 truncate w-full">{prob}%</span>
+                <span className="text-xs text-ink-3 truncate w-full mt-0.5" title={teamName}>
                   {teamName.length > 12 ? teamName.slice(0, 12) + '…' : teamName}
                 </span>
-                {isPickSelected && <Check className="h-3 w-3 text-teal-400 mt-1" />}
+                {isPickSelected && <Check className="h-3 w-3 text-amber-600 mt-1" />}
               </button>
             )
           })}
@@ -116,7 +116,7 @@ export function OddsCard({ event, selectedPicks, onAddPick, onRemovePick }: Odds
       {!isSelected && !started && (
         <button
           onClick={() => handlePick(event.best_odds.home !== null ? 'home' : 'away')}
-          className="mt-2 w-full flex items-center justify-center gap-1 text-xs text-slate-500 hover:text-teal-400 transition-colors py-1"
+          className="mt-2 w-full flex items-center justify-center gap-1 text-xs text-ink-3 hover:text-amber-600 transition-colors py-1"
         >
           <Plus className="h-3 w-3" /> Añadir a selección
         </button>

@@ -104,13 +104,13 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
       {/* Header */}
       <div className="flex items-center justify-between mb-8 anim-fade-in">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight">🌍 Mundial 2026</h1>
-          <p className="text-white/35 text-sm mt-0.5">11 jun – 19 jul · USA, Canada, Mexico</p>
+          <h1 className="text-2xl font-black text-ink tracking-tight">🌍 Mundial 2026</h1>
+          <p className="text-ink/35 text-sm mt-0.5">11 jun – 19 jul · USA, Canada, Mexico</p>
         </div>
         <div className="rounded-2xl px-4 py-2 text-right"
           style={{ background:'rgba(234,179,8,0.10)', border:'1px solid rgba(234,179,8,0.28)' }}>
-          <span className="text-xl font-black text-yellow-400">{totalPoints.toFixed(2)}</span>
-          <span className="text-xs text-yellow-400/50 ml-1.5">pts</span>
+          <span className="text-xl font-black text-amber-600">{totalPoints.toFixed(2)}</span>
+          <span className="text-xs text-amber-600/50 ml-1.5">pts</span>
         </div>
       </div>
 
@@ -119,7 +119,7 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
         <select
           value={activeGroup}
           onChange={e => setActiveGroup(e.target.value)}
-          className="sm:hidden w-full rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none"
+          className="sm:hidden w-full rounded-xl px-3 py-2.5 text-ink text-sm focus:outline-none"
           style={{ background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.12)' }}
         >
           {groupOptions.map(o => (
@@ -149,8 +149,8 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
       {activeGroups.length === 0 && unassigned.length === 0 && (
         <div className="text-center py-20 anim-fade-in">
           <p className="text-5xl mb-4">🌍</p>
-          <p className="text-white font-bold text-lg">Sin partidos disponibles todavía</p>
-          <p className="text-white/35 text-sm mt-1">Las cuotas del Mundial aparecerán cuando se acerquen los partidos</p>
+          <p className="text-ink font-bold text-lg">Sin partidos disponibles todavía</p>
+          <p className="text-ink/35 text-sm mt-1">Las cuotas del Mundial aparecerán cuando se acerquen los partidos</p>
         </div>
       )}
 
@@ -165,10 +165,10 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
                   {group.id}
                 </div>
                 <div>
-                  <h2 className="text-white font-bold text-sm">Grupo {group.id}</h2>
-                  <p className="text-white/35 text-xs">{group.teams.map(t => t.name).join(' · ')}</p>
+                  <h2 className="text-ink font-bold text-sm">Grupo {group.id}</h2>
+                  <p className="text-ink/35 text-xs">{group.teams.map(t => t.name).join(' · ')}</p>
                 </div>
-                <span className="ml-auto text-xs text-white/25 font-medium">
+                <span className="ml-auto text-xs text-ink/25 font-medium">
                   {matches.length} partido{matches.length !== 1 ? 's' : ''}
                 </span>
               </div>
@@ -187,9 +187,9 @@ export function MundialClient({ groups, matchesByGroup, unassigned, myPicks }: P
         {showUnassigned && (
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="text-white/30 font-black text-xs w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+              <div className="text-ink/30 font-black text-xs w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
                 style={{ background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.09)' }}>?</div>
-              <h2 className="text-white font-bold text-sm">Sin grupo asignado</h2>
+              <h2 className="text-ink font-bold text-sm">Sin grupo asignado</h2>
             </div>
             <div className="space-y-3 stagger">
               {unassigned.map(ev => (
@@ -237,13 +237,13 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
     <div className={`rounded-2xl p-4 transition-all anim-slide-up ${cardClass}`}>
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
-          <p className="text-white font-bold text-sm leading-tight">{ev.event_name}</p>
-          <p className="text-white/35 text-xs mt-1">{fmtDate(ev.commence_time)}</p>
+          <p className="text-ink font-bold text-sm leading-tight">{ev.event_name}</p>
+          <p className="text-ink/35 text-xs mt-1">{fmtDate(ev.commence_time)}</p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {myPick?.status === 'pending' && !matchStarted && (
             <button onClick={() => onDelete(myPick.id)}
-              className="text-white/20 hover:text-red-400 transition-colors p-1 rounded-lg hover:bg-red-500/[0.10]">
+              className="text-ink/20 hover:text-red-600 transition-colors p-1 rounded-lg hover:bg-red-500/[0.10]">
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -251,9 +251,9 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
           )}
           {myPick && (
             <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
-              myPick.status === 'won' ? 'text-green-400'
-              : myPick.status === 'lost' ? 'text-red-400'
-              : 'text-yellow-400'
+              myPick.status === 'won' ? 'text-green-600'
+              : myPick.status === 'lost' ? 'text-red-600'
+              : 'text-amber-600'
             }`}
             style={{
               background: myPick.status === 'won' ? 'rgba(34,197,94,0.12)'
@@ -282,16 +282,16 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
                 : myPick ? 'gb-btn-odds opacity-30 cursor-default'
                 : 'gb-btn-odds cursor-pointer'
               }`}>
-              <div className={`text-[10px] font-bold ${isMyPick || isStaged ? 'text-yellow-400' : 'text-white/40'}`}>{short}</div>
-              <div className={`font-black text-[17px] mt-0.5 ${isMyPick || isStaged ? 'text-yellow-400' : 'text-white'}`}>{odds.toFixed(2)}</div>
+              <div className={`text-[10px] font-bold ${isMyPick || isStaged ? 'text-amber-600' : 'text-ink/40'}`}>{short}</div>
+              <div className={`font-black text-[17px] mt-0.5 ${isMyPick || isStaged ? 'text-amber-600' : 'text-ink'}`}>{odds.toFixed(2)}</div>
             </button>
           )
         })}
       </div>
 
       {myPick?.status === 'pending' && matchStarted && (
-        <p className="text-xs text-white/30 mt-3 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-yellow-500/60 inline-block" />
+        <p className="text-xs text-ink/30 mt-3 flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400/60 inline-block" />
           Pendiente de resultado oficial
         </p>
       )}
@@ -299,14 +299,14 @@ function MatchCard({ ev, competition, myPick, staged, onStage, onConfirm, onReso
       {isStagingThis && !myPick && (
         <div className="mt-3 pt-3" style={{ borderTop:'1px solid rgba(234,179,8,0.15)' }}>
           <div className="flex items-center justify-between gap-3">
-            <div className="text-sm text-white/50">
-              <span className="text-white font-bold">{staged!.selection.replace(' gana', '')}</span>
-              {' '}@ <span className="text-yellow-400 font-black">{staged!.odds.toFixed(2)}</span>
-              <span className="text-white/25 text-xs ml-2">+{staged!.odds.toFixed(2)} pts si aciertas</span>
+            <div className="text-sm text-ink/50">
+              <span className="text-ink font-bold">{staged!.selection.replace(' gana', '')}</span>
+              {' '}@ <span className="text-amber-600 font-black">{staged!.odds.toFixed(2)}</span>
+              <span className="text-ink/25 text-xs ml-2">+{staged!.odds.toFixed(2)} pts si aciertas</span>
             </div>
             <div className="flex gap-2 shrink-0">
               <button onClick={() => onStage(ev, staged!.selection, staged!.odds)}
-                className="text-xs text-white/35 hover:text-white/60 px-3 py-1.5 rounded-xl transition-colors"
+                className="text-xs text-ink/35 hover:text-ink/60 px-3 py-1.5 rounded-xl transition-colors"
                 style={{ border:'1px solid rgba(255,255,255,0.08)' }}>
                 Cancelar
               </button>

@@ -69,23 +69,23 @@ function AnalizarInner() {
     <div>
       {/* Picks summary */}
       {picks.length > 0 && (
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 mb-6">
-          <p className="text-xs text-slate-500 uppercase tracking-wider mb-3">Tus selecciones ({picks.length})</p>
+        <div className="rounded-xl gb-card p-4 mb-6">
+          <p className="text-xs text-ink-3 uppercase tracking-wider mb-3">Tus selecciones ({picks.length})</p>
           <div className="space-y-2">
             {picks.map((pick, i) => (
               <div key={i} className="flex items-center justify-between text-sm">
                 <div className="min-w-0">
-                  <span className="text-slate-400 mr-2">#{i + 1}</span>
-                  <span className="text-white">{pick.event_name}</span>
-                  <span className="text-slate-500 ml-2">· {pick.selection}</span>
+                  <span className="text-ink-2 mr-2">#{i + 1}</span>
+                  <span className="text-ink">{pick.event_name}</span>
+                  <span className="text-ink-3 ml-2">· {pick.selection}</span>
                 </div>
-                <span className="text-teal-400 font-bold ml-3 shrink-0">@{pick.odds.toFixed(2)}</span>
+                <span className="text-amber-600 font-bold ml-3 shrink-0">@{pick.odds.toFixed(2)}</span>
               </div>
             ))}
           </div>
-          <div className="mt-3 pt-3 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-xs text-slate-500">Cuota combinada</span>
-            <span className="text-white font-black text-lg">
+          <div className="mt-3 pt-3 border-t border-black/[0.06] flex items-center justify-between">
+            <span className="text-xs text-ink-3">Cuota combinada</span>
+            <span className="text-ink font-black text-lg">
               {picks.reduce((acc, p) => acc * p.odds, 1).toFixed(2)}
             </span>
           </div>
@@ -95,9 +95,9 @@ function AnalizarInner() {
       {/* Loading */}
       {loading && (
         <div className="rounded-xl border border-purple-500/30 bg-purple-950/20 p-8 text-center">
-          <Loader2 className="h-10 w-10 text-purple-400 animate-spin mx-auto mb-4" />
-          <p className="text-white font-medium mb-1">Analizando con IA...</p>
-          <p className="text-slate-400 text-sm">Estudiando factores, estadísticas y riesgo de cada pick.</p>
+          <Loader2 className="h-10 w-10 text-purple-600 animate-spin mx-auto mb-4" />
+          <p className="text-ink font-medium mb-1">Analizando con IA...</p>
+          <p className="text-ink-2 text-sm">Estudiando factores, estadísticas y riesgo de cada pick.</p>
         </div>
       )}
 
@@ -105,13 +105,13 @@ function AnalizarInner() {
       {error && !loading && (
         <div className="rounded-xl border border-orange-500/30 bg-orange-500/10 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <AlertCircle className="h-5 w-5 text-orange-400 shrink-0" />
-            <p className="text-orange-300">{error}</p>
+            <AlertCircle className="h-5 w-5 text-orange-600 shrink-0" />
+            <p className="text-orange-700">{error}</p>
           </div>
           {picks.length >= 2 && (
             <button
               onClick={() => analyze(picks)}
-              className="flex items-center gap-2 text-sm bg-orange-500/20 hover:bg-orange-500/30 text-orange-300 px-4 py-2 rounded-lg transition-colors"
+              className="flex items-center gap-2 text-sm bg-orange-500/20 hover:bg-orange-500/30 text-orange-700 px-4 py-2 rounded-lg transition-colors"
             >
               <Brain className="h-4 w-4" /> Reintentar
             </button>
@@ -124,7 +124,7 @@ function AnalizarInner() {
 
       {/* Back */}
       <div className="mt-6">
-        <Link href="/buscar-eventos" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors">
+        <Link href="/buscar-eventos" className="flex items-center gap-2 text-sm text-ink-3 hover:text-ink-2 transition-colors">
           <ArrowLeft className="h-4 w-4" /> Volver a buscar eventos
         </Link>
       </div>
@@ -135,7 +135,7 @@ function AnalizarInner() {
 export function AnalizarClient() {
   return (
     <Suspense fallback={
-      <div className="flex items-center gap-2 text-slate-400 py-8">
+      <div className="flex items-center gap-2 text-ink-2 py-8">
         <Loader2 className="h-5 w-5 animate-spin" />
         Cargando...
       </div>

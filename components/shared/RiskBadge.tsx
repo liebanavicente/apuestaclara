@@ -10,9 +10,9 @@ export function RiskBadge({ level, className }: RiskBadgeProps) {
     <span
       className={cn(
         'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-        level === 'bajo' && 'bg-green-500/20 text-green-300 border border-green-500/30',
-        level === 'medio' && 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
-        level === 'alto' && 'bg-orange-500/20 text-orange-300 border border-orange-500/30',
+        level === 'bajo' && 'bg-green-500/20 text-green-700 border border-green-500/30',
+        level === 'medio' && 'bg-amber-400/20 text-amber-700 border border-amber-500/30',
+        level === 'alto' && 'bg-orange-500/20 text-orange-700 border border-orange-500/30',
         className
       )}
     >

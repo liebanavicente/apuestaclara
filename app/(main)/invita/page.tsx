@@ -50,22 +50,22 @@ export default async function InvitaPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 sm:px-6 py-12">
       <div className="flex items-center gap-3 mb-6">
-        <Share2 className="h-6 w-6 text-teal-400" />
-        <h1 className="text-2xl font-bold text-white">Invita y gana Premium</h1>
+        <Share2 className="h-6 w-6 text-amber-600" />
+        <h1 className="text-2xl font-bold text-ink">Invita y gana Premium</h1>
       </div>
 
-      <div className="rounded-xl border border-teal-500/30 bg-teal-950/30 p-5 mb-6">
+      <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 mb-6">
         <div className="flex items-center gap-2 mb-2">
-          <Trophy className="h-4 w-4 text-teal-400" />
-          <p className="text-teal-300 font-semibold">Primeros 100 Embajadores</p>
+          <Trophy className="h-4 w-4 text-amber-600" />
+          <p className="text-amber-700 font-semibold">Primeros 100 Embajadores</p>
         </div>
-        <p className="text-slate-400 text-sm leading-relaxed">
+        <p className="text-ink-2 text-sm leading-relaxed">
           Comparte tu enlace personal. Por cada usuario que se registre con tu enlace,
           recibes 30 días de Premium gratis (mientras queden plazas disponibles).
         </p>
         <div className="mt-3 flex items-center gap-3">
-          <span className="text-2xl font-black text-white">{Math.max(0, remaining)}</span>
-          <span className="text-slate-400 text-sm">plazas restantes de 100</span>
+          <span className="text-2xl font-black text-ink">{Math.max(0, remaining)}</span>
+          <span className="text-ink-2 text-sm">plazas restantes de 100</span>
         </div>
       </div>
 

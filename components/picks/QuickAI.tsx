@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Brain, Loader2 } from 'lucide-react'
+import { Sparkles, Loader2, X } from 'lucide-react'
 
 interface Analysis {
   verdict: 'favorable' | 'dudoso' | 'arriesgado'
@@ -18,15 +18,15 @@ interface Props {
 }
 
 const VERDICT_STYLE = {
-  favorable: 'text-emerald-700 bg-emerald-50 border-emerald-300',
-  dudoso: 'text-amber-700 bg-amber-50 border-amber-300',
-  arriesgado: 'text-rose-700 bg-rose-50 border-rose-300',
+  favorable: 'gb-chip-green',
+  dudoso: 'gb-chip-amber',
+  arriesgado: 'gb-chip-red',
 }
 
 const VERDICT_LABEL = {
-  favorable: '✓ Favorable',
-  dudoso: '⚠ Dudoso',
-  arriesgado: '✗ Arriesgado',
+  favorable: 'Favorable',
+  dudoso: 'Dudoso',
+  arriesgado: 'Arriesgado',
 }
 
 export function QuickAI({ event, league, selection, odds }: Props) {
@@ -52,22 +52,10 @@ export function QuickAI({ event, league, selection, odds }: Props) {
     }
   }
 
-  if (!analysis && !loading) {
-    return (
-      <button
-        onClick={analyze}
-        className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
-      >
-        <Brain className="h-3.5 w-3.5 text-indigo-500" />
-        <span>Consultar análisis IA</span>
-      </button>
-    )
-  }
-
   if (loading) {
     return (
-      <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-        <Loader2 className="h-3.5 w-3.5 animate-spin text-indigo-500" />
+      <div className="flex items-center gap-2 text-sm text-ink-2 h-8">
+        <Loader2 className="h-4 w-4 animate-spin text-violet-500" />
         Analizando partido…
       </div>
     )
@@ -75,62 +63,67 @@ export function QuickAI({ event, league, selection, odds }: Props) {
 
   if (error) {
     return (
-      <p className="text-xs text-rose-600 font-medium">
-        No se pudo obtener el análisis.{' '}
-        <button onClick={analyze} className="underline font-bold">
+      <p className="text-sm text-rose-600 h-8 flex items-center">
+        No se pudo obtener el análisis.&nbsp;
+        <button onClick={analyze} className="font-semibold underline underline-offset-2">
           Reintentar
         </button>
       </p>
     )
   }
 
-  if (!analysis) return null
+  if (!analysis) {
+    return (
+      <button onClick={analyze} className="gb-btn gb-btn-ghost gb-btn-sm -ml-2 !text-violet-600">
+        <Sparkles className="h-4 w-4" />
+        Análisis con IA
+      </button>
+    )
+  }
 
   return (
-    <div className="mt-2 rounded-2xl border border-slate-200/90 bg-white/95 p-3.5 space-y-2.5 text-xs shadow-xs">
+    <div className="rounded-2xl bg-white/70 p-4 space-y-3 text-sm shadow-[0_0_0_0.5px_rgba(0,0,0,0.06)] anim-scale-in">
       <div className="flex items-center gap-2">
-        <Brain className="h-4 w-4 text-indigo-600 shrink-0" />
-        <span className="text-slate-900 font-bold">Análisis rápido</span>
-        <span className={`ml-auto px-2.5 py-0.5 rounded-full border text-[11px] font-extrabold ${VERDICT_STYLE[analysis.verdict]}`}>
-          {VERDICT_LABEL[analysis.verdict]}
-        </span>
-      </div>
-
-      <p className="text-slate-600 leading-relaxed font-normal">{analysis.summary}</p>
-
-      <div className="grid grid-cols-2 gap-3 pt-1">
-        {analysis.pros?.length > 0 && (
-          <div className="p-2 rounded-xl bg-emerald-50/60 border border-emerald-100">
-            <p className="text-emerald-800 font-bold mb-1">A favor</p>
-            <ul className="space-y-0.5">
-              {analysis.pros.map((p, i) => (
-                <li key={i} className="text-emerald-700 text-[11px]">
-                  + {p}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {analysis.cons?.length > 0 && (
-          <div className="p-2 rounded-xl bg-rose-50/60 border border-rose-100">
-            <p className="text-rose-800 font-bold mb-1">Riesgos</p>
-            <ul className="space-y-0.5">
-              {analysis.cons.map((c, i) => (
-                <li key={i} className="text-rose-700 text-[11px]">
-                  − {c}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-
-      <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px] text-slate-400">
-        <p className="italic">{analysis.disclaimer}</p>
-        <button onClick={() => setAnalysis(null)} className="text-slate-500 hover:text-slate-800 font-bold ml-2">
-          Cerrar ×
+        <Sparkles className="h-4 w-4 text-violet-500 shrink-0" />
+        <span className="text-ink font-semibold">Análisis rápido</span>
+        <span className={`gb-chip ml-auto ${VERDICT_STYLE[analysis.verdict]}`}>{VERDICT_LABEL[analysis.verdict]}</span>
+        <button
+          onClick={() => setAnalysis(null)}
+          aria-label="Cerrar análisis"
+          className="w-6 h-6 flex items-center justify-center rounded-full text-ink-3 hover:bg-black/[0.05] hover:text-ink transition-colors"
+        >
+          <X className="w-3.5 h-3.5" />
         </button>
       </div>
+
+      <p className="text-ink-2 leading-relaxed">{analysis.summary}</p>
+
+      {(analysis.pros?.length > 0 || analysis.cons?.length > 0) && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {analysis.pros?.length > 0 && (
+            <div className="p-3 rounded-xl bg-emerald-500/[0.08]">
+              <p className="text-emerald-700 font-semibold text-xs mb-1">A favor</p>
+              <ul className="space-y-1">
+                {analysis.pros.map((p, i) => (
+                  <li key={i} className="text-ink-2 text-[13px] leading-snug">{p}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {analysis.cons?.length > 0 && (
+            <div className="p-3 rounded-xl bg-rose-500/[0.07]">
+              <p className="text-rose-700 font-semibold text-xs mb-1">Riesgos</p>
+              <ul className="space-y-1">
+                {analysis.cons.map((c, i) => (
+                  <li key={i} className="text-ink-2 text-[13px] leading-snug">{c}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
+      <p className="text-[11px] text-ink-3 leading-snug">{analysis.disclaimer}</p>
     </div>
   )
 }
